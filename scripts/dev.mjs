@@ -18,7 +18,8 @@ if (aiBaseUrl) {
   await new Promise((resolve, reject) => mock.once('error', reject).listen(0, '127.0.0.1', resolve));
   aiBaseUrl = `http://127.0.0.1:${mock.address().port}`;
 }
-const web = createWebServer({ aiBaseUrl, token, provider, placesKey: process.env.GOOGLE_MAPS_API_KEY, geminiKey: process.env.GEMINI_API_KEY, geminiModel: process.env.GEMINI_MODEL || undefined });
+const web = createWebServer({ aiBaseUrl, token, provider, placesKey: process.env.GOOGLE_MAPS_API_KEY, geminiKey: process.env.GEMINI_API_KEY, geminiModel: process.env.GEMINI_MODEL || undefined,
+  publicAppUrl: process.env.PUBLIC_APP_URL || `http://127.0.0.1:${process.env.PORT ?? 3000}` });
 try {
   await new Promise((resolve, reject) => web.once('error', reject).listen(Number(process.env.PORT ?? 3000), '127.0.0.1', resolve));
 } catch (error) { mock?.close(); throw error; }

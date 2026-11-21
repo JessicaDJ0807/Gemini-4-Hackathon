@@ -106,7 +106,7 @@ test('B rejects stale wardrobe versions and altered metadata; live mode never re
     const request = input(); mutate(request); assert.equal((await post(base, request)).status, 400);
   }
   const live = await app(t, { provider: 'live', fetchImpl: () => { throw new Error('Must not contact live AI'); } });
-  assert.equal((await post(live, input())).status, 503);
+  assert.equal((await post(live, input())).status, 400);
 });
 
 test('B returns an error for incomplete upstream plans without silently replacing them', async (t) => {

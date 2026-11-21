@@ -2,6 +2,7 @@ import { ApiError, validProfile, stringList } from './style-analysis.mjs';
 import { buildTrip, tripDates } from './trip.mjs';
 import { validateWeather } from './weather.mjs';
 const text = (value) => typeof value === 'string' && value.trim().length > 0;
+const proseList = (value) => Array.isArray(value) && value.length <= 100 && value.every(item => text(item) && item.length <= 4000);
 const unique = (items) => new Set(items).size === items.length;
 
 export function validateOutfitRequest(body) {
@@ -17,7 +18,7 @@ export function validateOutfitRequest(body) {
       if (!item || ![item.id, item.name, item.imageUrl, item.color].every(text) || !stringList(item.styleTags) ||
           !['top', 'bottom', 'dress', 'outerwear', 'shoes', 'accessory'].includes(item.category)) throw new Error('Invalid wardrobe item.');
     }
-    if (!Array.isArray(body.media) || body.media.length) throw new Error('The mock outfit flow supports the tags-only profile.');
+    if (!Array.isArray(body.media) || body.media.length) throw new Error('Original style photos are not included in this outfit flow.');
   } catch (error) { throw new ApiError(400, 'INVALID_OUTFIT_REQUEST', error.message); }
   return body;
 }
@@ -26,13 +27,15 @@ export function validateOutfitResponse(body, request) {
   const fail = () => { throw new ApiError(502, 'INVALID_OUTFIT_RESPONSE', 'The outfit service returned an invalid plan. Please retry.', true); };
   const dates = tripDates(request.trip.startDate, request.trip.endDate);
   if (!body || body.requestId !== request.requestId || body.inputRevision !== request.inputRevision ||
-      !Array.isArray(body.outfits) || !stringList(body.warnings)) fail();
+      !Array.isArray(body.outfits) || !proseList(body.warnings)) fail();
+  if (body.wardrobeImagesUsed !== undefined && (!stringList(body.wardrobeImagesUsed) || !unique(body.wardrobeImagesUsed) ||
+      body.wardrobeImagesUsed.some(id => !request.wardrobe.some(item => item.id === id)))) fail();
   const ids = new Set(), gaps = new Set();
   for (const outfit of body.outfits) {
     if (!outfit || !text(outfit.id) || ids.has(outfit.id) || !dates.includes(outfit.date) || !text(outfit.rationale) ||
         !Array.isArray(outfit.attractionIds) || outfit.attractionIds.length || !stringList(outfit.wardrobeItemIds) ||
         !unique(outfit.wardrobeItemIds) || outfit.wardrobeItemIds.some((id) => !request.wardrobe.some((item) => item.id === id)) ||
-        !Array.isArray(outfit.missingItems) || (outfit.stylingTips !== undefined && !stringList(outfit.stylingTips))) fail();
+        !Array.isArray(outfit.missingItems) || (outfit.stylingTips !== undefined && !proseList(outfit.stylingTips))) fail();
     ids.add(outfit.id);
     for (const gap of outfit.missingItems) {
       if (!gap || ![gap.id, gap.description, gap.searchQuery, gap.reason].every(text) || gaps.has(gap.id) ||

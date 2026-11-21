@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your wardrobe · Travel AI Stylist</title>
+  <link rel="stylesheet" href="/style.css"><script type="module" src="/wardrobe.mjs"></script>
+</head>
+<body class="wardrobe-page"><main>
+  <header><a class="brand" href="/">TRAVEL AI STYLIST</a><a href="/trip">Edit trip</a></header>
+  <p id="wardrobe-loading" role="status">Loading your trip…</p>
+  <div id="wardrobe-unavailable" hidden><p id="wardrobe-message" role="alert"></p><a class="button-link" href="/trip">Back to trip</a></div>
+  <section id="outfit-flow" hidden aria-labelledby="outfit-title">
+    <p class="eyebrow">03 / YOUR WARDROBE</p><h1 id="outfit-title">Your wardrobe</h1>
+    <p class="mock-badge">Demo · mock outfits, no AI analysis</p>
+    <p class="intro">Choose what you’d like to wear. We’ll put the looks together.</p>
+    <p class="hint">The mock does not interpret your preferences or avoidances. Uncheck anything unsuitable.</p>
+    <p id="outfit-context"></p>
+    <div id="wardrobe-grid" class="wardrobe-grid"></div>
+    <button id="generate-outfits" type="button" disabled>Generate my outfits</button>
+    <button id="reload-wardrobe" class="secondary" type="button" hidden>Reload wardrobe</button>
+    <p id="outfit-status" role="status"></p><p id="outfit-error" role="alert" hidden></p>
+    <section id="outfit-results" hidden aria-labelledby="results-title">
+      <h2 id="results-title" tabindex="-1">Your daily looks</h2>
+      <div id="outfit-warnings"></div><div id="daily-looks"></div>
+    </section>
+  </section>
+  <footer>Demo garments are illustrations, not products for sale. Weather data: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>.</footer>
+</main></body>
+</html>

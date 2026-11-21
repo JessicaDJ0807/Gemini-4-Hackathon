@@ -1,0 +1,13 @@
+{
+  "requestId": "style-demo-001",
+  "inputRevision": 1,
+  "tags": ["minimal"],
+  "avoidances": ["high heels"],
+  "notes": "Comfortable outfits for walking.",
+  "media": [
+    {"id": "min-01", "contentVersion": "1", "kind": "image", "mimeType": "image/jpeg", "readUrl": "http://127.0.0.1:8799/style_inspiration_fixture_pack/images/minimal_clean/min-01.jpg", "expiresAt": "2026-11-22T00:00:00Z"},
+    {"id": "min-03", "contentVersion": "1", "kind": "image", "mimeType": "image/jpeg", "readUrl": "http://127.0.0.1:8799/style_inspiration_fixture_pack/images/minimal_clean/min-03.jpg", "expiresAt": "2026-11-22T00:00:00Z"},
+    {"id": "min-05", "contentVersion": "1", "kind": "image", "mimeType": "image/jpeg", "readUrl": "http://127.0.0.1:8799/style_inspiration_fixture_pack/images/minimal_clean/min-05.jpg", "expiresAt": "2026-11-22T00:00:00Z"},
+    {"id": "rom-02", "contentVersion": "1", "kind": "image", "mimeType": "image/jpeg", "readUrl": "http://127.0.0.1:8799/style_inspiration_fixture_pack/images/romantic_cottagecore/rom-02.jpg", "expiresAt": "2026-11-22T00:00:00Z"}
+  ]
+}

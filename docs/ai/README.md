@@ -1,6 +1,6 @@
 # AI & Multimodal Workstream
 
-Owner: **Person A**. This document tracks AI responsibilities independently of the overall [project README](../../README.md).
+Owner: **Person A**. This document tracks AI responsibilities independently of the overall [project README](../../README.md). See [model choices](models.md) for which Gemini model each feature uses.
 
 ## Goals
 

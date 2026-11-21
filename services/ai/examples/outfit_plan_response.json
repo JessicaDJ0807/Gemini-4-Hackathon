@@ -1,0 +1,258 @@
+{
+  "requestId": "outfits-demo-001",
+  "inputRevision": 1,
+  "outfits": [
+    {
+      "id": "look-01",
+      "date": "2026-12-03",
+      "attractionIds": [
+        "fushimi-inari"
+      ],
+      "wardrobeItemIds": [
+        "top-01",
+        "bottom-02",
+        "shoes-01",
+        "acc-01"
+      ],
+      "rationale": "A warm cream knit sweater paired with straight-leg jeans and supportive sneakers handles the incline and walking at Fushimi Inari while staying flat and heel-free. Adding one essential waterproof shell protects against the 70% rain probability in 3 to 10 C weather without duplicating existing coats.",
+      "missingItems": [
+        {
+          "id": "miss-01-01",
+          "description": "Minimal waterproof hooded rain coat",
+          "searchQuery": "black minimal waterproof rain coat",
+          "priority": "essential",
+          "reason": "The forecast calls for 70% chance of precipitation and 3 to 10 C temperatures for outdoor hiking at Fushimi Inari, and the wardrobe has no rain-resistant outerwear.",
+          "category": "outerwear",
+          "color": "black",
+          "silhouette": "relaxed mid-thigh",
+          "material": "likely waterproof technical nylon or breathable shell",
+          "styleDescriptors": [
+            "minimal",
+            "matte",
+            "functional"
+          ]
+        }
+      ],
+      "stylingTips": [
+        "Wear the rain coat over the cream knit to stay dry without overheating on uphill steps.",
+        "Keep essentials secure and hands-free in the black leather crossbody bag."
+      ],
+      "name": "Rain-Ready Shrine Trek",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "top-01",
+            "name": "Cream crew-neck knit sweater",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "bottom-02",
+            "name": "Mid-wash straight-leg jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "shoes-01",
+            "name": "White leather sneakers",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "acc-01",
+            "name": "Black leather crossbody bag",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "miss-01-01",
+            "name": "Minimal waterproof hooded rain coat",
+            "owned": false
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor sightseeing",
+        "hiking",
+        "temple visit"
+      ],
+      "styleConnections": [
+        "minimal",
+        "straight-leg jeans",
+        "neutral tonal layering",
+        "comfortable walking without high heels"
+      ]
+    },
+    {
+      "id": "look-02",
+      "date": "2026-12-04",
+      "attractionIds": [
+        "nishiki-market",
+        "kaiseki-dinner"
+      ],
+      "wardrobeItemIds": [
+        "top-03",
+        "bottom-01",
+        "outer-01",
+        "shoes-02",
+        "acc-01"
+      ],
+      "rationale": "A black turtleneck and wide-leg trousers under the camel oversized blazer bridge daytime browsing at Nishiki Market and an evening Kaiseki dinner in smart casual comfort. The wool-friendly layers suit the cool 4 to 12 C forecast with minimal 10% rain risk, and leather loafers keep walking effortless.",
+      "missingItems": [],
+      "stylingTips": [
+        "Slip off the oversized blazer indoors if the market or restaurant feels warm.",
+        "Let the black crossbody bag act as a clean, understated accessory against the camel and black tones."
+      ],
+      "name": "Relaxed Tailoring for Market and Dinner",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "top-03",
+            "name": "Black fitted turtleneck",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "bottom-01",
+            "name": "Black wide-leg trousers",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "outer-01",
+            "name": "Camel oversized blazer",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "shoes-02",
+            "name": "Black leather loafers",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "acc-01",
+            "name": "Black leather crossbody bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "indoor market",
+        "shopping",
+        "evening dining"
+      ],
+      "styleConnections": [
+        "relaxed tailoring",
+        "oversized blazer",
+        "wide-leg trousers",
+        "smart casual",
+        "camel and black palette"
+      ]
+    },
+    {
+      "id": "look-03",
+      "date": "2026-12-05",
+      "attractionIds": [
+        "arashiyama"
+      ],
+      "wardrobeItemIds": [
+        "top-02",
+        "dress-01",
+        "outer-02",
+        "shoes-01",
+        "acc-01"
+      ],
+      "rationale": "Because weather data for December 5 is unavailable, this outfit is not weather-verified and relies on adaptable layering with a cotton tee under a navy knit midi dress and a removable beige wool coat. White leather sneakers provide cushioned support for extended outdoor walking through Arashiyama Bamboo Grove.",
+      "missingItems": [],
+      "stylingTips": [
+        "Layer the white cotton t-shirt beneath the navy knit dress so you can adjust warmth if conditions shift.",
+        "Carry the beige wool coat or wear it open over your shoulders depending on the actual temperature."
+      ],
+      "name": "Adaptable Layered Midi for Arashiyama",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "top-02",
+            "name": "White cotton t-shirt",
+            "owned": true
+          }
+        ],
+        "dress": [
+          {
+            "id": "dress-01",
+            "name": "Navy knit midi dress",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "outer-02",
+            "name": "Beige wool coat",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "shoes-01",
+            "name": "White leather sneakers",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "acc-01",
+            "name": "Black leather crossbody bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor walking",
+        "sightseeing"
+      ],
+      "styleConnections": [
+        "minimalist",
+        "neutral tonal layering",
+        "camel, cream, navy, and beige palette",
+        "no high heels"
+      ]
+    }
+  ],
+  "warnings": [
+    "Weather unavailable for 2026-12-05; outfits for that day are not weather-verified."
+  ],
+  "shoppingGaps": [
+    {
+      "id": "gap-01",
+      "searchQuery": "black minimal waterproof rain coat",
+      "category": "outerwear",
+      "color": "black",
+      "silhouette": "relaxed mid-thigh",
+      "material": "likely waterproof technical nylon or breathable shell",
+      "styleDescriptors": [
+        "minimal",
+        "matte",
+        "functional"
+      ],
+      "priority": "essential",
+      "reason": "The forecast calls for 70% chance of precipitation and 3 to 10 C temperatures for outdoor hiking at Fushimi Inari, and the wardrobe has no rain-resistant outerwear.",
+      "outfitIds": [
+        "look-01"
+      ],
+      "missingItemIds": [
+        "miss-01-01"
+      ],
+      "similarOwnedItemIds": []
+    }
+  ],
+  "model": "gemini-4-hydrogen"
+}

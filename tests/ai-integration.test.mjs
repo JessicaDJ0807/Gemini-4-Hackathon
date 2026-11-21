@@ -46,8 +46,8 @@ test('B sends photo wardrobe and nested preferences to A with auth; A missing it
     sent=JSON.parse(options.body);return Response.json(upstream);
   }});
   const inventory=await(await fetch(base+'/api/wardrobe')).json();
-  assert.equal(inventory.provider,'live');assert.equal(inventory.enabled,true);assert.equal(inventory.wardrobe.length,10);
-  assert.equal(inventory.credits.length,10);
+  assert.equal(inventory.provider,'live');assert.equal(inventory.enabled,true);assert.equal(inventory.wardrobe.length,37);
+  assert.equal(inventory.credits.length,37);
   const photo=await fetch(base+inventory.wardrobe[0].imageUrl);assert.match(photo.headers.get('Content-Type'),/image\/jpeg/);
   assert.deepEqual([...new Uint8Array(await photo.arrayBuffer()).slice(0,3)],[255,216,255]);
   const response=await post(base,request);assert.equal(response.status,200);const result=await response.json();

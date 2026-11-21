@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Download ten Pexels wardrobe-fixture photos. Usage: python download_images.py"""
+"""Download the Pexels wardrobe-fixture photos. Usage: python download_images.py
+
+Items without a photo_id (user-supplied or Wikimedia Commons) must already be in images/."""
 import json
 import re
 import time
@@ -47,6 +49,10 @@ for item in DATA["items"]:
     existing = next((p for p in DEST.glob(prefix + ".*") if validate(p)), None)
     if existing:
         print(f"SKIP {prefix}: {existing.name}")
+        continue
+    if not item.get("photo_id"):
+        print(f"MISS {prefix}: no Pexels photo_id; add images/{prefix}.jpg by hand (source: {item.get('source_url') or 'user-supplied'})")
+        failed.append((prefix, item.get("source_url") or "user-supplied image missing"))
         continue
     print(f"GET  {prefix}: {item['name']}")
     success = False

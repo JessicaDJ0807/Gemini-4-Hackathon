@@ -156,6 +156,14 @@ class OutfitPlanRequest(BaseModel):
     useInspirationMedia: bool = Field(True, description="extension: send inspiration media to Gemini")
 
 
+class InspirationNote(BaseModel):
+    """What the planner took from one inspiration item (extension)."""
+    mediaId: str
+    takeaway: str
+    usable: bool
+    usedInOutfitIds: list[str] = []
+
+
 class OutfitPlanResponse(BaseModel):
     requestId: str
     inputRevision: int
@@ -165,6 +173,7 @@ class OutfitPlanResponse(BaseModel):
     model: Optional[str] = None  # extension
     wardrobeImagesUsed: list[str] = []  # extension: wardrobe ids whose photo Gemini saw
     inspirationMediaUsed: list[str] = []  # extension: inspiration media ids Gemini saw
+    inspirationNotes: list[InspirationNote] = []  # extension: per inspiration item, what was borrowed and where
 
 
 class ShoppingGap(BaseModel):

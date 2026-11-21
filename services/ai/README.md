@@ -62,7 +62,7 @@ All additive and optional; see [docs/ai/contract-notes.md](../../docs/ai/contrac
 - Outfit: `directionId` (the direction that leads it; minor directions only add accents)
 - Style analysis response: `styleDirections` (duplicate of `suggestedProfile.directions`, kept for now), `model`
 - Request: `preferences` (free text), `outfitCount` (default 3), `useWardrobeImages` (default true), `useInspirationMedia` (default true)
-- Response: `wardrobeImagesUsed` (ids whose photo Gemini saw), `inspirationMediaUsed`
+- Response: `wardrobeImagesUsed` (ids whose photo Gemini saw), `inspirationMediaUsed`, `inspirationNotes` (per inspiration item: the idea taken from it, whether it was usable, which outfits used it)
 
 ## Viewing a plan
 

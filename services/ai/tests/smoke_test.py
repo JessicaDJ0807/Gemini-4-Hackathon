@@ -136,6 +136,37 @@ def weather_and_inspiration_checks() -> None:
     check(outfits[0].weatherKind == "forecast", "outfit records the weather kind it was planned for")
 
 
+def variety_checks() -> None:
+    print("Variety + inspiration notes (offline)")
+    from src.outfit_planning.planner import LlmInspirationNote, inspiration_notes
+
+    req = load_request()
+    days = trip_days(req)
+
+    def look(day, items, insp=()):
+        return LlmOutfit(name="x", date=str(day), attractionIds=[], wardrobeItemIds=items, missingItems=[],
+                         rationale="r", occasions=[], styleConnections=[], stylingTips=[],
+                         inspirationReferenceIds=list(insp))
+
+    plan = LlmPlan(
+        inspirationNotes=[LlmInspirationNote(mediaId="m1", takeaway="t1", usable=True),
+                          LlmInspirationNote(mediaId="m2", takeaway="t2", usable=True),
+                          LlmInspirationNote(mediaId="m3", takeaway="t3", usable=False),
+                          LlmInspirationNote(mediaId="ghost", takeaway="t", usable=True)],
+        outfits=[look(days[0], ["top-01", "bottom-01", "shoes-01"], ["m1"]),
+                 look(days[1], ["top-02", "bottom-01", "shoes-01"]),        # differs only in top
+                 look(days[2], ["dress-01", "outer-02", "shoes-02"], ["m1"])])
+    outfits, warns = validate(plan, req, days, None, {"m1", "m2", "m3"})
+    dupes = [w for w in warns if "near-duplicates" in w]
+    check(len(dupes) == 1 and "look-01 and look-02" in dupes[0], "near-duplicate outfits flagged, distinct ones not")
+
+    notes, nwarns = inspiration_notes(plan, outfits, ["m1", "m2", "m3"])
+    check([n.mediaId for n in notes] == ["m1", "m2", "m3"], "one note per seen inspiration item; unknown ids dropped")
+    check(notes[0].usedInOutfitIds == ["look-01", "look-03"], "notes record which outfits used them")
+    check(nwarns == ["Inspiration m2: marked usable but no outfit used it."],
+          "unused usable inspiration flagged; unusable one not")
+
+
 def direction_checks() -> None:
     print("Style directions (offline)")
     from src.outfit_planning.models import StyleDirection
@@ -242,6 +273,7 @@ def live_check() -> None:
 if __name__ == "__main__":
     offline_checks()
     weather_and_inspiration_checks()
+    variety_checks()
     direction_checks()
     style_analysis_checks()
     if "--offline" not in sys.argv:

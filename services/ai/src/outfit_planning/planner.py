@@ -20,14 +20,14 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-from .models import (MediaRef, MissingItem, Outfit, OutfitPiece, OutfitPlanRequest,
+from .models import (InspirationNote, MediaRef, MissingItem, Outfit, OutfitPiece, OutfitPlanRequest,
                      OutfitPlanResponse, WardrobeItem, WeatherDay)
 from .shopping import build_search_query, identify_shopping_gaps
 
 SERVICE_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(SERVICE_DIR / ".env")
 MODEL = os.getenv("OUTFIT_MODEL", "gemini-4-hydrogen")
-PROMPT_VERSION = "outfit_planning_v3"
+PROMPT_VERSION = "outfit_planning_v4"
 PROMPT = (SERVICE_DIR / "prompts" / f"{PROMPT_VERSION}.md").read_text()
 CATEGORIES = {"top", "bottom", "dress", "outerwear", "shoes", "accessory"}
 MAX_TRIP_DAYS = 7
@@ -74,7 +74,15 @@ class LlmOutfit(BaseModel):
     directionId: Optional[str] = None
 
 
+class LlmInspirationNote(BaseModel):
+    mediaId: str
+    takeaway: str
+    usable: bool
+
+
 class LlmPlan(BaseModel):
+    # Notes come first so the model studies every inspiration item before planning.
+    inspirationNotes: list[LlmInspirationNote] = []
     outfits: list[LlmOutfit]
 
 
@@ -328,6 +336,8 @@ def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date],
             weatherKind=day_weather.kind, directionId=direction_id,
         ))
 
+    warnings += variety_warnings(outfits, wardrobe)
+
     # A minor direction is a small accent, so it should not lead most of the trip.
     led_by_minor = [o.id for o in outfits if o.directionId and directions[o.directionId].strength == "minor"]
     has_stronger = any(d.strength != "minor" for d in directions.values())
@@ -335,6 +345,51 @@ def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date],
         warnings.append(f"Outfits {led_by_minor} are led by a minor style direction; "
                         "minor directions should only add accents.")
     return outfits, warnings
+
+
+CORE_ROLES = ("top", "bottom", "outerwear", "shoes")  # a dress fills the "bottom" role
+
+
+def variety_warnings(outfits: list[Outfit], wardrobe: dict[str, WardrobeItem]) -> list[str]:
+    """Flag near-duplicate outfits: two looks that differ in fewer than two core roles."""
+    def core(o: Outfit) -> dict[str, frozenset[str]]:
+        roles: dict[str, set[str]] = {r: set() for r in CORE_ROLES}
+        pieces = [(x, wardrobe[x].category) for x in o.wardrobeItemIds] + [(m.id, m.category) for m in o.missingItems]
+        for pid, cat in pieces:
+            role = "bottom" if cat == "dress" else cat
+            if role in roles:
+                roles[role].add(pid)
+        return {r: frozenset(v) for r, v in roles.items()}
+
+    out = []
+    cores = [(o.id, core(o)) for o in outfits]
+    for i, (a, ca) in enumerate(cores):
+        for b, cb in cores[i + 1:]:
+            differing = [r for r in ca if ca[r] != cb[r]]
+            if len(differing) < 2:
+                out.append(f"{a} and {b} are near-duplicates (differ only in {differing or 'nothing'}).")
+    return out
+
+
+def inspiration_notes(plan: LlmPlan, outfits: list[Outfit], seen: list[str]) -> tuple[list[InspirationNote], list[str]]:
+    """Keep one note per inspiration item Gemini saw; report items no outfit used."""
+    by_id = {}
+    for n in plan.inspirationNotes:
+        if n.mediaId in seen and n.mediaId not in by_id:
+            by_id[n.mediaId] = n
+    notes, warnings = [], []
+    for mid in seen:
+        used_in = [o.id for o in outfits if mid in o.inspirationReferenceIds]
+        n = by_id.get(mid)
+        if n is None:
+            warnings.append(f"Inspiration {mid}: no note from the model.")
+            if used_in:
+                notes.append(InspirationNote(mediaId=mid, takeaway="", usable=True, usedInOutfitIds=used_in))
+            continue
+        notes.append(InspirationNote(mediaId=mid, takeaway=n.takeaway, usable=n.usable, usedInOutfitIds=used_in))
+        if n.usable and not used_in:
+            warnings.append(f"Inspiration {mid}: marked usable but no outfit used it.")
+    return notes, warnings
 
 
 # ---------- entry point ----------
@@ -391,6 +446,8 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         if plan is None:
             continue
         outfits, check_warnings = validate(plan, req, slots, weather, set(inspiration))
+        notes, note_warnings = inspiration_notes(plan, outfits, [m.id for m in req.media if m.id in inspiration])
+        check_warnings += note_warnings
         if len(outfits) == len(slots) and all(o.wardrobeItemIds or o.missingItems for o in outfits):
             warnings += check_warnings
             break
@@ -405,4 +462,5 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         warnings=warnings, shoppingGaps=identify_shopping_gaps(outfits, req.wardrobe), model=MODEL,
         wardrobeImagesUsed=[w.id for w in req.wardrobe if w.id in images],
         inspirationMediaUsed=[m.id for m in req.media if m.id in inspiration],
+        inspirationNotes=notes,
     )

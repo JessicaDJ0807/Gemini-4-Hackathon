@@ -63,6 +63,7 @@ def render(req: dict, res: dict, title: str) -> str:
     weather = {w["date"]: w for w in req["trip"].get("weather", [])}
     seen_photos = set(res.get("wardrobeImagesUsed", []))
     seen_insp = set(res.get("inspirationMediaUsed", []))
+    notes = {n["mediaId"]: n for n in res.get("inspirationNotes", [])}
     cited = defaultdict(list)
     for o in res["outfits"]:
         for m in o.get("inspirationReferenceIds", []):
@@ -98,7 +99,11 @@ def render(req: dict, res: dict, title: str) -> str:
             src = image_src(m.get("readUrl"))
             img = (f'<img src="{esc(src)}" alt="{esc(mid)}" loading="lazy">' if m.get("kind") == "image"
                    else f'<video src="{esc(src)}" muted controls></video>')
-            out.append(f'<figure class="insp {cls}">{img}<figcaption><b>{esc(mid)}</b> {esc(state)}</figcaption></figure>')
+            n = notes.get(mid)
+            note = ""
+            if n:
+                note = f'<span class="takeaway{"" if n["usable"] else " unusable"}">{"" if n["usable"] else "Not usable: "}{esc(n["takeaway"])}</span>'
+            out.append(f'<figure class="insp {cls}">{img}<figcaption><b>{esc(mid)}</b> {esc(state)}{note}</figcaption></figure>')
         out.append("</div></section>")
 
     out.append('<section class="panel"><h2>Weather (from request)</h2><div class="days">')
@@ -170,7 +175,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}h1{margin:0 0 4px;fon
 .chip{display:inline-block;background:var(--chip);border-radius:99px;padding:2px 10px;margin:2px 4px 2px 0;font-size:13px}
 .chip.soft{background:transparent;border:1px solid var(--line)}.chip.avoid{color:var(--buy);border:1px solid var(--buy);background:transparent}
 .note{color:var(--muted);margin:8px 0 0}.strip{display:flex;gap:10px;overflow-x:auto}
-.insp{margin:0;width:150px;flex:none}.insp img,.insp video{width:150px;height:190px;object-fit:cover;border-radius:8px;border:3px solid transparent}
+.insp{margin:0;width:190px;flex:none}.takeaway{display:block;color:var(--ink);margin-top:4px}.takeaway.unusable{color:var(--warn)}.insp img,.insp video{width:190px;height:190px;object-fit:cover;border-radius:8px;border:3px solid transparent}
 .insp.cited img{border-color:var(--accent)}.insp.unseen img,.insp.seen img{opacity:.55}.insp figcaption{font-size:12px;color:var(--muted)}
 .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}.day{border-left:4px solid var(--muted);padding:4px 10px;display:flex;flex-direction:column}
 .day.forecast,.badge.forecast{border-color:var(--rain);color:var(--rain)}.day.climate,.badge.climate{border-color:var(--climate);color:var(--climate)}

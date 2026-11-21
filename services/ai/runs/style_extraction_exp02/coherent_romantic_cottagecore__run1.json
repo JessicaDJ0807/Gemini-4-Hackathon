@@ -1,0 +1,564 @@
+{
+  "case": "coherent_romantic_cottagecore",
+  "run": 1,
+  "case_spec": {
+    "kind": "coherent",
+    "image_ids": [
+      "rom-01",
+      "rom-02",
+      "rom-03",
+      "rom-04",
+      "rom-05"
+    ],
+    "expected_primary": "romantic_cottagecore",
+    "notes": "Five distinct source photos representing related aesthetic; manually review all five before labeling as ground truth"
+  },
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v2",
+  "settings": "defaults except system_instruction + JSON schema output (same as exp 01)",
+  "images": {
+    "rom-01": {
+      "path": "images/romantic_cottagecore/rom-01.jpg",
+      "board": "romantic_cottagecore",
+      "pexels_id": 12793879
+    },
+    "rom-02": {
+      "path": "images/romantic_cottagecore/rom-02.jpg",
+      "board": "romantic_cottagecore",
+      "pexels_id": 29748902
+    },
+    "rom-03": {
+      "path": "images/romantic_cottagecore/rom-03.jpg",
+      "board": "romantic_cottagecore",
+      "pexels_id": 16637112
+    },
+    "rom-04": {
+      "path": "images/romantic_cottagecore/rom-04.jpg",
+      "board": "romantic_cottagecore",
+      "pexels_id": 4589431
+    },
+    "rom-05": {
+      "path": "images/romantic_cottagecore/rom-05.jpg",
+      "board": "romantic_cottagecore",
+      "pexels_id": 36888281
+    }
+  },
+  "elapsed_seconds": 43.7,
+  "usage": {
+    "prompt_tokens": 7166,
+    "output_tokens": 1936,
+    "thinking_tokens": 3081,
+    "total_tokens": 12183
+  },
+  "invalid_image_ids": [],
+  "missing_per_image": [],
+  "style_profile": {
+    "aesthetics": [
+      "romantic",
+      "cottagecore",
+      "vintage-inspired",
+      "coquette",
+      "historical-inspired"
+    ],
+    "colors": [
+      "cream and off-white",
+      "muted sage and botanical green",
+      "blush and dusty pink",
+      "earthy brown and tan",
+      "red accents",
+      "light blue accents"
+    ],
+    "silhouettes": [
+      "fit-and-flare dress",
+      "fitted or corseted bodice",
+      "full gathered skirt",
+      "square neckline",
+      "sweetheart neckline",
+      "voluminous sleeves",
+      "bare-shoulder neckline"
+    ],
+    "stylingPatterns": [
+      "ribbon and bow accents",
+      "vintage and ditsy floral prints",
+      "ruffle and lace trim",
+      "headwear and hair accessories",
+      "corset lacing or layered bodice",
+      "flat earthy footwear",
+      "vertical stripes and layered petticoat"
+    ],
+    "avoidances": [
+      "black and dark color palettes",
+      "boxy or oversized silhouettes",
+      "athletic or streetwear pieces"
+    ],
+    "visualReferenceIds": [
+      "rom-01",
+      "rom-02",
+      "rom-03",
+      "rom-04",
+      "rom-05"
+    ]
+  },
+  "extraction": {
+    "per_image": [
+      {
+        "image_id": "rom-01",
+        "garments": [
+          "cream floral long-sleeve dress",
+          "sheer bishop sleeves with smocked cuffs",
+          "dusty pink satin ribbon bows",
+          "small stud earring",
+          "thin metallic ring"
+        ],
+        "aesthetics": [
+          "romantic",
+          "cottagecore",
+          "coquette",
+          "vintage-inspired"
+        ],
+        "colors": [
+          "cream",
+          "blush pink",
+          "dusty rose",
+          "muted green"
+        ],
+        "silhouettes": [
+          "fitted bodice",
+          "square neckline",
+          "voluminous bishop sleeves",
+          "flared skirt"
+        ],
+        "styling_details": [
+          "delicate rose floral print",
+          "white lace trim",
+          "ruffle trim",
+          "satin ribbon bows at shoulders, bodice, waist, and cuffs",
+          "faux pearl button details on bodice",
+          "smocked ruffled cuffs"
+        ],
+        "notes": "Cropped at the upper thigh, so full skirt length and footwear are not visible. The sleeves appear to be sheer chiffon or organza paired with a lightweight woven dress fabric."
+      },
+      {
+        "image_id": "rom-02",
+        "garments": [
+          "floral milkmaid midi or maxi dress",
+          "oversized red ribbon hair bow",
+          "delicate pendant necklace"
+        ],
+        "aesthetics": [
+          "cottagecore",
+          "romantic",
+          "coquette"
+        ],
+        "colors": [
+          "off-white",
+          "red",
+          "blue",
+          "soft green"
+        ],
+        "silhouettes": [
+          "smocked fitted bodice",
+          "square neckline",
+          "short puff sleeves",
+          "full gathered skirt"
+        ],
+        "styling_details": [
+          "small ditsy floral print",
+          "smocked waist and bodice",
+          "voluminous puff sleeves",
+          "large red hair bow accessory"
+        ],
+        "notes": "The lower hem and footwear are obscured, so the exact length and shoes are not visible. The dress fabric appears to be lightweight woven cotton or linen."
+      },
+      {
+        "image_id": "rom-03",
+        "garments": [
+          "striped sleeveless dress with flutter sleeves",
+          "patterned corset-style bodice vest",
+          "white layered underskirt",
+          "brown mid-calf lace-up boots",
+          "floral and metallic headband",
+          "small stud earrings"
+        ],
+        "aesthetics": [
+          "cottagecore",
+          "historical-inspired",
+          "romantic",
+          "vintage-inspired"
+        ],
+        "colors": [
+          "off-white",
+          "muted sage grey",
+          "tan",
+          "brown",
+          "white"
+        ],
+        "silhouettes": [
+          "fitted corset waist",
+          "square neckline",
+          "ruffled flutter sleeves",
+          "full gathered midi skirt"
+        ],
+        "styling_details": [
+          "layered corset vest over dress",
+          "narrow vertical stripes",
+          "small shoulder ribbon ties",
+          "visible ruffled petticoat hem",
+          "lace-up suede-look boots",
+          "headband accessory"
+        ],
+        "notes": "The dress appears to be lightweight cotton or linen, and the boots appear to be suede. The handheld flowers are excluded as a prop."
+      },
+      {
+        "image_id": "rom-04",
+        "garments": [
+          "strapless floral fit-and-flare dress",
+          "straw boater hat with light blue ribbon",
+          "brown flat penny loafers",
+          "woven wicker basket bag"
+        ],
+        "aesthetics": [
+          "romantic",
+          "cottagecore",
+          "vintage-inspired"
+        ],
+        "colors": [
+          "cream",
+          "soft pink",
+          "muted green",
+          "natural straw",
+          "light blue",
+          "cognac brown"
+        ],
+        "silhouettes": [
+          "strapless sweetheart neckline",
+          "fitted bodice",
+          "flared A-line above-the-knee skirt"
+        ],
+        "styling_details": [
+          "vintage floral print",
+          "ribbon-trimmed straw sun hat",
+          "flat slip-on suede-look loafers",
+          "woven basket accessory"
+        ],
+        "notes": "The dress fabric appears to be a structured lightweight cotton blend, and the loafers appear to be suede."
+      },
+      {
+        "image_id": "rom-05",
+        "garments": [
+          "off-the-shoulder floral corset dress",
+          "pink satin front lace-up ribbon"
+        ],
+        "aesthetics": [
+          "romantic",
+          "coquette",
+          "cottagecore",
+          "historical-inspired",
+          "vintage-inspired"
+        ],
+        "colors": [
+          "cream",
+          "pastel pink",
+          "dusty rose",
+          "muted green"
+        ],
+        "silhouettes": [
+          "fitted boned corset bodice",
+          "off-the-shoulder sweetheart neckline",
+          "draped short sleeves",
+          "gathered flared skirt"
+        ],
+        "styling_details": [
+          "front corset lacing with satin ribbon bow",
+          "ruffled neckline trim",
+          "vintage rose floral print",
+          "draped off-the-shoulder sleeves"
+        ],
+        "notes": "Seated pose cropped around mid-thigh, so full skirt length and footwear are not visible. The dress fabric appears to be a midweight textured cotton blend or jacquard."
+      }
+    ],
+    "style_directions": [
+      {
+        "name": "Romantic Cottagecore",
+        "description": "A cohesive dress-led wardrobe built around light cream bases, vintage floral prints, defined waists, full flared skirts, and feminine trim such as ribbons, ruffles, and lace.",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ],
+        "strength": "dominant"
+      },
+      {
+        "name": "Coquette and Corset-Inspired Romantic",
+        "description": "A softer, dressier angle emphasizing satin ribbon bows, lace trim, structured or lace-up bodices, sheer or draped sleeves, and blush rose palettes.",
+        "image_ids": [
+          "rom-01",
+          "rom-05"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Rustic Vintage Pastoral",
+        "description": "Daytime countryside styling combining breezy cotton-look dresses with practical earthy accessories like flat suede loafers, lace-up boots, straw hats, and hair ribbons.",
+        "image_ids": [
+          "rom-02",
+          "rom-03",
+          "rom-04"
+        ],
+        "strength": "secondary"
+      }
+    ],
+    "aesthetics": [
+      {
+        "label": "romantic",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "cottagecore",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "vintage-inspired",
+        "image_ids": [
+          "rom-01",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "coquette",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "historical-inspired",
+        "image_ids": [
+          "rom-01",
+          "rom-03",
+          "rom-05"
+        ]
+      }
+    ],
+    "colors": [
+      {
+        "label": "cream and off-white",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "muted sage and botanical green",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "blush and dusty pink",
+        "image_ids": [
+          "rom-01",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "earthy brown and tan",
+        "image_ids": [
+          "rom-03",
+          "rom-04"
+        ]
+      },
+      {
+        "label": "red accents",
+        "image_ids": [
+          "rom-02",
+          "rom-04"
+        ]
+      },
+      {
+        "label": "light blue accents",
+        "image_ids": [
+          "rom-02",
+          "rom-04"
+        ]
+      }
+    ],
+    "silhouettes": [
+      {
+        "label": "fit-and-flare dress",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "fitted or corseted bodice",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "full gathered skirt",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "square neckline",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03"
+        ]
+      },
+      {
+        "label": "sweetheart neckline",
+        "image_ids": [
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "voluminous sleeves",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "bare-shoulder neckline",
+        "image_ids": [
+          "rom-04",
+          "rom-05"
+        ]
+      }
+    ],
+    "styling_patterns": [
+      {
+        "label": "ribbon and bow accents",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "vintage and ditsy floral prints",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "ruffle and lace trim",
+        "image_ids": [
+          "rom-01",
+          "rom-03",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "headwear and hair accessories",
+        "image_ids": [
+          "rom-02",
+          "rom-03",
+          "rom-04"
+        ]
+      },
+      {
+        "label": "corset lacing or layered bodice",
+        "image_ids": [
+          "rom-03",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "flat earthy footwear",
+        "image_ids": [
+          "rom-03",
+          "rom-04"
+        ]
+      },
+      {
+        "label": "vertical stripes and layered petticoat",
+        "image_ids": [
+          "rom-03"
+        ]
+      }
+    ],
+    "avoidances": [
+      {
+        "label": "black and dark color palettes",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "boxy or oversized silhouettes",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      },
+      {
+        "label": "athletic or streetwear pieces",
+        "image_ids": [
+          "rom-01",
+          "rom-02",
+          "rom-03",
+          "rom-04",
+          "rom-05"
+        ]
+      }
+    ],
+    "summary": "Your style centers on romantic cottagecore dresses with fitted or corseted bodices, full flared skirts, and soft cream bases accented by vintage floral prints, blush pink, and muted botanical greens. You gravitate toward feminine details like satin ribbons, ruffles, puff or bishop sleeves, and square or sweetheart necklines. For daytime versatility, you balance dressy coquette details with rustic accessories such as straw hats, hair bows, and flat earthy suede footwear."
+  },
+  "status": "ok"
+}

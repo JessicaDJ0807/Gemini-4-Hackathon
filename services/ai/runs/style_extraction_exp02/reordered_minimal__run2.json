@@ -1,0 +1,534 @@
+{
+  "case": "reordered_minimal",
+  "run": 2,
+  "case_spec": {
+    "kind": "permutation",
+    "image_ids": [
+      "min-05",
+      "min-04",
+      "min-03",
+      "min-02",
+      "min-01"
+    ],
+    "compare_with": "coherent_minimal_clean",
+    "notes": "Same inputs different order"
+  },
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v2",
+  "settings": "defaults except system_instruction + JSON schema output (same as exp 01)",
+  "images": {
+    "min-05": {
+      "path": "images/minimal_clean/min-05.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 4816586
+    },
+    "min-04": {
+      "path": "images/minimal_clean/min-04.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 18786724
+    },
+    "min-03": {
+      "path": "images/minimal_clean/min-03.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 12400328
+    },
+    "min-02": {
+      "path": "images/minimal_clean/min-02.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 9142805
+    },
+    "min-01": {
+      "path": "images/minimal_clean/min-01.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 23531833
+    }
+  },
+  "elapsed_seconds": 49.3,
+  "usage": {
+    "prompt_tokens": 7194,
+    "output_tokens": 1857,
+    "thinking_tokens": 3091,
+    "total_tokens": 12142
+  },
+  "invalid_image_ids": [],
+  "missing_per_image": [],
+  "style_profile": {
+    "aesthetics": [
+      "minimalist",
+      "tailored",
+      "monochrome",
+      "smart casual",
+      "edgy",
+      "utilitarian"
+    ],
+    "colors": [
+      "camel and tan",
+      "white",
+      "light beige and stone",
+      "black",
+      "dark neutrals",
+      "light-wash blue denim"
+    ],
+    "silhouettes": [
+      "relaxed or oversized blazer",
+      "high-waisted tailored trousers",
+      "high-waisted pleated trousers",
+      "fitted cropped top",
+      "cropped blazer",
+      "fitted corset top",
+      "belted drop-shoulder jacket",
+      "high-waisted straight-leg jeans"
+    ],
+    "stylingPatterns": [
+      "solid-color dressing without prints",
+      "open blazer layering",
+      "tonal matching sets and suiting",
+      "belted waist definition",
+      "relaxed outerwear paired with fitted or cropped inner layers",
+      "minimal jewelry and accessories"
+    ],
+    "avoidances": [
+      "prints and patterns",
+      "bright or saturated colors",
+      "heavy embellishment or maximalist accessories"
+    ],
+    "visualReferenceIds": [
+      "min-05",
+      "min-04",
+      "min-03",
+      "min-02",
+      "min-01"
+    ]
+  },
+  "extraction": {
+    "per_image": [
+      {
+        "image_id": "min-05",
+        "garments": [
+          "camel tailored blazer",
+          "white cropped crew-neck t-shirt",
+          "camel high-waisted pleated trousers",
+          "matching fabric waist belt with rectangular buckle",
+          "small silver earring"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "tailored",
+          "smart casual",
+          "monochrome"
+        ],
+        "colors": [
+          "camel",
+          "tan",
+          "white"
+        ],
+        "silhouettes": [
+          "relaxed blazer",
+          "fitted cropped top",
+          "high-waisted pleated trousers"
+        ],
+        "styling_details": [
+          "tonal suiting set",
+          "open blazer over fitted white base layer",
+          "belted waist definition",
+          "solid colors with no prints",
+          "minimal jewelry"
+        ],
+        "notes": "Cropped at mid-thigh, so trouser length and footwear are not visible. The suiting set appears to be a smooth medium-weight woven fabric and the top appears to be a fitted cotton knit."
+      },
+      {
+        "image_id": "min-04",
+        "garments": [
+          "dark cropped tailored blazer",
+          "dark corset-style crew-neck bodysuit with sheer panels",
+          "dark high-waisted pleated trousers",
+          "dark belt with rectangular metallic buckle",
+          "small chain-link drop earrings",
+          "chain necklace"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "tailored",
+          "edgy",
+          "monochrome"
+        ],
+        "colors": [
+          "dark neutrals"
+        ],
+        "silhouettes": [
+          "cropped blazer",
+          "fitted corset top",
+          "high-waisted pleated trousers"
+        ],
+        "styling_details": [
+          "cropped open blazer layered over structured sheer-paneled top",
+          "accented leather-look waist belt",
+          "subtle metallic chain jewelry",
+          "solid fabrics with no prints"
+        ],
+        "notes": "Image is in black and white, so exact hues cannot be confirmed and appear as dark and charcoal tones. Cropped at the upper thigh, so trouser hem and footwear are not visible. The blazer and trousers appear to be woven suiting fabric, while the top appears to combine opaque knit with sheer mesh panels."
+      },
+      {
+        "image_id": "min-03",
+        "garments": [
+          "black tailored blazer",
+          "black high-waisted tailored trousers",
+          "thin red cord bracelet"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "tailored",
+          "monochrome",
+          "modern evening"
+        ],
+        "colors": [
+          "black"
+        ],
+        "silhouettes": [
+          "relaxed blazer",
+          "high-waisted tailored trousers"
+        ],
+        "styling_details": [
+          "all-black monochrome suiting",
+          "blazer worn open with no visible inner top",
+          "minimal accessories",
+          "solid matte fabric with no prints"
+        ],
+        "notes": "Seated pose cropped above the ankles, so trouser hem and footwear are not visible. The suit appears to be a smooth matte woven suiting fabric."
+      },
+      {
+        "image_id": "min-02",
+        "garments": [
+          "light beige belted utility jacket",
+          "light beige matching trousers"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "utilitarian",
+          "monochrome"
+        ],
+        "colors": [
+          "light beige",
+          "stone",
+          "taupe"
+        ],
+        "silhouettes": [
+          "drop-shoulder relaxed jacket",
+          "cinched tie waist",
+          "relaxed trousers"
+        ],
+        "styling_details": [
+          "tonal matching two-piece set",
+          "self-tie waist belt",
+          "oversized front patch pockets",
+          "collared V-neck front worn closed without visible inner layer",
+          "solid matte texture with no prints"
+        ],
+        "notes": "Cropped at mid-thigh, so trouser length and footwear are not visible. The set appears to be made of smooth matte leather or faux leather. Thin decorative clear wire visible in the frame appears to be an editorial prop rather than wearable clothing."
+      },
+      {
+        "image_id": "min-01",
+        "garments": [
+          "camel oversized blazer",
+          "white ribbed cropped bandeau top",
+          "light-wash high-waisted straight-leg jeans"
+        ],
+        "aesthetics": [
+          "smart casual",
+          "minimalist",
+          "modern casual"
+        ],
+        "colors": [
+          "camel",
+          "tan",
+          "white",
+          "light-wash blue denim"
+        ],
+        "silhouettes": [
+          "oversized blazer",
+          "fitted cropped bandeau top",
+          "high-waisted straight-leg jeans"
+        ],
+        "styling_details": [
+          "tailored blazer dressed down with denim",
+          "open blazer over cropped white base layer",
+          "high-waisted bottom balancing cropped top",
+          "clean solid pieces with no prints"
+        ],
+        "notes": "Subject is barefoot, so no footwear preference is shown. The blazer appears to be a lightweight woven fabric, the bandeau appears to be a textured or smocked knit, and the jeans appear to be structured denim."
+      }
+    ],
+    "style_directions": [
+      {
+        "name": "Modern Minimalist Tailoring",
+        "description": "Clean-lined blazers, high-waisted trousers, and cohesive tonal sets in neutral shades, relying on sharp structure, belted waists, and solid fabrics rather than prints or ornamentation.",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "min-05"
+        ],
+        "strength": "dominant"
+      },
+      {
+        "name": "Relaxed Smart Casual",
+        "description": "Warm camel relaxed or oversized blazers paired with crisp white cropped tops and versatile bottoms like light-wash straight-leg jeans or belted pleated trousers.",
+        "image_ids": [
+          "min-01",
+          "min-05"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Sleek Dark Tailoring",
+        "description": "Dark monochrome tailored blazers and high-waisted trousers styled with structured corset-style layering or an open shirt-free neckline for a sharper dressy look.",
+        "image_ids": [
+          "min-03",
+          "min-04"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Utilitarian Monochrome",
+        "description": "Structured tonal separates with functional details such as large patch pockets, a wide collar, and a self-tie waist belt in a smooth leather-look finish.",
+        "image_ids": [
+          "min-02"
+        ],
+        "strength": "minor"
+      }
+    ],
+    "aesthetics": [
+      {
+        "label": "minimalist",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "tailored",
+        "image_ids": [
+          "min-01",
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "monochrome",
+        "image_ids": [
+          "min-02",
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "smart casual",
+        "image_ids": [
+          "min-01",
+          "min-05"
+        ]
+      },
+      {
+        "label": "edgy",
+        "image_ids": [
+          "min-04"
+        ]
+      },
+      {
+        "label": "utilitarian",
+        "image_ids": [
+          "min-02"
+        ]
+      }
+    ],
+    "colors": [
+      {
+        "label": "camel and tan",
+        "image_ids": [
+          "min-01",
+          "min-05"
+        ]
+      },
+      {
+        "label": "white",
+        "image_ids": [
+          "min-01",
+          "min-05"
+        ]
+      },
+      {
+        "label": "light beige and stone",
+        "image_ids": [
+          "min-02"
+        ]
+      },
+      {
+        "label": "black",
+        "image_ids": [
+          "min-03"
+        ]
+      },
+      {
+        "label": "dark neutrals",
+        "image_ids": [
+          "min-03",
+          "min-04"
+        ]
+      },
+      {
+        "label": "light-wash blue denim",
+        "image_ids": [
+          "min-01"
+        ]
+      }
+    ],
+    "silhouettes": [
+      {
+        "label": "relaxed or oversized blazer",
+        "image_ids": [
+          "min-01",
+          "min-03",
+          "min-05"
+        ]
+      },
+      {
+        "label": "high-waisted tailored trousers",
+        "image_ids": [
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "high-waisted pleated trousers",
+        "image_ids": [
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "fitted cropped top",
+        "image_ids": [
+          "min-01",
+          "min-05"
+        ]
+      },
+      {
+        "label": "cropped blazer",
+        "image_ids": [
+          "min-04"
+        ]
+      },
+      {
+        "label": "fitted corset top",
+        "image_ids": [
+          "min-04"
+        ]
+      },
+      {
+        "label": "belted drop-shoulder jacket",
+        "image_ids": [
+          "min-02"
+        ]
+      },
+      {
+        "label": "high-waisted straight-leg jeans",
+        "image_ids": [
+          "min-01"
+        ]
+      }
+    ],
+    "styling_patterns": [
+      {
+        "label": "solid-color dressing without prints",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "open blazer layering",
+        "image_ids": [
+          "min-01",
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "tonal matching sets and suiting",
+        "image_ids": [
+          "min-02",
+          "min-03",
+          "min-05"
+        ]
+      },
+      {
+        "label": "belted waist definition",
+        "image_ids": [
+          "min-02",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "relaxed outerwear paired with fitted or cropped inner layers",
+        "image_ids": [
+          "min-01",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "minimal jewelry and accessories",
+        "image_ids": [
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      }
+    ],
+    "avoidances": [
+      {
+        "label": "prints and patterns",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      },
+      {
+        "label": "bright or saturated colors",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-05"
+        ]
+      },
+      {
+        "label": "heavy embellishment or maximalist accessories",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "min-05"
+        ]
+      }
+    ],
+    "summary": "Your style centers on modern minimalist tailoring built around neutral tones like camel, beige, white, and black, with clean solid fabrics and no prints. You gravitate toward structured blazers, high-waisted trousers, and tonal matching sets, often balanced with belted waists or sleek fitted and cropped base layers. For variety, you mix smart-casual daytime pairings like camel blazers with light-wash denim alongside sharper dark monochrome tailoring and understated utilitarian sets."
+  },
+  "status": "ok"
+}

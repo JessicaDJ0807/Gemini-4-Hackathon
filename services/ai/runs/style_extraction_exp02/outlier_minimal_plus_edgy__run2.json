@@ -1,0 +1,503 @@
+{
+  "case": "outlier_minimal_plus_edgy",
+  "run": 2,
+  "case_spec": {
+    "kind": "outlier",
+    "image_ids": [
+      "min-01",
+      "min-02",
+      "min-03",
+      "min-04",
+      "edg-01"
+    ],
+    "expected_primary": "minimal_clean",
+    "notes": "4 minimal plus 1 edgy; do not infer dislikes from minority preference"
+  },
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v2",
+  "settings": "defaults except system_instruction + JSON schema output (same as exp 01)",
+  "images": {
+    "min-01": {
+      "path": "images/minimal_clean/min-01.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 23531833
+    },
+    "min-02": {
+      "path": "images/minimal_clean/min-02.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 9142805
+    },
+    "min-03": {
+      "path": "images/minimal_clean/min-03.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 12400328
+    },
+    "min-04": {
+      "path": "images/minimal_clean/min-04.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 18786724
+    },
+    "edg-01": {
+      "path": "images/edgy_grunge/edg-01.jpg",
+      "board": "edgy_grunge",
+      "pexels_id": 8602189
+    }
+  },
+  "elapsed_seconds": 48.1,
+  "usage": {
+    "prompt_tokens": 7195,
+    "output_tokens": 1637,
+    "thinking_tokens": 3521,
+    "total_tokens": 12353
+  },
+  "invalid_image_ids": [],
+  "missing_per_image": [],
+  "style_profile": {
+    "aesthetics": [
+      "minimalist",
+      "tailored",
+      "edgy",
+      "monochromatic",
+      "smart casual",
+      "utilitarian",
+      "rock chic"
+    ],
+    "colors": [
+      "black",
+      "camel",
+      "beige",
+      "white",
+      "light blue denim",
+      "dark and mid-tone neutrals"
+    ],
+    "silhouettes": [
+      "tailored blazer",
+      "high-waisted trousers",
+      "oversized outerwear",
+      "cinched waist",
+      "high-waisted straight-leg jeans",
+      "cropped blazer",
+      "cropped fitted top",
+      "structured moto jacket"
+    ],
+    "stylingPatterns": [
+      "solid unpatterned garments",
+      "minimal accessories",
+      "open structured jacket layering",
+      "monochromatic tonal dressing",
+      "waist definition with belts",
+      "leather-look texture",
+      "fitted base layer under structured blazer"
+    ],
+    "avoidances": [
+      "bold prints and patterns",
+      "bright saturated colors"
+    ],
+    "visualReferenceIds": [
+      "min-01",
+      "min-02",
+      "min-03",
+      "min-04",
+      "edg-01"
+    ]
+  },
+  "extraction": {
+    "per_image": [
+      {
+        "image_id": "min-01",
+        "garments": [
+          "oversized single-breasted blazer",
+          "strapless bandeau crop top",
+          "high-waisted straight-leg jeans"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "smart casual",
+          "modern classic"
+        ],
+        "colors": [
+          "camel",
+          "white",
+          "light blue denim"
+        ],
+        "silhouettes": [
+          "oversized blazer",
+          "cropped fitted top",
+          "high-waisted straight-leg jeans"
+        ],
+        "styling_details": [
+          "open blazer layered over cropped top",
+          "high-low pairing of tailored outerwear with casual denim",
+          "solid unpatterned pieces",
+          "no visible accessories or footwear"
+        ],
+        "notes": "Subject is seated and barefoot, so footwear preferences are not shown. The blazer appears to be a lightweight woven suiting or cotton-blend fabric, and the white bandeau top appears to be ribbed or smocked knit."
+      },
+      {
+        "image_id": "min-02",
+        "garments": [
+          "belted utility shirt jacket",
+          "matching trousers"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "utilitarian",
+          "monochromatic"
+        ],
+        "colors": [
+          "beige",
+          "stone"
+        ],
+        "silhouettes": [
+          "relaxed drop-shoulder jacket",
+          "cinched waist",
+          "matching co-ord set"
+        ],
+        "styling_details": [
+          "monochromatic tonal dressing",
+          "self-fabric tie belt at the waist",
+          "large chest patch pockets and slanted hip pockets",
+          "open notched collar"
+        ],
+        "notes": "Cropped at mid-thigh, so lower trouser silhouette and footwear are not visible. The matching set appears to be matte leather or faux leather with a relaxed fit. Clear editorial wire around the subject is excluded as a photography prop."
+      },
+      {
+        "image_id": "min-03",
+        "garments": [
+          "tailored single-breasted blazer",
+          "high-waisted trousers",
+          "thin string bracelet"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "tailored",
+          "monochromatic"
+        ],
+        "colors": [
+          "black"
+        ],
+        "silhouettes": [
+          "relaxed tailored blazer",
+          "high-waisted wide-leg trousers"
+        ],
+        "styling_details": [
+          "monochromatic all-black suiting",
+          "blazer worn open with no visible inner top",
+          "structured shoulders and clean lapels",
+          "minimal accessories"
+        ],
+        "notes": "Subject is seated and cropped at mid-thigh, so full trouser length and footwear are not visible. The suiting appears to be medium-weight woven wool or a synthetic blend."
+      },
+      {
+        "image_id": "min-04",
+        "garments": [
+          "cropped blazer",
+          "fitted sheer-paneled corset-style top",
+          "high-waisted pleated trousers",
+          "buckled waist belt",
+          "small link drop earrings",
+          "chain necklace"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "tailored",
+          "edgy"
+        ],
+        "colors": [
+          "dark neutral",
+          "mid-tone neutral"
+        ],
+        "silhouettes": [
+          "cropped boxy blazer",
+          "fitted crew-neck top",
+          "high-waisted pleated trousers",
+          "cinched waist"
+        ],
+        "styling_details": [
+          "cropped tailored jacket layered over structured corset-seamed top",
+          "defined waist with rectangular-buckle belt",
+          "front trouser pleats",
+          "subtle metallic jewelry"
+        ],
+        "notes": "The photograph is black and white, so exact garment colors cannot be confirmed and appear to be dark and mid-tone neutrals. Cropped at mid-thigh, hiding lower trouser cut and footwear. The top appears to combine opaque knit with sheer paneled boning, and the blazer and trousers appear to be woven suiting fabric."
+      },
+      {
+        "image_id": "edg-01",
+        "garments": [
+          "crocodile-embossed moto jacket",
+          "dark solid inner top",
+          "dark bottoms"
+        ],
+        "aesthetics": [
+          "edgy",
+          "rock chic",
+          "urban street style"
+        ],
+        "colors": [
+          "black"
+        ],
+        "silhouettes": [
+          "structured hip-length moto jacket",
+          "fitted sleeves"
+        ],
+        "styling_details": [
+          "textured crocodile-embossed finish",
+          "exposed metal zipper hardware",
+          "belted hem detail",
+          "dark tonal layering"
+        ],
+        "notes": "Side-profile image cropped at the hips, so the inner top, lower garments, and footwear are largely hidden. The moto jacket appears to be structured crocodile-embossed leather or faux leather."
+      }
+    ],
+    "style_directions": [
+      {
+        "name": "Modern Minimalist Tailoring",
+        "description": "Clean-lined, structured outerwear such as blazers and tailored utility jackets paired with high-waisted trousers or straight-leg denim in restrained neutral palettes.",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04"
+        ],
+        "strength": "dominant"
+      },
+      {
+        "name": "Edgy Dark Styling",
+        "description": "Bolder, darker elements featuring textured leather-look moto outerwear, sheer corset-seamed layering, and stark all-black suiting.",
+        "image_ids": [
+          "edg-01",
+          "min-04",
+          "min-03"
+        ],
+        "strength": "secondary"
+      }
+    ],
+    "aesthetics": [
+      {
+        "label": "minimalist",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04"
+        ]
+      },
+      {
+        "label": "tailored",
+        "image_ids": [
+          "min-01",
+          "min-03",
+          "min-04"
+        ]
+      },
+      {
+        "label": "edgy",
+        "image_ids": [
+          "edg-01",
+          "min-04"
+        ]
+      },
+      {
+        "label": "monochromatic",
+        "image_ids": [
+          "min-02",
+          "min-03"
+        ]
+      },
+      {
+        "label": "smart casual",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "utilitarian",
+        "image_ids": [
+          "min-02"
+        ]
+      },
+      {
+        "label": "rock chic",
+        "image_ids": [
+          "edg-01"
+        ]
+      }
+    ],
+    "colors": [
+      {
+        "label": "black",
+        "image_ids": [
+          "min-03",
+          "edg-01"
+        ]
+      },
+      {
+        "label": "camel",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "beige",
+        "image_ids": [
+          "min-02"
+        ]
+      },
+      {
+        "label": "white",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "light blue denim",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "dark and mid-tone neutrals",
+        "image_ids": [
+          "min-04"
+        ]
+      }
+    ],
+    "silhouettes": [
+      {
+        "label": "tailored blazer",
+        "image_ids": [
+          "min-01",
+          "min-03",
+          "min-04"
+        ]
+      },
+      {
+        "label": "high-waisted trousers",
+        "image_ids": [
+          "min-03",
+          "min-04"
+        ]
+      },
+      {
+        "label": "oversized outerwear",
+        "image_ids": [
+          "min-01",
+          "min-02"
+        ]
+      },
+      {
+        "label": "cinched waist",
+        "image_ids": [
+          "min-02",
+          "min-04"
+        ]
+      },
+      {
+        "label": "high-waisted straight-leg jeans",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "cropped blazer",
+        "image_ids": [
+          "min-04"
+        ]
+      },
+      {
+        "label": "cropped fitted top",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "structured moto jacket",
+        "image_ids": [
+          "edg-01"
+        ]
+      }
+    ],
+    "styling_patterns": [
+      {
+        "label": "solid unpatterned garments",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "edg-01"
+        ]
+      },
+      {
+        "label": "minimal accessories",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "edg-01"
+        ]
+      },
+      {
+        "label": "open structured jacket layering",
+        "image_ids": [
+          "min-01",
+          "min-03",
+          "min-04"
+        ]
+      },
+      {
+        "label": "monochromatic tonal dressing",
+        "image_ids": [
+          "min-02",
+          "min-03",
+          "edg-01"
+        ]
+      },
+      {
+        "label": "waist definition with belts",
+        "image_ids": [
+          "min-02",
+          "min-04"
+        ]
+      },
+      {
+        "label": "leather-look texture",
+        "image_ids": [
+          "min-02",
+          "edg-01"
+        ]
+      },
+      {
+        "label": "fitted base layer under structured blazer",
+        "image_ids": [
+          "min-01",
+          "min-04"
+        ]
+      }
+    ],
+    "avoidances": [
+      {
+        "label": "bold prints and patterns",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "min-04",
+          "edg-01"
+        ]
+      },
+      {
+        "label": "bright saturated colors",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03",
+          "edg-01"
+        ]
+      }
+    ],
+    "summary": "Your style centers on modern minimalist tailoring built around structured blazers, high-waisted trousers, and clean neutral palettes in black, beige, and camel. You balance relaxed or cropped outerwear with defined waists and fitted base layers, while adding edgy accents through crocodile-embossed moto jackets and sheer corset-style detailing. Across your inspiration, you consistently favor solid, unpatterned pieces, subtle textural contrast, and minimal accessories."
+  },
+  "status": "ok"
+}

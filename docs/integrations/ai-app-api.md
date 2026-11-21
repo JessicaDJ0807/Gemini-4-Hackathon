@@ -1,6 +1,6 @@
 # A and B API specification
 
-Status: B saves a full editable style profile with nested directions and manual tags, aligned with the proposal in PR #2. Uploaded inspiration photos are analyzed through B's Gemini adapter. A's nested-profile adoption and live outfit integration remain pending.
+Status: B saves a full editable style profile with nested directions and manual tags, aligned with the proposal in PR #2. Uploaded inspiration photos are analyzed through B's Gemini adapter. Live outfit generation is connected to A; native nested-profile adoption remains pending, with B passing grouped style details through A's existing `preferences` field.
 
 ## Ownership and flow
 
@@ -46,7 +46,7 @@ The proposed nested profile discussed in PR #2 is implemented on B's side:
 
 The main UI shows compact style labels; details are saved for outfit reference and editable under an optional disclosure. New analysis after nested edits is staged for explicit replacement or dismissal, preserving manual tags either way. Empty/failed results retain current preferences. Confirmation saves the full profile and passes it into outfit requests. Manual-only profiles work without Gemini, and older tag-only saves still load.
 
-Original photos remain transient. Saved photo IDs are provenance, not downloadable `MediaRef`s; outfit `media` stays empty. A's current planner still requires an update to explicitly consume the nested structure. The A-hosted style-analysis adapter below remains separate from B's direct Gemini photo flow. See [B setup](../../apps/web/README.md#automatic-photo-labels-with-gemini).
+Original photos remain transient. Saved photo IDs are provenance, not downloadable `MediaRef`s; outfit `media` stays empty. Until A accepts nested fields natively, B passes their JSON through the existing `preferences` field alongside the derived flat profile. The A-hosted style-analysis adapter below remains separate from B's direct Gemini photo flow. See [B setup](../../apps/web/README.md#automatic-photo-labels-with-gemini).
 
 ## 1 Style analysis
 
@@ -88,7 +88,7 @@ B lets the user accept or edit suggestions before committing the profile. A pres
 
 `POST /v1/outfit-plans`
 
-**Request:** `requestId`, `inputRevision`, `styleProfile`, `trip`, `wardrobeVersion`, `wardrobe`, and `media` are required.
+**Request:** `requestId`, `inputRevision`, `styleProfile`, `trip`, `wardrobeVersion`, `wardrobe`, and `media` are required. B’s live adapter additionally sends `outfitCount` equal to the trip-day count, `useWardrobeImages: true`, and `preferences` containing confirmed nested style details. Wardrobe URLs are canonical, absolute URLs reachable by A. Live server/browser timeouts are 120/130 seconds. B rejects missing-day plans rather than inventing replacements.
 
 `trip` contains `destination`, `startDate`, `endDate`, `attractions`, and `weather`, plus optional `notes`. Attractions are full confirmed place records, not just IDs or the unaccepted suggestion list. The current UI sends `media: []` and `visualReferenceIds: []`; photo-derived preferences are user-confirmed style tags.
 

@@ -6,24 +6,29 @@
   <link rel="stylesheet" href="/style.css"><script type="module" src="/wardrobe.mjs"></script>
 </head>
 <body class="wardrobe-page"><main>
-  <header><a class="brand" href="/">TRAVEL AI STYLIST</a><a href="/trip">Edit trip</a></header>
+  <header><a class="brand" href="/">TRAVEL AI STYLIST</a><nav aria-label="Wardrobe navigation"><a href="/trip">Edit trip</a><button id="open-bag" class="bag-trigger" type="button">Bag (0)</button></nav></header>
   <p id="wardrobe-loading" role="status">Loading your trip…</p>
   <div id="wardrobe-unavailable" hidden><p id="wardrobe-message" role="alert"></p><a class="button-link" href="/trip">Back to trip</a></div>
   <section id="outfit-flow" hidden aria-labelledby="outfit-title">
-    <p class="eyebrow">03 / YOUR WARDROBE</p><h1 id="outfit-title">Your wardrobe</h1>
-    <p class="mock-badge">Demo · mock outfits, no AI analysis</p>
-    <p class="intro">Choose what you’d like to wear. We’ll put the looks together.</p>
-    <p class="hint">The mock does not interpret your preferences or avoidances. Uncheck anything unsuitable.</p>
+    <p class="eyebrow">03 / THE FINISHING TOUCHES</p><h1 id="outfit-title">Pack less. Wear more.</h1>
+    <p id="outfit-mode" class="mock-badge">Demo · mock outfits, no AI analysis</p>
+    <p class="intro">Your pieces, styled for the journey.</p>
+    <p id="mock-note" class="hint">The mock does not interpret your preferences or avoidances. Uncheck anything unsuitable.</p>
     <p id="outfit-context"></p>
+    <details id="wardrobe-selection" open><summary>Your wardrobe <span id="wardrobe-count"></span></summary>
+    <p class="hint">Tap to include the pieces you’re bringing.</p>
     <div id="wardrobe-grid" class="wardrobe-grid"></div>
+    </details><div class="generate-bar">
     <button id="generate-outfits" type="button" disabled>Generate my outfits</button>
     <button id="reload-wardrobe" class="secondary" type="button" hidden>Reload wardrobe</button>
-    <p id="outfit-status" role="status"></p><p id="outfit-error" role="alert" hidden></p>
+    </div><p id="outfit-status" role="status"></p><p id="outfit-error" role="alert" hidden></p>
     <section id="outfit-results" hidden aria-labelledby="results-title">
-      <h2 id="results-title" tabindex="-1">Your daily looks</h2>
-      <div id="outfit-warnings"></div><div id="daily-looks"></div>
+      <div class="results-heading"><div><p class="eyebrow">MADE FOR YOUR TRIP</p><h2 id="results-title" tabindex="-1">Your daily looks</h2></div></div>
+      <div id="look-days" class="look-days" role="group" aria-label="Choose a trip day"></div>
+      <details id="outfit-warning-details" class="look-notes" hidden><summary>About these looks</summary><div id="outfit-warnings"></div></details><div id="daily-looks"></div>
     </section>
   </section>
-  <footer>Demo garments are illustrations, not products for sale. Weather data: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>.</footer>
+  <details id="wardrobe-credits" class="photo-credits" hidden><summary>Wardrobe photo credits · Pexels</summary><ul id="wardrobe-credit-list"></ul></details>
+  <footer><span id="wardrobe-footer">Demo garments are illustrations, not products for sale.</span> Weather data: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>.</footer>
 </main></body>
 </html>

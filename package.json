@@ -2,9 +2,12 @@
   "name": "travel-ai-stylist",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22.9" },
+  "engines": {
+    "node": ">=22.9"
+  },
   "scripts": {
     "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "dev:full": "node --env-file-if-exists=.env scripts/dev-full.mjs"
   }
 }

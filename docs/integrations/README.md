@@ -6,7 +6,7 @@ B uses Open-Meteo through `POST /api/weather` for destination-local daily foreca
 
 ## Shop.dev / Shopify (Person B)
 
-AI returns missing-item *requirements* and search strings, not fabricated purchasable listings. Commerce resolves actual inventory, prices, variants, carts, and checkout. Confirm merchant-specific checkout limitations and require explicit user action to purchase.
+A returns missing-item requirements and search strings. B now consumes those through **Shop this piece** and `POST /api/products/search`, calling Shop MCP's read-only catalog search. It displays up to five real product matches with photos, merchant, price/currency, shown variant, availability, and the original product link. No generated product listings or inferred missing items. [Implementation and limits](../../apps/web/README.md#shop-this-piece-real-product-search). Users can select a returned variant, add it to a session bag, and review a checkout per merchant. B creates the checkout through Shop MCP using signed search offers; payment is handed to the merchant’s secure page. Embedded payment and order tracking remain future work.
 
 ## 3D viewer (Person C, integrated by B)
 

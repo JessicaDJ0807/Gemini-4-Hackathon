@@ -153,11 +153,16 @@ def render(req: dict, res: dict, title: str) -> str:
 
     gaps = res.get("shoppingGaps", [])
     if gaps:
-        out.append('<section class="panel"><h2>Shopping gaps</h2><table><tr><th>Search</th><th>Priority</th>'
-                   '<th>For</th><th>Similar owned</th><th>Reason</th></tr>')
+        out.append('<section class="panel"><h2>Shopping gaps</h2><table><tr><th>#</th><th>Search</th><th>Fallbacks</th>'
+                   '<th>Priority</th><th>For</th><th>Owned</th><th>Reason</th></tr>')
         for g in gaps:
-            out.append(f'<tr><td><b>{esc(g["searchQuery"])}</b></td><td>{esc(g["priority"])}</td>'
-                       f'<td>{esc(", ".join(g["outfitIds"]))}</td><td>{esc(", ".join(g.get("similarOwnedItemIds", [])) or "—")}</td>'
+            use_owned = g.get("decision") == "use_owned"
+            owned = (f'wear {g["ownedAlternativeId"]}' if use_owned
+                     else ", ".join(g.get("similarOwnedItemIds", [])) or "—")
+            search = f'<s>{esc(g["searchQuery"])}</s>' if use_owned else f'<b>{esc(g["searchQuery"])}</b>'
+            out.append(f'<tr><td>{esc(str(g.get("rank") or "—"))}</td><td>{search}</td>'
+                       f'<td>{esc(" · ".join(g.get("fallbackQueries", [])) or "—")}</td><td>{esc(g["priority"])}</td>'
+                       f'<td>{esc(", ".join(g["outfitIds"]))}</td><td>{esc(owned)}</td>'
                        f'<td>{esc(g["reason"])}</td></tr>')
         out.append("</table></section>")
     out.append("</main></body></html>")

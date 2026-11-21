@@ -22,7 +22,7 @@ from pydantic import BaseModel
 
 from .models import (InspirationNote, MediaRef, MissingItem, Outfit, OutfitPiece, OutfitPlanRequest,
                      OutfitPlanResponse, WardrobeItem, WeatherDay)
-from .shopping import build_search_query, identify_shopping_gaps
+from .shopping import build_search_query, plan_shopping
 
 SERVICE_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(SERVICE_DIR / ".env")
@@ -457,9 +457,12 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         warnings += check_warnings
         warnings.append(f"Only {len(outfits)} of {len(slots)} requested outfits were usable.")
 
+    gaps, shop_warnings = plan_shopping(outfits, req.wardrobe, profile, images, client)
+    warnings += shop_warnings
+
     return OutfitPlanResponse(
         requestId=req.requestId, inputRevision=req.inputRevision, outfits=outfits,
-        warnings=warnings, shoppingGaps=identify_shopping_gaps(outfits, req.wardrobe), model=MODEL,
+        warnings=warnings, shoppingGaps=gaps, model=MODEL,
         wardrobeImagesUsed=[w.id for w in req.wardrobe if w.id in images],
         inspirationMediaUsed=[m.id for m in req.media if m.id in inspiration],
         inspirationNotes=notes,

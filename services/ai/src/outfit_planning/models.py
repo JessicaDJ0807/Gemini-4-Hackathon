@@ -191,6 +191,11 @@ class ShoppingGap(BaseModel):
     missingItemIds: list[str]
     similarOwnedItemIds: list[str] = Field(
         [], description="Owned items with the same category and color; check before buying")
+    # extensions (AI shopping list)
+    decision: Literal["buy", "use_owned"] = "buy"
+    ownedAlternativeId: Optional[str] = Field(None, description="use_owned: the wardrobe item to wear instead")
+    fallbackQueries: list[str] = Field([], description="broader searches to try if searchQuery finds nothing")
+    rank: Optional[int] = Field(None, description="buy order for the trip, 1 = most useful")
 
 
 class ErrorBody(BaseModel):

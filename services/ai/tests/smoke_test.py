@@ -16,7 +16,8 @@ from src.outfit_planning.models import OutfitPlanRequest, OutfitPlanResponse  # 
 from src.outfit_planning.planner import (LlmMissingItem, LlmOutfit, LlmPlan,  # noqa: E402
                                          PlanningError, generate_outfits,
                                          outfit_slots, trip_days, validate)
-from src.outfit_planning.shopping import identify_shopping_gaps  # noqa: E402
+from src.outfit_planning.shopping import (LlmShoppingList, LlmSuggestion,  # noqa: E402
+                                          identify_shopping_gaps, plan_shopping, validate_shopping)
 
 REQUEST = SERVICE_DIR / "examples" / "outfit_plan_request.json"
 passed = 0
@@ -62,6 +63,42 @@ def offline_checks() -> None:
 
     gaps = identify_shopping_gaps(outfits, req.wardrobe)
     check(len(gaps) == 1 and gaps[0].outfitIds == ["look-01", "look-02"], "duplicate purchase merged across outfits")
+
+    # AI shopping list: validation against real ids
+    owned_shoes = next(w for w in req.wardrobe if w.category == "shoes")
+    outfits[2].missingItems = [outfits[0].missingItems[0].model_copy(update={
+        "id": "miss-03-01", "description": "Walking shoes", "category": "shoes", "priority": "optional",
+        "searchQuery": "white walking sneakers"})]
+    shop = LlmShoppingList(suggestions=[
+        LlmSuggestion(missingItemIds=["miss-01-01", "miss-02-01", "miss-99-99"], decision="buy",
+                      searchQuery="black waterproof rain jacket", fallbackQueries=["rain jacket", "Rain Jacket", "a", "b"],
+                      category="outerwear", priority="optional", rank=1, reason="rain"),
+        LlmSuggestion(missingItemIds=["miss-03-01"], decision="use_owned", ownedAlternativeId=owned_shoes.id,
+                      searchQuery="white sneakers", category="shoes", priority="optional", reason="you own shoes"),
+    ])
+    gaps, shop_warn = validate_shopping(shop, outfits, req.wardrobe)
+    check(gaps[0].missingItemIds == ["miss-01-01", "miss-02-01"] and gaps[0].outfitIds == ["look-01", "look-02"],
+          "AI merge kept; invented missing-item id removed")
+    check(gaps[0].priority == "essential", "model cannot downgrade an essential need")
+    check(gaps[0].fallbackQueries == ["rain jacket", "a"], "fallback queries deduplicated and capped")
+    check(gaps[1].decision == "use_owned" and gaps[1].ownedAlternativeId == owned_shoes.id and gaps[1].rank is None,
+          "owned alternative kept, unranked")
+    bad_alt = LlmShoppingList(suggestions=[LlmSuggestion(
+        missingItemIds=["miss-01-01"], decision="use_owned", ownedAlternativeId=owned_shoes.id,
+        searchQuery="rain jacket", category="outerwear", priority="essential", reason="r")])
+    gaps, shop_warn = validate_shopping(bad_alt, outfits, req.wardrobe)
+    check(gaps[0].decision == "buy" and gaps[0].ownedAlternativeId is None, "wrong-category owned alternative rejected")
+    check({i for g in gaps for i in g.missingItemIds} == {"miss-01-01", "miss-02-01", "miss-03-01"}
+          and any("skipped" in w for w in shop_warn), "skipped missing items still become searches")
+    check([g.rank for g in gaps if g.decision == "buy"] == list(range(1, len(gaps) + 1)), "buys ranked 1..n")
+
+    class OfflineClient:
+        class models:
+            @staticmethod
+            def generate_content(**_):
+                raise TimeoutError("simulated outage")
+    gaps, shop_warn = plan_shopping(outfits, req.wardrobe, client=OfflineClient())
+    check(gaps and any("fell back" in w for w in shop_warn), "shopping falls back when Gemini fails")
 
     bad = load_request()
     bad.trip.endDate = bad.trip.startDate.replace(day=1)

@@ -63,7 +63,7 @@ See [`packages/contracts/`](../../packages/contracts/README.md) for the source o
 - [ ] Validate Gemini model availability and JSON/video input support in the hackathon environment.
 - [ ] Implement style analysis with **photo and short video** test cases; persist original media refs and timestamps.
 - [ ] Implement daily outfit recommendations using **actual garment images**, persona, and trip/weather data.
-- [ ] Return validated clothing IDs and missing-item descriptions.
+- [x] Return validated clothing IDs and missing-item descriptions.
 - [ ] Add on-demand virtual try-on and destination look image generation.
 - [ ] Save several real-input success/failure examples, latency measurements, and prompt/model versions.
 

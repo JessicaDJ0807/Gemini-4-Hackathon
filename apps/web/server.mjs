@@ -12,7 +12,6 @@ import { searchDestinations } from './destinations.mjs';
 import { suggestAttractions } from '../../data/attractions/catalog.mjs';
 import { getTripWeather } from './weather.mjs';
 import { createPlacesClient } from './google-places.mjs';
-import { wardrobe, wardrobeVersion } from '../../data/demo-wardrobe/wardrobe.mjs';
 import { validateOutfitRequest, validateOutfitResponse } from '../../packages/contracts/outfit-plans.mjs';
 
 const assets = {
@@ -22,7 +21,6 @@ const assets = {
   '/shared/product-search.mjs': ['../../packages/contracts/product-search.mjs', 'text/javascript'],
   ...Object.fromEntries(Object.values(placePhotos).map(photo => [photo.imageUrl, [`../../data/attractions/photos/${photo.imageUrl.split('/').at(-1)}`, photo.mimeType]])),
   '/place-photos.mjs': ['place-photos.mjs', 'text/javascript'],
-  ...Object.fromEntries(wardrobe.map((item) => [item.imageUrl, [`../../data/demo-wardrobe/images/${item.id}.svg`, 'image/svg+xml']])),
   '/style-profile.mjs': ['../../packages/contracts/style-profile.mjs', 'text/javascript'],
   '/shared/style-profile.mjs': ['../../packages/contracts/style-profile.mjs', 'text/javascript'],
   '/shared/style-inspiration.mjs': ['../../packages/contracts/style-inspiration.mjs', 'text/javascript'],
@@ -46,8 +44,9 @@ const assets = {
 };
 
 export function createWebServer({ aiBaseUrl, token, provider, fetchImpl = fetch, locationFetch = fetch, placesKey, placesFetch = fetch, weatherFetch = fetch, weatherNow, geminiKey, geminiModel, geminiFetch = fetch, timeoutMs = 25000, geminiTimeoutMs = 55000, shopFetch = fetch, shopTimeoutMs = 20000, outfitTimeoutMs = 120000, publicAppUrl = 'http://127.0.0.1:3000' }) {
-  const activeWardrobe = provider === 'live' ? photoWardrobe : wardrobe;
-  const activeVersion = provider === 'live' ? photoWardrobeVersion : wardrobeVersion;
+  // Both demo and live mode use A's real wardrobe photos (services/ai/tests/fixtures/wardrobe).
+  const activeWardrobe = photoWardrobe;
+  const activeVersion = photoWardrobeVersion;
   const gemini = createGeminiStyle({ apiKey: geminiKey, model: geminiModel, fetchImpl: geminiFetch, timeoutMs: geminiTimeoutMs });
   const shopCheckout = createShopCheckout({ fetchImpl: shopFetch, timeoutMs: shopTimeoutMs });
   const searchProducts = createProductSearch({ fetchImpl: shopFetch, timeoutMs: shopTimeoutMs, issueOffer: shopCheckout.issueOffer });
@@ -57,7 +56,7 @@ export function createWebServer({ aiBaseUrl, token, provider, fetchImpl = fetch,
     try {
       const url = new URL(request.url, 'http://localhost');
       if (request.method === 'GET' && request.url === '/api/place-photos') return json(response, 200, placePhotos);
-      if (request.method === 'GET' && ['/api/wardrobe', '/api/demo-wardrobe'].includes(request.url)) return json(response, 200, { wardrobeVersion: activeVersion, wardrobe: activeWardrobe, enabled: true, provider, credits: provider === 'live' ? photoCredits : [] });
+      if (request.method === 'GET' && ['/api/wardrobe', '/api/demo-wardrobe'].includes(request.url)) return json(response, 200, { wardrobeVersion: activeVersion, wardrobe: activeWardrobe, enabled: true, provider, credits: photoCredits });
       if (request.method === 'GET' && request.url === '/api/places/config') return json(response, 200, { enabled: places.enabled });
       if (request.method === 'GET' && url.pathname === '/api/destinations') {
         return json(response, 200, await searchDestinations(url.searchParams.get('q'), locationFetch));

@@ -56,7 +56,7 @@ export function attachOutfits() {
       catalog = result; selected = new Set(result.wardrobe.map((item) => item.id));
       $('outfit-mode').textContent = result.provider === 'live' ? 'Sample wardrobe · Styled with AI' : 'Demo · mock outfits, no AI analysis';
       $('mock-note').hidden = result.provider === 'live';
-      $('wardrobe-footer').textContent = result.provider === 'live' ? 'Sample wardrobe photos are styling references, not products for sale.' : 'Demo garments are illustrations, not products for sale.';
+      $('wardrobe-footer').textContent = 'Sample wardrobe photos are styling references, not products for sale.';
       const credits = result.credits ?? [];
       $('wardrobe-credits').hidden = !credits.length;
       $('wardrobe-credit-list').replaceChildren(...credits.map(credit => {

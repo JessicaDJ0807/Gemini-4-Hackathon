@@ -13,7 +13,10 @@ export function mockOutfits(request) {
     const gap = (category, description, priority, reason) => missingItems.push({
       id: `gap-${weather.date}-${category}`, description, searchQuery: description, priority, reason
     });
-    if (!pick('dress')) {
+    const has = (category) => request.wardrobe.some((item) => item.category === category);
+    // Prefer separates; wear a dress on odd days when one exists, or whenever separates are incomplete.
+    const wantsDress = has('dress') && (!has('top') || !has('bottom') || index % 2 === 1);
+    if (!(wantsDress && pick('dress'))) {
       if (!pick('top')) gap('top', 'An everyday top', 'essential', 'No top is selected in the demo wardrobe.');
       if (!pick('bottom')) gap('bottom', 'Everyday trousers', 'essential', 'No bottoms are selected in the demo wardrobe.');
     }

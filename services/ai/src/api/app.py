@@ -16,9 +16,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from ..outfit_planning.models import (ErrorBody, ErrorResponse, Outfit, OutfitPlanRequest,
-                                      OutfitPlanResponse, ShoppingGap, WardrobeItem)
-from ..outfit_planning.planner import PlanningError, generate_outfits
-from ..outfit_planning.shopping import identify_shopping_gaps
+                                      OutfitPlanResponse, ShoppingGap, StyleProfile, WardrobeItem)
+from ..outfit_planning.planner import PlanningError, fetch_wardrobe_images, generate_outfits
+from ..outfit_planning.shopping import plan_shopping
 from ..preview_generation.visualize import GENERATED_DIR, PreviewRequest, PreviewResponse, visualize_outfit
 from ..style_analysis.service import (StyleAnalysisError, StyleAnalysisRequest,
                                       StyleAnalysisResponse, analyze_style)
@@ -85,13 +85,19 @@ def outfit_plans(req: OutfitPlanRequest, authorization: Optional[str] = Header(N
 class ShoppingGapsRequest(BaseModel):
     outfits: list[Outfit]
     wardrobe: list[WardrobeItem] = []
+    styleProfile: Optional[StyleProfile] = None
+    useWardrobeImages: bool = True
 
 
 @app.post("/v1/shopping-gaps", response_model=list[ShoppingGap])
 def shopping_gaps(req: ShoppingGapsRequest, authorization: Optional[str] = Header(None)):
     if not authorized(authorization):
         return error(401, "UNAUTHORIZED", "Missing or invalid service token.", False)
-    return identify_shopping_gaps(req.outfits, req.wardrobe)
+    images = {}
+    if req.useWardrobeImages and any(o.missingItems for o in req.outfits):
+        images, _ = fetch_wardrobe_images(req.wardrobe)
+    gaps, _ = plan_shopping(req.outfits, req.wardrobe, req.styleProfile, images)
+    return gaps
 
 
 @app.post("/v1/outfit-previews", response_model=PreviewResponse)

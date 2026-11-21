@@ -50,11 +50,12 @@ function productCard(product) {
   else info.append(element('p', 'Check options in the store', 'hint'));
   info.append(link); card.append(picture, info); return card;
 }
-// Accept A's missing-item shape directly. This component never invents missing items.
+// Accept A's missing-item or shopping-gap shape directly. This component never invents missing items.
+// Optional: `fallbackQueries` (tried in order when a search finds nothing) and `detail` (replaces the priority hint).
 export function createMissingItemShop(item) {
   const container = element('li', undefined, 'missing-piece');
   const header = element('div', undefined, 'missing-piece-heading');
-  const copy = element('div'); copy.append(element('p', item.description, 'missing-piece-title'), element('p', item.priority === 'essential' ? 'Recommended addition' : 'Optional addition', 'hint'));
+  const copy = element('div'); copy.append(element('p', item.description, 'missing-piece-title'), element('p', item.detail ?? (item.priority === 'essential' ? 'Recommended addition' : 'Optional addition'), 'hint'));
   const toggle = element('button', 'Shop this piece', 'shop-piece-button'); toggle.type = 'button';
   toggle.setAttribute('aria-label', `Shop this piece: ${item.description}`);
   const panel = element('section', undefined, 'shop-matches'); panel.hidden = true;
@@ -67,22 +68,32 @@ export function createMissingItemShop(item) {
   const note = element('p', 'Products from Shop · Select your option before adding. Final availability and total are confirmed at checkout.', 'shop-disclaimer'); note.hidden = true;
   panel.append(status, warnings, grid, retry, note); header.append(copy, toggle); container.append(header, panel);
   let controller, revision = 0, disposed = false;
+  const queries = [item.searchQuery, ...(item.fallbackQueries ?? [])];
+  async function searchOnce(query, active) {
+    const request = { requestId: crypto.randomUUID(), inputRevision: active, missingItem: { id: item.id, searchQuery: query } };
+    const response = await fetch('/api/products/search', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request), signal: AbortSignal.any([controller.signal, AbortSignal.timeout(25000)]) });
+    const result = await response.json();
+    if (disposed || active !== revision) return null;
+    if (!response.ok) throw new Error(result.error?.message ?? 'Product search is unavailable. Please try again.');
+    return validateProductSearchResponse(result, request);
+  }
   async function search() {
     controller?.abort(); controller = new AbortController(); const active = ++revision;
-    const request = { requestId: crypto.randomUUID(), inputRevision: active,
-      missingItem: { id: item.id, searchQuery: item.searchQuery } };
     status.textContent = 'Finding pieces for your outfit…'; status.classList.add('is-loading');
     panel.setAttribute('aria-busy', 'true'); retry.hidden = true; note.hidden = true; warnings.replaceChildren(); grid.replaceChildren();
     try {
-      const response = await fetch('/api/products/search', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request), signal: AbortSignal.any([controller.signal, AbortSignal.timeout(25000)]) });
-      const result = await response.json();
-      if (disposed || active !== revision) return;
-      if (!response.ok) throw new Error(result.error?.message ?? 'Product search is unavailable. Please try again.');
-      validateProductSearchResponse(result, request);
+      let result, used = 0;
+      for (; used < queries.length; used++) {  // a broader search only when the previous one found nothing
+        result = await searchOnce(queries[used], active);
+        if (!result) return;
+        if (result.products.length) break;
+      }
+      used = Math.min(used, queries.length - 1);
       warnings.replaceChildren(...result.warnings.map(message => element('p', message, 'hint')));
       grid.replaceChildren(...result.products.map(productCard));
-      status.textContent = result.products.length ? `${result.products.length} pieces to explore` : 'No matches found for this piece. You can try again later.';
+      status.textContent = !result.products.length ? 'No matches found for this piece. You can try again later.'
+        : used ? `No exact match; ${result.products.length} pieces for “${queries[used]}”` : `${result.products.length} pieces to explore`;
       retry.hidden = result.products.length > 0; note.hidden = result.products.length === 0;
     } catch (error) {
       if (disposed || active !== revision || error.name === 'AbortError') return;

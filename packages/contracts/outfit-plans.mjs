@@ -46,3 +46,29 @@ export function validateOutfitResponse(body, request) {
   if (dates.some((date) => { const count = body.outfits.filter((outfit) => outfit.date === date).length; return count < 1 || count > 2; })) fail();
   return body;
 }
+
+// A's optional `shoppingGaps`: one entry per purchase, merging missing items across outfits.
+// Returns the list (buys by rank, then owned swaps) only if it accounts for every missing item exactly once;
+// otherwise null, and the page keeps shopping each outfit's missing items directly.
+export function shoppingListFrom(body, request) {
+  const missing = new Map(body.outfits.flatMap((outfit) => outfit.missingItems.map((item) => [item.id, outfit.id])));
+  const gaps = body.shoppingGaps;
+  if (!missing.size || !Array.isArray(gaps) || !gaps.length || gaps.length > 30) return null;
+  const outfitIds = new Set(body.outfits.map((outfit) => outfit.id)), ids = new Set(), covered = new Set(), list = [];
+  for (const gap of gaps) {
+    const decision = gap?.decision ?? 'buy';
+    const fallbackQueries = gap?.fallbackQueries ?? [];
+    if (!gap || !text(gap.id) || ids.has(gap.id) || ![gap.searchQuery, gap.reason].every(text) || gap.searchQuery.length > 1000 ||
+        !['essential', 'optional'].includes(gap.priority) || !['buy', 'use_owned'].includes(decision) ||
+        !stringList(gap.missingItemIds) || !gap.missingItemIds.length || gap.missingItemIds.some((id) => !missing.has(id) || covered.has(id)) ||
+        !stringList(gap.outfitIds) || gap.outfitIds.some((id) => !outfitIds.has(id)) ||
+        !stringList(fallbackQueries) || fallbackQueries.length > 3 || fallbackQueries.some((query) => !text(query) || query.length > 1000) ||
+        (gap.rank != null && (!Number.isSafeInteger(gap.rank) || gap.rank < 1)) ||
+        (decision === 'use_owned' && !request.wardrobe.some((item) => item.id === gap.ownedAlternativeId))) return null;
+    ids.add(gap.id); gap.missingItemIds.forEach((id) => covered.add(id));
+    list.push({ ...gap, decision, fallbackQueries, rank: decision === 'buy' ? gap.rank : null, outfitIds: [...new Set(gap.missingItemIds.map((id) => missing.get(id)))] });
+  }
+  if (covered.size !== missing.size) return null;
+  const buys = list.filter((gap) => gap.decision === 'buy').sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+  return [...buys.map((gap, index) => ({ ...gap, rank: index + 1 })), ...list.filter((gap) => gap.decision === 'use_owned')];
+}

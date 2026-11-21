@@ -16,7 +16,8 @@ from src.outfit_planning.models import OutfitPlanRequest, OutfitPlanResponse  # 
 from src.outfit_planning.planner import (LlmMissingItem, LlmOutfit, LlmPlan,  # noqa: E402
                                          PlanningError, generate_outfits,
                                          outfit_slots, trip_days, validate)
-from src.outfit_planning.shopping import identify_shopping_gaps  # noqa: E402
+from src.outfit_planning.shopping import (LlmShoppingList, LlmSuggestion, clean_descriptor,  # noqa: E402
+                                          identify_shopping_gaps, plan_shopping, validate_shopping)
 
 REQUEST = SERVICE_DIR / "examples" / "outfit_plan_request.json"
 passed = 0
@@ -63,6 +64,52 @@ def offline_checks() -> None:
     gaps = identify_shopping_gaps(outfits, req.wardrobe)
     check(len(gaps) == 1 and gaps[0].outfitIds == ["look-01", "look-02"], "duplicate purchase merged across outfits")
 
+    leak = ("wool blend (likely/optional lining for warmth vs wind resistance? Keep concise: wool blend, "
+            "optional insulated lining to handle windy NYC streets.)")
+    check(clean_descriptor(leak) == "wool blend", "leaked model reasoning stripped from descriptor")
+    check(clean_descriptor("relaxed tailored") == "relaxed tailored" and clean_descriptor("cotton/linen") == "cotton/linen"
+          and clean_descriptor("  ") is None, "normal descriptors unchanged")
+    leaky = LlmPlan(outfits=[fake.outfits[0].model_copy(update={"missingItems": [rain.model_copy(update={"material": leak})]})])
+    leaky_outfits, leaky_warn = validate(leaky, req, slots[:1])
+    check(leaky_outfits[0].missingItems[0].material == "wool blend" and any("shortened" in w for w in leaky_warn),
+          "planner cleans missing-item descriptors and warns")
+
+    # AI shopping list: validation against real ids
+    owned_shoes = next(w for w in req.wardrobe if w.category == "shoes")
+    outfits[2].missingItems = [outfits[0].missingItems[0].model_copy(update={
+        "id": "miss-03-01", "description": "Walking shoes", "category": "shoes", "priority": "optional",
+        "searchQuery": "white walking sneakers"})]
+    shop = LlmShoppingList(suggestions=[
+        LlmSuggestion(missingItemIds=["miss-01-01", "miss-02-01", "miss-99-99"], decision="buy",
+                      searchQuery="black waterproof rain jacket", fallbackQueries=["rain jacket", "Rain Jacket", "a", "b"],
+                      category="outerwear", priority="optional", rank=1, reason="rain"),
+        LlmSuggestion(missingItemIds=["miss-03-01"], decision="use_owned", ownedAlternativeId=owned_shoes.id,
+                      searchQuery="white sneakers", category="shoes", priority="optional", reason="you own shoes"),
+    ])
+    gaps, shop_warn = validate_shopping(shop, outfits, req.wardrobe)
+    check(gaps[0].missingItemIds == ["miss-01-01", "miss-02-01"] and gaps[0].outfitIds == ["look-01", "look-02"],
+          "AI merge kept; invented missing-item id removed")
+    check(gaps[0].priority == "essential", "model cannot downgrade an essential need")
+    check(gaps[0].fallbackQueries == ["rain jacket", "a"], "fallback queries deduplicated and capped")
+    check(gaps[1].decision == "use_owned" and gaps[1].ownedAlternativeId == owned_shoes.id and gaps[1].rank is None,
+          "owned alternative kept, unranked")
+    bad_alt = LlmShoppingList(suggestions=[LlmSuggestion(
+        missingItemIds=["miss-01-01"], decision="use_owned", ownedAlternativeId=owned_shoes.id,
+        searchQuery="rain jacket", category="outerwear", priority="essential", reason="r")])
+    gaps, shop_warn = validate_shopping(bad_alt, outfits, req.wardrobe)
+    check(gaps[0].decision == "buy" and gaps[0].ownedAlternativeId is None, "wrong-category owned alternative rejected")
+    check({i for g in gaps for i in g.missingItemIds} == {"miss-01-01", "miss-02-01", "miss-03-01"}
+          and any("skipped" in w for w in shop_warn), "skipped missing items still become searches")
+    check([g.rank for g in gaps if g.decision == "buy"] == list(range(1, len(gaps) + 1)), "buys ranked 1..n")
+
+    class OfflineClient:
+        class models:
+            @staticmethod
+            def generate_content(**_):
+                raise TimeoutError("simulated outage")
+    gaps, shop_warn = plan_shopping(outfits, req.wardrobe, client=OfflineClient())
+    check(gaps and any("fell back" in w for w in shop_warn), "shopping falls back when Gemini fails")
+
     bad = load_request()
     bad.trip.endDate = bad.trip.startDate.replace(day=1)
     try:
@@ -82,6 +129,133 @@ def offline_checks() -> None:
         check(False, "upstream failure handled")
     except PlanningError as e:
         check(e.code == "AI_UNAVAILABLE" and e.retryable, "upstream failure -> AI_UNAVAILABLE, retryable")
+
+
+def weather_and_inspiration_checks() -> None:
+    print("Weather + inspiration (offline)")
+    from src.outfit_planning.models import MediaRef, WeatherDay
+    from src.outfit_planning.planner import llm_input, normalize_weather, select_inspiration
+
+    req = load_request()
+    days = trip_days(req)
+    req.trip.weather[2] = WeatherDay(date=days[2], kind="climate", minTempC=2, maxTempC=9)
+    req.trip.weather.append(WeatherDay(date=days[0].replace(day=20), kind="forecast", minTempC=1, maxTempC=2))
+    req.trip.weather.append(WeatherDay(date=days[1], kind="forecast", minTempC=0, maxTempC=0))
+    weather, warns = normalize_weather(req, days)
+    check(weather[days[2]].kind == "climate" and any("seasonal estimate" in w for w in warns),
+          "climate estimate kept and labeled")
+    check(any("outside the trip" in w for w in warns) and any("Duplicate" in w for w in warns),
+          "out-of-trip and duplicate weather records reported")
+
+    empty = load_request()
+    empty.trip.weather = [WeatherDay(date=days[0], kind="forecast"),
+                          WeatherDay(date=days[1], kind="unavailable", maxTempC=30)]
+    weather2, warns2 = normalize_weather(empty, days)
+    check(weather2[days[0]].kind == "unavailable" and weather2[days[1]].maxTempC is None
+          and weather2[days[2]].kind == "unavailable", "empty/contradictory/missing weather -> unavailable")
+
+    payload = json.loads(llm_input(req, outfit_slots(days, 3), weather))
+    check("weather" not in payload["trip"] and payload["outfitsToCreate"][0]["weather"]["maxTempC"] == 10,
+          "each outfit slot carries its own day's weather")
+
+    def ref(i, **kw):
+        return MediaRef(**({"id": i, "kind": "image", "mimeType": "image/jpeg",
+                            "readUrl": f"https://x.example/{i}.jpg"} | kw))
+
+    insp = load_request()
+    insp.styleProfile.visualReferenceIds = ["m1", "m2", "m4", "m5"]
+    insp.media = [ref("m1"), ref("m1"), ref("m2", mimeType="image/gif"), ref("m3"), ref("m4", readUrl="ftp://x/a")]
+    chosen, warns3 = select_inspiration(insp)
+    check([m.id for m in chosen] == ["m1"], "only valid profile references selected")
+    check(sum("Inspiration" in w for w in warns3) == 4 and any("'m5'" in w for w in warns3),
+          "rejected media and unsupplied references reported")
+
+    rain = LlmMissingItem(description="x", category="accessory", searchQuery="x", priority="optional", reason="r")
+    plan = LlmPlan(outfits=[LlmOutfit(
+        name="A", date=str(days[0]), attractionIds=[], wardrobeItemIds=["top-02", "bottom-02", "shoes-01"],
+        missingItems=[rain], rationale="r", occasions=[], styleConnections=[], stylingTips=[],
+        inspirationReferenceIds=["m1", "ghost"])])
+    outfits, warns4 = validate(plan, req, days[:1], weather, {"m1"})
+    check(outfits[0].inspirationReferenceIds == ["m1"] and any("ghost" in w for w in warns4),
+          "unseen inspiration ids removed")
+    check(any("rain chance" in w for w in warns4) and any("no outerwear" in w for w in warns4),
+          "rainy/cold day without outer layer flagged")
+    check(outfits[0].weatherKind == "forecast", "outfit records the weather kind it was planned for")
+
+
+def variety_checks() -> None:
+    print("Variety + inspiration notes (offline)")
+    from src.outfit_planning.planner import LlmInspirationNote, inspiration_notes
+
+    req = load_request()
+    days = trip_days(req)
+
+    def look(day, items, insp=()):
+        return LlmOutfit(name="x", date=str(day), attractionIds=[], wardrobeItemIds=items, missingItems=[],
+                         rationale="r", occasions=[], styleConnections=[], stylingTips=[],
+                         inspirationReferenceIds=list(insp))
+
+    plan = LlmPlan(
+        inspirationNotes=[LlmInspirationNote(mediaId="m1", takeaway="t1", usable=True),
+                          LlmInspirationNote(mediaId="m2", takeaway="t2", usable=True),
+                          LlmInspirationNote(mediaId="m3", takeaway="t3", usable=False),
+                          LlmInspirationNote(mediaId="ghost", takeaway="t", usable=True)],
+        outfits=[look(days[0], ["top-01", "bottom-01", "shoes-01"], ["m1"]),
+                 look(days[1], ["top-02", "bottom-01", "shoes-01"]),        # differs only in top
+                 look(days[2], ["dress-01", "outer-02", "shoes-02"], ["m1"])])
+    outfits, warns = validate(plan, req, days, None, {"m1", "m2", "m3"})
+    dupes = [w for w in warns if "near-duplicates" in w]
+    check(len(dupes) == 1 and "look-01 and look-02" in dupes[0], "near-duplicate outfits flagged, distinct ones not")
+
+    notes, nwarns = inspiration_notes(plan, outfits, ["m1", "m2", "m3"])
+    check([n.mediaId for n in notes] == ["m1", "m2", "m3"], "one note per seen inspiration item; unknown ids dropped")
+    check(notes[0].usedInOutfitIds == ["look-01", "look-03"], "notes record which outfits used them")
+    check(nwarns == ["Inspiration m2: marked usable but no outfit used it."],
+          "unused usable inspiration flagged; unusable one not")
+
+
+def direction_checks() -> None:
+    print("Style directions (offline)")
+    from src.outfit_planning.models import StyleDirection
+    from src.outfit_planning.planner import normalize_weather
+    from src.style_analysis.schema import ImageObservation, StyleDirection as ExDirection, StyleExtraction, Trait
+    from src.style_analysis.service import StyleDirectionOut, profile_directions
+
+    ex = StyleExtraction(
+        per_image=[ImageObservation(image_id="m1", garments=["blazer"], aesthetics=[], colors=[], silhouettes=[],
+                                    styling_details=[], notes=""),
+                   ImageObservation(image_id="m2", garments=["floral dress"], aesthetics=[], colors=[],
+                                    silhouettes=[], styling_details=[], notes="")],
+        style_directions=[ExDirection(name="Romantic", description="d", image_ids=["m2"], strength="minor"),
+                          ExDirection(name="Minimal", description="d", image_ids=["m1"], strength="dominant")],
+        aesthetics=[], colors=[Trait(label="camel", image_ids=["m1"]), Trait(label="pink", image_ids=["m2"]),
+                               Trait(label="navy", image_ids=[])],
+        silhouettes=[], styling_patterns=[], avoidances=[], summary="s")
+    outs = [StyleDirectionOut(name=d.name, description=d.description, strength=d.strength,
+                              visualReferenceIds=d.image_ids) for d in ex.style_directions]
+    dirs = profile_directions(ex, outs, ["minimal"])
+    check([d.name for d in dirs] == ["Minimal", "Romantic"] and dirs[0].id == "dir-01", "directions ordered strongest first")
+    check(dirs[0].colors == ["camel", "navy"] and dirs[1].colors == ["pink"],
+          "each direction gets the traits seen in its own media")
+    check(dirs[0].keyPieces == ["blazer"] and dirs[0].source == "both" and dirs[1].source == "media",
+          "key pieces and source filled")
+
+    req = load_request()
+    req.styleProfile.directions = [StyleDirection(id="dir-01", name="Minimal", strength="dominant"),
+                                   StyleDirection(id="dir-02", name="Romantic", strength="minor")]
+    days = trip_days(req)
+    weather, _ = normalize_weather(req, days)
+
+    def outfit(direction):
+        return LlmOutfit(name="A", date=str(days[0]), attractionIds=[], wardrobeItemIds=["dress-01", "shoes-01"],
+                         missingItems=[], rationale="r", occasions=[], styleConnections=[], stylingTips=[],
+                         directionId=direction)
+
+    outfits, warns = validate(LlmPlan(outfits=[outfit("dir-01"), outfit("dir-99")]), req, days[:1] * 2, weather)
+    check(outfits[0].directionId == "dir-01" and outfits[1].directionId is None
+          and any("dir-99" in w for w in warns), "unknown direction id removed")
+    _, warns2 = validate(LlmPlan(outfits=[outfit("dir-02")] * 3), req, days[:1] * 3, weather)
+    check(any("minor style direction" in w for w in warns2), "minor direction leading the trip flagged")
 
 
 def style_analysis_checks() -> None:
@@ -145,6 +319,9 @@ def live_check() -> None:
 
 if __name__ == "__main__":
     offline_checks()
+    weather_and_inspiration_checks()
+    variety_checks()
+    direction_checks()
     style_analysis_checks()
     if "--offline" not in sys.argv:
         live_check()

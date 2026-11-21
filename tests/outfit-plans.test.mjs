@@ -5,15 +5,18 @@ import { createWebServer } from '../apps/web/server.mjs';
 import { createMockAiServer } from '../scripts/mock-ai.mjs';
 import { mockOutfits } from '../scripts/mock-outfits.mjs';
 import { wardrobe, wardrobeVersion } from '../data/demo-wardrobe/wardrobe.mjs';
+import { photoWardrobe, photoWardrobeVersion } from '../data/demo-wardrobe/photo-wardrobe.mjs';
 import { catalog } from '../data/attractions/catalog.mjs';
 import { buildTrip } from '../packages/contracts/trip.mjs';
-import { validateOutfitRequest, validateOutfitResponse } from '../packages/contracts/outfit-plans.mjs';
+import { shoppingListFrom, validateOutfitRequest, validateOutfitResponse } from '../packages/contracts/outfit-plans.mjs';
 function input() {
   return { requestId: 'outfits-001', inputRevision: 3,
     styleProfile: { styleTags: ['minimal'], colors: ['cream'], avoidances: ['high heels'], visualReferenceIds: [] },
     trip: buildTrip(catalog[1].destination, '2026-11-24', '2026-11-26', [{ id: 'cafe', name: 'A saved café', source: 'user', activityTags: [] }]),
     wardrobeVersion, wardrobe: structuredClone(wardrobe), media: [] };
 }
+// The web server serves A's photo wardrobe in every mode.
+const serverInput = () => ({ ...input(), wardrobeVersion: photoWardrobeVersion, wardrobe: structuredClone(photoWardrobe) });
 async function listen(t, server) {
   await new Promise((resolve, reject) => server.once('error', reject).listen(0, '127.0.0.1', resolve));
   t.after(() => new Promise((resolve) => { server.close(resolve); server.closeAllConnections(); }));
@@ -27,18 +30,18 @@ async function app(t, overrides = {}) {
 const post = (base, body) => fetch(base + '/api/outfit-plans', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 
 test('catalog and original images are served and the full B-to-mock flow preserves context', async (t) => {
-  const request = input(); let captured;
+  const request = serverInput(); let captured;
   const base = await app(t, { fetchImpl: async (url, options) => {
     assert.ok(url.endsWith('/v1/outfit-plans'));
     assert.equal(options.headers.Authorization, 'Bearer test-outfit-token');
     captured = JSON.parse(options.body); return fetch(url, options);
   } });
   const data = await (await fetch(base + '/api/demo-wardrobe')).json();
-  assert.equal(data.wardrobe.length, 9); assert.equal(data.wardrobeVersion, wardrobeVersion);
+  assert.equal(data.wardrobe.length, 10); assert.equal(data.wardrobeVersion, photoWardrobeVersion);
+  assert.equal(data.credits.length, 10);
   for (const item of data.wardrobe) {
     const image = await fetch(base + item.imageUrl);
-    assert.equal(image.status, 200); assert.match(image.headers.get('content-type'), /image\/svg\+xml/);
-    assert.match(await image.text(), /demo illustration/);
+    assert.equal(image.status, 200); assert.match(image.headers.get('content-type'), /image\/jpeg/);
   }
   const response = await post(base, request); assert.equal(response.status, 200);
   const result = await response.json();
@@ -100,25 +103,26 @@ test('response validation rejects unknown/excluded items, missing days, stale ID
   ]) { const response = mockOutfits(request); mutate(response); assert.throws(() => validateOutfitResponse(response, request), { code: 'INVALID_OUTFIT_RESPONSE' }); }
 });
 
-test('B rejects stale wardrobe versions and altered metadata; live mode never receives demo SVG requests', async (t) => {
+test('B rejects stale wardrobe versions and altered metadata; neither mode accepts the legacy SVG wardrobe', async (t) => {
   const base = await app(t);
   for (const mutate of [(r) => { r.wardrobeVersion = 'old'; }, (r) => { r.wardrobe[0].imageUrl = 'https://untrusted.example/photo'; }]) {
-    const request = input(); mutate(request); assert.equal((await post(base, request)).status, 400);
+    const request = serverInput(); mutate(request); assert.equal((await post(base, request)).status, 400);
   }
+  assert.equal((await post(base, input())).status, 400);
   const live = await app(t, { provider: 'live', fetchImpl: () => { throw new Error('Must not contact live AI'); } });
   assert.equal((await post(live, input())).status, 400);
 });
 
 test('B returns an error for incomplete upstream plans without silently replacing them', async (t) => {
-  const result = mockOutfits(input()); result.outfits.pop();
+  const result = mockOutfits(serverInput()); result.outfits.pop();
   const base = await app(t, { fetchImpl: async () => Response.json(result) });
-  const response = await post(base, input()); assert.equal(response.status, 502);
+  const response = await post(base, serverInput()); assert.equal(response.status, 502);
   assert.equal((await response.json()).error.code, 'INVALID_OUTFIT_RESPONSE');
 });
 
 
 test('edited nested profile reaches outfit planning intact alongside derived compatibility fields', async t => {
-  const request = input();
+  const request = serverInput();
   request.styleProfile = buildStyleProfile({ summary: 'Personal travel style.', userTags: ['comfortable'], avoidances: [],
     directions: [{ id: 'dir-1', name: 'My tailoring', description: 'Easy structured layers.', strength: 'dominant', source: 'media',
       visualReferenceIds: ['photo-1'], colors: ['navy'], silhouettes: ['wide-leg'], stylingPatterns: [], keyPieces: ['blazer'] }] });
@@ -130,4 +134,41 @@ test('edited nested profile reaches outfit planning intact alongside derived com
   assert.deepEqual(captured.styleProfile.styleTags, ['comfortable', 'My tailoring']);
   assert.deepEqual(captured.styleProfile.colors, ['navy']);
   assert.deepEqual(captured.media, []); // Reference IDs are provenance, not retained image bytes.
+});
+
+test('mock rotates the photo wardrobe: separates on even days, the dress on odd days', () => {
+  const request = serverInput(); request.trip = buildTrip(catalog[1].destination, '2026-11-24', '2026-11-27', []);
+  const looks = mockOutfits(request).outfits;
+  assert.ok(!looks[0].wardrobeItemIds.includes('wd-07') && looks[0].wardrobeItemIds.includes('wd-06'));
+  assert.ok(looks[1].wardrobeItemIds.includes('wd-07') && !looks[1].wardrobeItemIds.includes('wd-06'));
+});
+
+test('A shopping list merges missing items across looks, ranks buys and keeps owned swaps', () => {
+  const request = input(); request.wardrobe = request.wardrobe.filter((item) => item.category !== 'shoes');
+  const plan = mockOutfits(request), [a, b, c] = plan.outfits.map((look) => look.missingItems[0].id);
+  const owned = request.wardrobe[0].id;
+  plan.shoppingGaps = [
+    { id: 'gap-02', searchQuery: 'white sneakers', reason: 'Day three.', priority: 'optional', decision: 'use_owned',
+      ownedAlternativeId: owned, missingItemIds: [c], outfitIds: [] },
+    { id: 'gap-01', searchQuery: 'walking shoes', fallbackQueries: ['sneakers'], reason: 'Two walking days.', priority: 'essential',
+      decision: 'buy', rank: 3, missingItemIds: [a, b], outfitIds: [plan.outfits[0].id] }
+  ];
+  const list = shoppingListFrom(validateOutfitResponse(plan, request), request);
+  assert.deepEqual(list.map((gap) => [gap.id, gap.decision, gap.rank]), [['gap-01', 'buy', 1], ['gap-02', 'use_owned', null]]);
+  assert.deepEqual(list[0].outfitIds, [plan.outfits[0].id, plan.outfits[1].id]); // derived from the merged items, not trusted
+  assert.deepEqual(list[0].fallbackQueries, ['sneakers']);
+});
+
+test('an invalid or incomplete A shopping list falls back to per-look shopping', () => {
+  const request = input(); request.wardrobe = request.wardrobe.filter((item) => item.category !== 'shoes');
+  const base = mockOutfits(request), ids = base.outfits.map((look) => look.missingItems[0].id);
+  const gap = (extra) => ({ id: 'gap-01', searchQuery: 'walking shoes', reason: 'r', priority: 'essential', missingItemIds: ids, outfitIds: [], ...extra });
+  assert.equal(shoppingListFrom(base, request), null); // older A: no shoppingGaps
+  assert.equal(shoppingListFrom({ ...base, shoppingGaps: [gap()] }, request).length, 1); // decision defaults to buy
+  for (const gaps of [
+    [gap({ missingItemIds: ids.slice(1) })], // a missing item left out
+    [gap({ missingItemIds: [...ids, 'invented'] })], [gap(), gap({ id: 'gap-02' })], // invented id; item counted twice
+    [gap({ decision: 'use_owned', ownedAlternativeId: 'not-selected' })], [gap({ decision: 'maybe' })],
+    [gap({ fallbackQueries: [''] })], [gap({ rank: 0 })], [gap({ searchQuery: '' })]
+  ]) assert.equal(shoppingListFrom({ ...base, shoppingGaps: gaps }, request), null);
 });

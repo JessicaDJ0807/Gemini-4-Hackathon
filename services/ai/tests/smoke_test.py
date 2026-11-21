@@ -218,6 +218,33 @@ def style_analysis_checks() -> None:
           "unknown media ids removed and reported")
 
 
+def b_contract_checks() -> None:
+    """Rules from B's validators in packages/contracts/*.mjs."""
+    print("B contract alignment (offline)")
+    from src.outfit_planning.models import StyleDirection
+    from src.style_analysis.service import b_labels, nested_profile
+
+    check(b_labels(["Minimal", " camel", "minimal ", "", "x" * 101]) == ["minimal", "camel"],
+          "labels deduplicated like B's uniqueLabels (first position, last spelling)")
+    d = lambda i, s, **kw: StyleDirection(id=i, name=f"Style {i}", strength=s, **kw)
+    p = nested_profile([d("dir-01", "dominant", colors=["camel", "Black"], visualReferenceIds=["a"]),
+                        d("dir-02", "minor", colors=["black", "pink"], visualReferenceIds=["b"])],
+                       ["minimal"], ["high heels"], "s" * 600, None)
+    check(p.styleTags == ["minimal", "Style dir-01", "Style dir-02"] and p.aesthetics == ["Style dir-01", "Style dir-02"],
+          "styleTags = user tags + direction names; aesthetics = direction names")
+    check(p.colors == ["camel", "black", "pink"] and p.visualReferenceIds == ["a", "b"] and len(p.summary) == 500,
+          "flat fields are unions of direction values; summary capped at 500")
+
+    req = load_request()
+    req.outfitCount = None
+    for days, expected in ((1, 2), (2, 3), (3, 3), (5, 5)):
+        req.trip.endDate = req.trip.startDate.replace(day=req.trip.startDate.day + days - 1)
+        trip = trip_days(req)
+        n = min(max(3, len(trip)), 2 * len(trip))
+        check(n == expected and max(outfit_slots(trip, n).count(x) for x in trip) <= 2,
+              f"default outfit count for a {days}-day trip is {expected} (1-2 per day)")
+
+
 def live_check() -> None:
     print("Live check (Gemini)")
     req = load_request()
@@ -244,6 +271,7 @@ if __name__ == "__main__":
     weather_and_inspiration_checks()
     direction_checks()
     style_analysis_checks()
+    b_contract_checks()
     if "--offline" not in sys.argv:
         live_check()
     print(f"\nAll {passed} checks passed.")

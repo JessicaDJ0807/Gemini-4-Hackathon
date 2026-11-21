@@ -26,7 +26,7 @@ Set `MEDIA_ALLOWED_HOSTS` (comma-separated) to the hosts B's media URLs use; uns
 | Endpoint | Python entry point | What it does | Typical time |
 | --- | --- | --- | --- |
 | `POST /v1/style-analysis` | `src.style_analysis.service.analyze_style(req)` | Tags + notes + images/videos (B's `readUrl`s) → `suggestedProfile` (with style `directions`, passed straight to outfit planning), per-media `observations`. Avoidances only from the user | ~12 s tags only, ~35–50 s with media |
-| `POST /v1/outfit-plans` | `src.outfit_planning.planner.generate_outfits(req)` | Style profile + inspiration `media` + wardrobe (incl. photos from `imageUrl`) + trip with per-day weather → outfits (default 3, spread over the trip days) with missing items and `shoppingGaps` | ~20–30 s, ~35 s with 4 inspiration images |
+| `POST /v1/outfit-plans` | `src.outfit_planning.planner.generate_outfits(req)` | Style profile + inspiration `media` + wardrobe (incl. photos from `imageUrl`) + trip with per-day weather → outfits (default 3, within 1–2 per trip day) with missing items and `shoppingGaps` | ~20–30 s, ~35 s with 4 inspiration images |
 | `POST /v1/shopping-gaps` | `src.outfit_planning.shopping.identify_shopping_gaps(outfits, wardrobe)` | Outfits → deduplicated shop searches. No model call. Already included in the outfit-plans response | instant |
 | `POST /v1/outfit-previews` | `src.preview_generation.visualize.visualize_outfit(req)` | One outfit → generated image (`mode: "outfit"` studio, or `"destination"` scene). Gemini 4 writes the image prompt; a Gemini image model draws it. Image served at the returned `imageRef` | ~14 s |
 | `GET /health` | | Liveness | |
@@ -76,7 +76,7 @@ Renders one HTML page per plan (in `generated/plan_views/`, gitignored): wardrob
 ## Tests
 
 ```bash
-python tests/smoke_test.py            # 30 offline checks + 8 checks on one live Gemini call
+python tests/smoke_test.py            # 37 offline checks + 8 checks on one live Gemini call
 python tests/smoke_test.py --offline  # no API calls
 ```
 

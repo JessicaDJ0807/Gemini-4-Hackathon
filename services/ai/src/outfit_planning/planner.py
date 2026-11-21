@@ -340,12 +340,15 @@ def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date],
 # ---------- entry point ----------
 
 def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None) -> OutfitPlanResponse:
-    """Plan `req.outfitCount` outfits (default 3) across the trip days."""
+    """Plan outfits across the trip days (default 3, within 1-2 per day)."""
     profile = req.styleProfile
-    if not (profile.styleTags or profile.aesthetics or profile.colors or profile.notes):
+    if not (profile.styleTags or profile.aesthetics or profile.colors or profile.notes
+            or profile.userTags or profile.directions):
         raise PlanningError("INVALID_REQUEST", "Style profile needs at least one positive preference.", False, 400)
     days = trip_days(req)
-    slots = outfit_slots(days, req.outfitCount)
+    # Contract: 1-2 outfits per day. Default aims for 3 total (the product brief), within that range.
+    count = req.outfitCount or min(max(3, len(days)), 2 * len(days))
+    slots = outfit_slots(days, count)
 
     warnings: list[str] = []
     if not req.wardrobe:

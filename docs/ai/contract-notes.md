@@ -13,7 +13,7 @@ How the implemented AI service relates to [docs/integrations/ai-app-api.md](../i
 
 ## Differences to agree on with B
 
-1. **Outfit count.** The product brief wants 3 recommendations; the contract says 1–2 outfits per trip day. The service spreads `outfitCount` (default 3) across days, one per day before any day gets two. A 3-day trip satisfies both. A 1-day trip with the default gives 3 outfits on one day and a warning. B can send `outfitCount` to control this.
+1. **Outfit count.** Follows the contract's 1–2 outfits per trip day. Without `outfitCount`, the service aims for 3 outfits (the product brief) within that range: 1-day trip → 2, 2–3 days → 3, longer trips → one per day. B can still send `outfitCount`; a value that puts more than 2 on a day adds a warning.
 2. **Additive fields** (optional; B can ignore them): `Outfit.name`, `itemsByCategory`, `occasions`, `styleConnections`; `MissingItem.category/color/silhouette/material/styleDescriptors`; response `shoppingGaps`, `model`; request `preferences`, `outfitCount`.
 3. **Extra endpoints** not in the contract: `POST /v1/shopping-gaps`, `POST /v1/outfit-previews`, and static images under `/media/generated/`. The contract lists previews and product search as out of scope; they're available for the demo.
 4. **Lenient request fields.** For demo robustness, `Destination` coordinates/timezone, `WardrobeItem.imageUrl/color` and `Attraction.source` are optional here (required in the contract).
@@ -26,3 +26,4 @@ How the implemented AI service relates to [docs/integrations/ai-app-api.md](../i
    - Video `observations` don't include `timestampSeconds` yet (the field is optional).
    - Media hosts: set `MEDIA_ALLOWED_HOSTS`; when unset any http(s) host is accepted (dev only). Max 10 items, 20 MB per image, 100 MB per video. `contentVersion` and `expiresAt` are accepted but not checked.
    - Synchronous and slow with media (~35–50 s on `gemini-4-neon`); the contract's timeouts must allow for this.
+9. **B's validators (`packages/contracts/*.mjs`, merged in PR #4).** Checked with B's own JavaScript: `/v1/style-analysis` output passes `validNestedProfile` and `validProfile`, and `/v1/outfit-plans` output passes `validateOutfitResponse`. To match them, `suggestedProfile` now has `summary` (AI description, ≤500 chars), `userTags` (the user's tags), and at most 3 `directions` (one dominant, ≤3 media refs and ≤8 labels per list). Its flat fields are derived exactly like B's `buildStyleProfile()`. `notes` now holds only the user's own notes. B sends attractions without dates, so outfits return empty `attractionIds`, as B's validator requires. `kind: "climate"` weather is accepted by A but not sent by B.

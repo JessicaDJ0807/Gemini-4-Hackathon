@@ -37,7 +37,10 @@ class StyleProfile(BaseModel):
     aesthetics: list[str] = []
     silhouettes: list[str] = []
     stylingPatterns: list[str] = []
-    directions: list[StyleDirection] = []  # extension: strongest first
+    # Nested shape (PR #2, implemented by B in packages/contracts/style-profile.mjs)
+    summary: Optional[str] = None
+    userTags: list[str] = []
+    directions: list[StyleDirection] = []  # strongest first
 
 
 class Destination(BaseModel):
@@ -151,7 +154,9 @@ class OutfitPlanRequest(BaseModel):
     wardrobe: list[WardrobeItem] = []
     media: list[MediaRef] = []
     preferences: Optional[str] = Field(None, description="extension: free-text user preferences")
-    outfitCount: int = Field(3, ge=1, le=14, description="extension: total outfits to return")
+    outfitCount: Optional[int] = Field(
+        None, ge=1, le=14,
+        description="extension: total outfits. Default: 3, kept within the contract's 1-2 per trip day")
     useWardrobeImages: bool = Field(True, description="extension: send wardrobe photos to Gemini")
     useInspirationMedia: bool = Field(True, description="extension: send inspiration media to Gemini")
 

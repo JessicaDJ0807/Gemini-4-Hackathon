@@ -7,7 +7,7 @@ import { mockOutfits } from '../scripts/mock-outfits.mjs';
 import { wardrobe, wardrobeVersion } from '../data/demo-wardrobe/wardrobe.mjs';
 import { catalog } from '../data/attractions/catalog.mjs';
 import { buildTrip } from '../packages/contracts/trip.mjs';
-import { validateOutfitRequest, validateOutfitResponse } from '../packages/contracts/outfit-plans.mjs';
+import { shoppingListFrom, validateOutfitRequest, validateOutfitResponse } from '../packages/contracts/outfit-plans.mjs';
 function input() {
   return { requestId: 'outfits-001', inputRevision: 3,
     styleProfile: { styleTags: ['minimal'], colors: ['cream'], avoidances: ['high heels'], visualReferenceIds: [] },
@@ -130,4 +130,34 @@ test('edited nested profile reaches outfit planning intact alongside derived com
   assert.deepEqual(captured.styleProfile.styleTags, ['comfortable', 'My tailoring']);
   assert.deepEqual(captured.styleProfile.colors, ['navy']);
   assert.deepEqual(captured.media, []); // Reference IDs are provenance, not retained image bytes.
+});
+
+test('A shopping list merges missing items across looks, ranks buys and keeps owned swaps', () => {
+  const request = input(); request.wardrobe = request.wardrobe.filter((item) => item.category !== 'shoes');
+  const plan = mockOutfits(request), [a, b, c] = plan.outfits.map((look) => look.missingItems[0].id);
+  const owned = request.wardrobe[0].id;
+  plan.shoppingGaps = [
+    { id: 'gap-02', searchQuery: 'white sneakers', reason: 'Day three.', priority: 'optional', decision: 'use_owned',
+      ownedAlternativeId: owned, missingItemIds: [c], outfitIds: [] },
+    { id: 'gap-01', searchQuery: 'walking shoes', fallbackQueries: ['sneakers'], reason: 'Two walking days.', priority: 'essential',
+      decision: 'buy', rank: 3, missingItemIds: [a, b], outfitIds: [plan.outfits[0].id] }
+  ];
+  const list = shoppingListFrom(validateOutfitResponse(plan, request), request);
+  assert.deepEqual(list.map((gap) => [gap.id, gap.decision, gap.rank]), [['gap-01', 'buy', 1], ['gap-02', 'use_owned', null]]);
+  assert.deepEqual(list[0].outfitIds, [plan.outfits[0].id, plan.outfits[1].id]); // derived from the merged items, not trusted
+  assert.deepEqual(list[0].fallbackQueries, ['sneakers']);
+});
+
+test('an invalid or incomplete A shopping list falls back to per-look shopping', () => {
+  const request = input(); request.wardrobe = request.wardrobe.filter((item) => item.category !== 'shoes');
+  const base = mockOutfits(request), ids = base.outfits.map((look) => look.missingItems[0].id);
+  const gap = (extra) => ({ id: 'gap-01', searchQuery: 'walking shoes', reason: 'r', priority: 'essential', missingItemIds: ids, outfitIds: [], ...extra });
+  assert.equal(shoppingListFrom(base, request), null); // older A: no shoppingGaps
+  assert.equal(shoppingListFrom({ ...base, shoppingGaps: [gap()] }, request).length, 1); // decision defaults to buy
+  for (const gaps of [
+    [gap({ missingItemIds: ids.slice(1) })], // a missing item left out
+    [gap({ missingItemIds: [...ids, 'invented'] })], [gap(), gap({ id: 'gap-02' })], // invented id; item counted twice
+    [gap({ decision: 'use_owned', ownedAlternativeId: 'not-selected' })], [gap({ decision: 'maybe' })],
+    [gap({ fallbackQueries: [''] })], [gap({ rank: 0 })], [gap({ searchQuery: '' })]
+  ]) assert.equal(shoppingListFrom({ ...base, shoppingGaps: gaps }, request), null);
 });

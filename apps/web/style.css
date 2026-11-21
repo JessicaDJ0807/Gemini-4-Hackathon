@@ -212,6 +212,13 @@ figcaption { font-size: 14px; font-weight: 600; margin-top: 8px; }
 .shop-product-link { display: block; margin-top: auto; padding-top: 14px; font-size: 13px; text-underline-offset: 3px; }
 .shop-disclaimer { font-size: 11px; color: #626a61; margin-bottom: 0; }
 .shop-warnings .hint { color: #73501f; overflow-wrap: anywhere; }
+/* One trip-wide list when A merges missing pieces across looks. */
+.shopping-list { background: #fffefa; border-radius: 18px; padding: 28px; margin-top: 22px; }
+.shopping-list > .eyebrow { margin: 0 0 8px; }
+.shopping-list h3 { font: 400 25px Georgia, serif; margin: 0; }
+.shopping-list h4 { font-size: 13px; font-weight: 600; margin: 24px 0 0; color: #59664f; }
+.shopping-list > .hint { margin: 6px 0 4px; }
+@media (max-width: 480px) { .shopping-list { padding: 18px; } }
 @media (max-width: 480px) { .missing-piece-heading { flex-direction: column; gap: 10px; } .shop-piece-button { width: auto; } }
 @media (prefers-reduced-motion: reduce) { .shop-status.is-loading::before { animation: none; } }
 #outfit-status.is-loading { display: flex; align-items: center; gap: 10px; }

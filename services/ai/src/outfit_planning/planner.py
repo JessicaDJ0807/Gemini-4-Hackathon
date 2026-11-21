@@ -22,7 +22,7 @@ from pydantic import BaseModel
 
 from .models import (InspirationNote, MediaRef, MissingItem, Outfit, OutfitPiece, OutfitPlanRequest,
                      OutfitPlanResponse, WardrobeItem, WeatherDay)
-from .shopping import build_search_query, plan_shopping
+from .shopping import build_search_query, clean_descriptors, plan_shopping
 
 SERVICE_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(SERVICE_DIR / ".env")
@@ -297,6 +297,8 @@ def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date],
         missing = []
         for j, m in enumerate(lo.missingItems):
             item = MissingItem(id=f"miss-{i + 1:02d}-{j + 1:02d}", **m.model_dump())
+            if clean_descriptors(item):
+                warnings.append(f"{oid}: shortened {item.id} descriptors (model added extra text).")
             if not item.searchQuery.strip():
                 item.searchQuery = build_search_query(item)
             missing.append(item)

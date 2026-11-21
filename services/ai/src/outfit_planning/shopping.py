@@ -32,6 +32,30 @@ def build_search_query(item: MissingItem) -> str:
     return query or item.description
 
 
+MAX_DESCRIPTOR_WORDS = 6
+
+
+def clean_descriptor(text: str | None) -> str | None:
+    """Short attribute text for UI and search. Drops model asides that leak into the
+    field, e.g. "wool blend (likely/optional lining? Keep concise: ...)" -> "wool blend"."""
+    if not text:
+        return None
+    text = re.sub(r"\(.*?(\)|$)", " ", text)  # parentheticals, closed or not
+    text = re.split(r"[?;:\n]", text)[0]
+    words = text.replace("/", " / ").split()
+    text = " ".join(words[:MAX_DESCRIPTOR_WORDS]).replace(" / ", "/").strip(" ,.-/")
+    return text or None
+
+
+def clean_descriptors(item) -> bool:
+    """Clean color/material/silhouette/styleDescriptors in place. True if anything changed."""
+    before = (item.color, item.material, item.silhouette, list(item.styleDescriptors))
+    item.color, item.material, item.silhouette = (clean_descriptor(item.color), clean_descriptor(item.material),
+                                                  clean_descriptor(item.silhouette))
+    item.styleDescriptors = list(dict.fromkeys(d for d in map(clean_descriptor, item.styleDescriptors) if d))[:3]
+    return before != (item.color, item.material, item.silhouette, item.styleDescriptors)
+
+
 def _norm(text: str) -> str:
     return re.sub(r"[^a-z0-9 ]", "", text.lower()).strip()
 
@@ -165,6 +189,7 @@ def validate_shopping(plan: LlmShoppingList, outfits: list[Outfit],
             fallbackQueries=_clean_queries(query, s.fallbackQueries),
             rank=s.rank if decision == "buy" else None,
         )
+        clean_descriptors(gap)
         if decision == "buy":
             gap.similarOwnedItemIds = similar_owned(gap, wardrobe)  # duck-typed: category + color
         gaps.append(gap)

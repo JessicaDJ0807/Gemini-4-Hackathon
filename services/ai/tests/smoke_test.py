@@ -16,7 +16,7 @@ from src.outfit_planning.models import OutfitPlanRequest, OutfitPlanResponse  # 
 from src.outfit_planning.planner import (LlmMissingItem, LlmOutfit, LlmPlan,  # noqa: E402
                                          PlanningError, generate_outfits,
                                          outfit_slots, trip_days, validate)
-from src.outfit_planning.shopping import (LlmShoppingList, LlmSuggestion,  # noqa: E402
+from src.outfit_planning.shopping import (LlmShoppingList, LlmSuggestion, clean_descriptor,  # noqa: E402
                                           identify_shopping_gaps, plan_shopping, validate_shopping)
 
 REQUEST = SERVICE_DIR / "examples" / "outfit_plan_request.json"
@@ -63,6 +63,16 @@ def offline_checks() -> None:
 
     gaps = identify_shopping_gaps(outfits, req.wardrobe)
     check(len(gaps) == 1 and gaps[0].outfitIds == ["look-01", "look-02"], "duplicate purchase merged across outfits")
+
+    leak = ("wool blend (likely/optional lining for warmth vs wind resistance? Keep concise: wool blend, "
+            "optional insulated lining to handle windy NYC streets.)")
+    check(clean_descriptor(leak) == "wool blend", "leaked model reasoning stripped from descriptor")
+    check(clean_descriptor("relaxed tailored") == "relaxed tailored" and clean_descriptor("cotton/linen") == "cotton/linen"
+          and clean_descriptor("  ") is None, "normal descriptors unchanged")
+    leaky = LlmPlan(outfits=[fake.outfits[0].model_copy(update={"missingItems": [rain.model_copy(update={"material": leak})]})])
+    leaky_outfits, leaky_warn = validate(leaky, req, slots[:1])
+    check(leaky_outfits[0].missingItems[0].material == "wool blend" and any("shortened" in w for w in leaky_warn),
+          "planner cleans missing-item descriptors and warns")
 
     # AI shopping list: validation against real ids
     owned_shoes = next(w for w in req.wardrobe if w.category == "shoes")

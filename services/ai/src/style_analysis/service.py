@@ -9,9 +9,8 @@ import json
 import os
 import tempfile
 import time
-from datetime import datetime
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Optional
 from urllib.parse import urlparse
 
 import httpx
@@ -20,7 +19,7 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-from ..outfit_planning.models import StyleProfile
+from ..outfit_planning.models import MediaRef, StyleDirection, StyleProfile
 from .schema import StyleExtraction, invalid_image_ids
 
 SERVICE_DIR = Path(__file__).resolve().parents[2]
@@ -41,15 +40,6 @@ class StyleAnalysisError(Exception):
 
 
 # ---------- contract models ----------
-
-class MediaRef(BaseModel):
-    id: str
-    contentVersion: str = "1"
-    kind: Literal["image", "video"]
-    mimeType: str
-    readUrl: str
-    expiresAt: Optional[datetime] = None
-
 
 class StyleAnalysisRequest(BaseModel):
     requestId: str
@@ -149,6 +139,77 @@ def unique(labels) -> list[str]:
     return out
 
 
+STRENGTH_RANK = {"dominant": 0, "secondary": 1, "minor": 2}
+MAX_DIRECTIONS, MAX_REFS, MAX_LABELS, MAX_LABEL_LEN = 3, 3, 8, 100
+MAX_SUMMARY, MAX_USER_TAGS = 500, 20
+
+
+def profile_directions(ex: StyleExtraction, directions: list["StyleDirectionOut"],
+                       tags: list[str]) -> list[StyleDirection]:
+    """Give each direction the traits seen in its own media, strongest first.
+
+    A trait belongs to a direction when it cites at least one of that direction's
+    media ids. Traits that cite no media (from tags/notes) go to the strongest direction.
+    """
+    # B's limits (packages/contracts/style-profile.mjs): strongest 3 directions,
+    # at most one dominant, 3 media refs and 8 labels per list.
+    ordered = sorted(directions, key=lambda d: STRENGTH_RANK.get(d.strength, 3))[:MAX_DIRECTIONS]
+    garments = {o.image_id: o.garments for o in ex.per_image}
+    out = []
+    seen_dominant = False
+    for n, d in enumerate(ordered):
+        ids = set(d.visualReferenceIds)
+        strongest = n == 0
+        strength = d.strength
+        if strength == "dominant":
+            strength = "secondary" if seen_dominant else strength
+            seen_dominant = True
+
+        def pick(traits):
+            return b_labels(t.label for t in traits
+                            if (set(t.image_ids) & ids) or (strongest and not t.image_ids))[:MAX_LABELS]
+
+        if not ids:
+            source = "tags"
+        elif strongest and tags:
+            source = "both"  # the user's tags also feed the strongest direction
+        else:
+            source = "media"
+        out.append(StyleDirection(
+            id=f"dir-{n + 1:02d}", name=d.name.strip()[:MAX_LABEL_LEN], strength=strength,
+            description=d.description.strip()[:MAX_SUMMARY],
+            colors=pick(ex.colors), silhouettes=pick(ex.silhouettes),
+            stylingPatterns=pick(ex.styling_patterns),
+            keyPieces=b_labels(g for i in d.visualReferenceIds for g in garments.get(i, []))[:6],
+            visualReferenceIds=d.visualReferenceIds[:MAX_REFS], source=source,
+        ))
+    return out
+
+
+def b_labels(values) -> list[str]:
+    """Deduplicate exactly like B's uniqueLabels(): trimmed, case-insensitive, first
+    position wins, last spelling wins. Over-long or empty labels are dropped."""
+    order: dict[str, str] = {}
+    for v in values:
+        label = v.strip()
+        if label and len(label) <= MAX_LABEL_LEN:
+            order[label.lower()] = label  # dict keeps first insertion position
+    return list(order.values())
+
+
+def nested_profile(directions: list[StyleDirection], user_tags: list[str], avoidances: list[str],
+                   summary: str, notes: str | None) -> StyleProfile:
+    """Profile in B's nested shape; flat fields derived exactly like B's buildStyleProfile()."""
+    collect = lambda key: b_labels(v for d in directions for v in getattr(d, key))
+    names = [d.name for d in directions]
+    return StyleProfile(
+        summary=summary[:MAX_SUMMARY], directions=directions, userTags=user_tags, avoidances=avoidances,
+        notes=notes, visualReferenceIds=collect("visualReferenceIds"),
+        styleTags=b_labels(user_tags + names), colors=collect("colors"), aesthetics=b_labels(names),
+        silhouettes=collect("silhouettes"), stylingPatterns=collect("stylingPatterns"),
+    )
+
+
 # ---------- entry point ----------
 
 def analyze_style(req: StyleAnalysisRequest, client: genai.Client | None = None) -> StyleAnalysisResponse:
@@ -196,7 +257,6 @@ def analyze_style(req: StyleAnalysisRequest, client: genai.Client | None = None)
     if bad:
         warnings.append(f"Removed references to unknown media ids {bad}.")
     keep = lambda ids: [i for i in dict.fromkeys(ids) if i in valid]
-    labels = lambda traits: unique(t.label for t in traits)
 
     observations = []
     for o in ex.per_image:
@@ -213,18 +273,14 @@ def analyze_style(req: StyleAnalysisRequest, client: genai.Client | None = None)
 
     directions = [StyleDirectionOut(name=d.name, description=d.description, strength=d.strength,
                                     visualReferenceIds=keep(d.image_ids)) for d in ex.style_directions]
-    main = [d.name for d in sorted(directions, key=lambda d: {"dominant": 0, "secondary": 1}.get(d.strength, 2))
-            if d.strength in ("dominant", "secondary")]
-    profile = StyleProfile(
-        styleTags=unique(tags + main + labels(ex.aesthetics)),
-        colors=labels(ex.colors),
+    if len(directions) > MAX_DIRECTIONS:
+        warnings.append(f"Kept the {MAX_DIRECTIONS} strongest of {len(directions)} style directions.")
+    profile = nested_profile(
+        directions=profile_directions(ex, directions, tags),
+        user_tags=b_labels(tags)[:MAX_USER_TAGS],
         avoidances=avoidances,  # the user's own, preserved exactly
-        visualReferenceIds=[m.id for m in req.media if m.id in {i for d in directions for i in d.visualReferenceIds}
-                            or m.id in {o.mediaId for o in observations}],
-        notes=ex.summary,
-        aesthetics=labels(ex.aesthetics),
-        silhouettes=labels(ex.silhouettes),
-        stylingPatterns=labels(ex.styling_patterns),
+        summary=ex.summary.strip(),
+        notes=notes or None,    # the user's own notes; the AI's description goes in summary
     )
     if not req.media:
         warnings.append("No media supplied; profile is based on tags and notes only.")

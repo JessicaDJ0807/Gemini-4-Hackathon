@@ -25,8 +25,8 @@ Set `MEDIA_ALLOWED_HOSTS` (comma-separated) to the hosts B's media URLs use; uns
 
 | Endpoint | Python entry point | What it does | Typical time |
 | --- | --- | --- | --- |
-| `POST /v1/style-analysis` | `src.style_analysis.service.analyze_style(req)` | Tags + notes + images/videos (B's `readUrl`s) → editable `suggestedProfile`, per-media `observations`, `styleDirections`. Avoidances only from the user | ~12 s tags only, ~35–50 s with media |
-| `POST /v1/outfit-plans` | `src.outfit_planning.planner.generate_outfits(req)` | Style profile + wardrobe (incl. photos from `imageUrl`) + trip → outfits (default 3, spread over the trip days) with missing items and `shoppingGaps` | ~20–30 s |
+| `POST /v1/style-analysis` | `src.style_analysis.service.analyze_style(req)` | Tags + notes + images/videos (B's `readUrl`s) → `suggestedProfile` (with style `directions`, passed straight to outfit planning), per-media `observations`. Avoidances only from the user | ~12 s tags only, ~35–50 s with media |
+| `POST /v1/outfit-plans` | `src.outfit_planning.planner.generate_outfits(req)` | Style profile + inspiration `media` + wardrobe (incl. photos from `imageUrl`) + trip with per-day weather → outfits (default 3, within 1–2 per trip day) with missing items and `shoppingGaps` | ~20–30 s, ~35 s with 4 inspiration images |
 | `POST /v1/shopping-gaps` | `src.outfit_planning.shopping.identify_shopping_gaps(outfits, wardrobe)` | Outfits → deduplicated shop searches. No model call. Already included in the outfit-plans response | instant |
 | `POST /v1/outfit-previews` | `src.preview_generation.visualize.visualize_outfit(req)` | One outfit → generated image (`mode: "outfit"` studio, or `"destination"` scene). Gemini 4 writes the image prompt; a Gemini image model draws it. Image served at the returned `imageRef` | ~14 s |
 | `GET /health` | | Liveness | |
@@ -36,6 +36,7 @@ Examples (real outputs from the demo run):
 - Request: [examples/outfit_plan_request.json](examples/outfit_plan_request.json) (3-day Kyoto trip, 13 text-only wardrobe items)
 - With wardrobe photos: [request](examples/outfit_plan_request_wardrobe_images.json) / [response](examples/outfit_plan_response_wardrobe_images.json) (10 items from `tests/fixtures/wardrobe/`; serve them with `cd tests/fixtures && python3 -m http.server 8799`)
 - Response: [examples/outfit_plan_response.json](examples/outfit_plan_response.json)
+- With inspiration media + forecast/climate weather: [request](examples/outfit_plan_request_inspiration.json) / [response](examples/outfit_plan_response_inspiration.json) (serve with `cd tests/fixtures && python3 -m http.server 8799`; images come from the local-only fixture pack)
 - Preview response: [examples/outfit_preview_response.json](examples/outfit_preview_response.json)
 
 ```bash
@@ -53,17 +54,29 @@ Errors use the contract's body `{requestId, inputRevision, error: {code, message
 
 All additive and optional; see [docs/ai/contract-notes.md](../../docs/ai/contract-notes.md).
 
-- Outfit: `name`, `itemsByCategory` (each piece has `owned: true/false`), `occasions`, `styleConnections`
+- Outfit: `name`, `itemsByCategory` (each piece has `owned: true/false`), `occasions`, `styleConnections`, `inspirationReferenceIds` (inspiration media that shaped it), `weatherKind` (the weather it was planned for)
+- WeatherDay: `kind: "climate"` (seasonal estimate for dates beyond the forecast), optional `conditions`, `windKph`, `humidityPct`
 - MissingItem: `category`, `color`, `silhouette`, `material`, `styleDescriptors`
 - Response: `shoppingGaps` (input for the Shopify integration), `model`
-- Style analysis response: `styleDirections` (dominant/secondary/minor with supporting media ids), `model`
-- Request: `preferences` (free text), `outfitCount` (default 3), `useWardrobeImages` (default true)
-- Response: `wardrobeImagesUsed` (ids whose photo Gemini saw)
+- StyleProfile: `directions` (dominant/secondary/minor, each with its own colors, silhouettes, styling patterns, key pieces and media ids; see [proposal](../../docs/ai/proposals/style-profile-directions.md))
+- Outfit: `directionId` (the direction that leads it; minor directions only add accents)
+- Style analysis response: `styleDirections` (duplicate of `suggestedProfile.directions`, kept for now), `model`
+- Request: `preferences` (free text), `outfitCount` (default 3), `useWardrobeImages` (default true), `useInspirationMedia` (default true)
+- Response: `wardrobeImagesUsed` (ids whose photo Gemini saw), `inspirationMediaUsed`
+
+## Viewing a plan
+
+```bash
+python tools/view_plan.py examples/outfit_plan_request_inspiration.json \
+    examples/outfit_plan_response_inspiration.json --open
+```
+
+Renders one HTML page per plan (in `generated/plan_views/`, gitignored): wardrobe photos per outfit, missing items, that day's weather, which inspiration media each outfit cited, warnings and shopping gaps. Local fixture URLs are mapped to `tests/fixtures/`, so the fixture server doesn't need to be running.
 
 ## Tests
 
 ```bash
-python tests/smoke_test.py            # 16 offline checks + 8 checks on one live Gemini call
+python tests/smoke_test.py            # 37 offline checks + 8 checks on one live Gemini call
 python tests/smoke_test.py --offline  # no API calls
 ```
 

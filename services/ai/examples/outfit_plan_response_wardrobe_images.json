@@ -1,0 +1,294 @@
+{
+  "requestId": "outfits-demo-wardrobe-images",
+  "inputRevision": 1,
+  "outfits": [
+    {
+      "id": "look-01",
+      "date": "2026-12-03",
+      "attractionIds": [
+        "fushimi-inari"
+      ],
+      "wardrobeItemIds": [
+        "wd-01",
+        "wd-03",
+        "wd-05",
+        "wd-06",
+        "wd-09",
+        "wd-10"
+      ],
+      "rationale": "Although wd-05 is labeled a black jacket, the photo shows a sleeveless quilted puffer vest, so layering it over the warm cream cable-knit sweater (wd-03) and under a waterproof shell handles 3 to 10 C and 70% rain at Fushimi Inari Shrine. Rugged lace-up brown boots (wd-09) and denim (wd-06) provide sturdy footing for long uphill walking without high heels.",
+      "missingItems": [
+        {
+          "id": "miss-01-01",
+          "description": "Waterproof hooded rain coat in black to layer over knits and vest",
+          "searchQuery": "black minimalist waterproof hooded rain coat",
+          "priority": "essential",
+          "reason": "Forecast shows 3 to 10 C with a 70% chance of precipitation, and the wardrobe lacks a sleeved waterproof outer layer for outdoor shrine hiking.",
+          "category": "outerwear",
+          "color": "black",
+          "silhouette": "relaxed mid-length hooded coat",
+          "material": "likely waterproof nylon or coated cotton blend",
+          "styleDescriptors": [
+            "minimal",
+            "functional",
+            "relaxed"
+          ]
+        }
+      ],
+      "stylingTips": [
+        "Wear wd-01 as a breathable base layer under the chunky knit wd-03 so you can adjust warmth while climbing steps.",
+        "Cuff the darker-wash jeans from wd-06 slightly above the wd-09 boot shaft to keep hems dry in wet weather.",
+        "Use the black leather tote wd-10 as a practical carryall for a compact umbrella and water bottle."
+      ],
+      "name": "Trail-Ready Rain Layering",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-01",
+            "name": "White basic T-shirt",
+            "owned": true
+          },
+          {
+            "id": "wd-03",
+            "name": "Beige knit sweater",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-05",
+            "name": "Black jacket",
+            "owned": true
+          },
+          {
+            "id": "miss-01-01",
+            "name": "Waterproof hooded rain coat in black to layer over knits and vest",
+            "owned": false
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-09",
+            "name": "Brown leather boots",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor",
+        "hiking",
+        "temple"
+      ],
+      "styleConnections": [
+        "minimal",
+        "neutral tonal layering",
+        "comfortable for walking",
+        "no high heels"
+      ]
+    },
+    {
+      "id": "look-02",
+      "date": "2026-12-04",
+      "attractionIds": [
+        "nishiki-market",
+        "kaiseki-dinner"
+      ],
+      "wardrobeItemIds": [
+        "wd-01",
+        "wd-04",
+        "wd-06",
+        "wd-08",
+        "wd-10"
+      ],
+      "rationale": "Pairing the structured beige tailored blazer (wd-04) over the clean white tee (wd-01) and dark-wash denim (wd-06) delivers smart-casual relaxed tailoring that transitions smoothly from Nishiki Market to an evening kaiseki dinner in 4 to 12 C dry weather. Flat black-and-white leather sneakers (wd-08) and the black leather tote (wd-10) keep the look minimal and comfortable for all-day walking.",
+      "missingItems": [],
+      "stylingTips": [
+        "Choose the darker blue jeans shown in wd-06 for a sharper, dinner-appropriate smart-casual finish.",
+        "Leave wd-04 open over wd-01 during daytime market browsing and button it up for the evening meal.",
+        "Carry the black leather tote wd-10 as a single clean statement accessory tying into the black trim of wd-08."
+      ],
+      "name": "Relaxed Tailoring Market-to-Dinner",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-01",
+            "name": "White basic T-shirt",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-04",
+            "name": "Beige tailored blazer",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-08",
+            "name": "Black-and-white sneakers",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "indoor",
+        "food",
+        "shopping",
+        "dining",
+        "evening"
+      ],
+      "styleConnections": [
+        "relaxed tailoring",
+        "smart casual",
+        "blazer over plain tee",
+        "minimalist"
+      ]
+    },
+    {
+      "id": "look-03",
+      "date": "2026-12-05",
+      "attractionIds": [
+        "arashiyama"
+      ],
+      "wardrobeItemIds": [
+        "wd-02",
+        "wd-03",
+        "wd-04",
+        "wd-06",
+        "wd-09",
+        "wd-10"
+      ],
+      "rationale": "Because weather for 2026-12-05 is unavailable, this look is not weather-verified and uses adaptable neutral tonal layering—combining the crisp white button-up (wd-02), cream cable-knit sweater (wd-03), and beige blazer (wd-04)—so you can add or remove layers during your walk through Arashiyama Bamboo Grove. Sturdy flat brown leather boots (wd-09) and straight-leg jeans (wd-06) prioritize walking comfort while staying true to a cream, camel, and black palette.",
+      "missingItems": [],
+      "stylingTips": [
+        "Wear wd-02 under wd-03 with the collar and cuffs peeking out, then add wd-04 on top if conditions feel chilly.",
+        "Unbutton the top of wd-02 for an effortless, relaxed smart-casual silhouette.",
+        "Stow removed knit or outerwear layers inside the roomy wd-10 leather tote while walking."
+      ],
+      "name": "Tonal Layered Bamboo Grove Walk",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-02",
+            "name": "White button-up shirt",
+            "owned": true
+          },
+          {
+            "id": "wd-03",
+            "name": "Beige knit sweater",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-04",
+            "name": "Beige tailored blazer",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-09",
+            "name": "Brown leather boots",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor",
+        "walking"
+      ],
+      "styleConnections": [
+        "neutral tonal layering",
+        "minimal",
+        "relaxed tailoring",
+        "cream and camel palette"
+      ]
+    }
+  ],
+  "warnings": [
+    "Weather unavailable for 2026-12-05; outfits for that day are not weather-verified."
+  ],
+  "shoppingGaps": [
+    {
+      "id": "gap-01",
+      "searchQuery": "black minimalist waterproof hooded rain coat",
+      "category": "outerwear",
+      "color": "black",
+      "silhouette": "relaxed mid-length hooded coat",
+      "material": "likely waterproof nylon or coated cotton blend",
+      "styleDescriptors": [
+        "minimal",
+        "functional",
+        "relaxed"
+      ],
+      "priority": "essential",
+      "reason": "Forecast shows 3 to 10 C with a 70% chance of precipitation, and the wardrobe lacks a sleeved waterproof outer layer for outdoor shrine hiking.",
+      "outfitIds": [
+        "look-01"
+      ],
+      "missingItemIds": [
+        "miss-01-01"
+      ],
+      "similarOwnedItemIds": [
+        "wd-05"
+      ]
+    }
+  ],
+  "model": "gemini-4-hydrogen",
+  "wardrobeImagesUsed": [
+    "wd-01",
+    "wd-02",
+    "wd-03",
+    "wd-04",
+    "wd-05",
+    "wd-06",
+    "wd-07",
+    "wd-08",
+    "wd-09",
+    "wd-10"
+  ]
+}

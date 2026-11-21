@@ -118,6 +118,7 @@ class OutfitPlanRequest(BaseModel):
     media: list[dict] = []
     preferences: Optional[str] = Field(None, description="extension: free-text user preferences")
     outfitCount: int = Field(3, ge=1, le=14, description="extension: total outfits to return")
+    useWardrobeImages: bool = Field(True, description="extension: send wardrobe photos to Gemini")
 
 
 class OutfitPlanResponse(BaseModel):
@@ -127,6 +128,7 @@ class OutfitPlanResponse(BaseModel):
     warnings: list[str]
     shoppingGaps: list["ShoppingGap"] = []  # extension
     model: Optional[str] = None  # extension
+    wardrobeImagesUsed: list[str] = []  # extension: wardrobe ids whose photo Gemini saw
 
 
 class ShoppingGap(BaseModel):

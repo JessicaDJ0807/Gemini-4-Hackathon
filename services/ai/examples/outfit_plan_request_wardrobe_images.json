@@ -1,0 +1,244 @@
+{
+  "requestId": "outfits-demo-wardrobe-images",
+  "inputRevision": 1,
+  "styleProfile": {
+    "styleTags": [
+      "minimal",
+      "relaxed tailoring"
+    ],
+    "aesthetics": [
+      "minimalist",
+      "smart casual"
+    ],
+    "colors": [
+      "camel",
+      "cream",
+      "black",
+      "navy"
+    ],
+    "silhouettes": [
+      "oversized blazer",
+      "wide-leg trousers",
+      "straight-leg jeans"
+    ],
+    "stylingPatterns": [
+      "neutral tonal layering",
+      "blazer over plain tee",
+      "one statement accessory"
+    ],
+    "avoidances": [
+      "high heels"
+    ],
+    "visualReferenceIds": [],
+    "notes": "Mock profile shaped like Experiment 02's minimal board output. Comfortable for lots of walking."
+  },
+  "trip": {
+    "destination": {
+      "id": "kyoto",
+      "name": "Kyoto",
+      "countryCode": "JP",
+      "latitude": 35.0116,
+      "longitude": 135.7681,
+      "timezone": "Asia/Tokyo"
+    },
+    "startDate": "2026-12-03",
+    "endDate": "2026-12-05",
+    "attractions": [
+      {
+        "id": "fushimi-inari",
+        "name": "Fushimi Inari Shrine",
+        "source": "curated",
+        "activityTags": [
+          "outdoor",
+          "hiking",
+          "temple"
+        ],
+        "date": "2026-12-03"
+      },
+      {
+        "id": "nishiki-market",
+        "name": "Nishiki Market",
+        "source": "curated",
+        "activityTags": [
+          "indoor",
+          "food",
+          "shopping"
+        ],
+        "date": "2026-12-04"
+      },
+      {
+        "id": "kaiseki-dinner",
+        "name": "Kaiseki dinner",
+        "source": "user",
+        "activityTags": [
+          "dining",
+          "evening"
+        ],
+        "date": "2026-12-04",
+        "notes": "Restaurant to be confirmed."
+      },
+      {
+        "id": "arashiyama",
+        "name": "Arashiyama Bamboo Grove",
+        "source": "curated",
+        "activityTags": [
+          "outdoor",
+          "walking"
+        ],
+        "date": "2026-12-05"
+      },
+      {
+        "id": "philosophers-path",
+        "name": "Philosopher's Path",
+        "source": "curated",
+        "activityTags": [
+          "outdoor",
+          "walking"
+        ]
+      }
+    ],
+    "weather": [
+      {
+        "date": "2026-12-03",
+        "kind": "forecast",
+        "minTempC": 3,
+        "maxTempC": 10,
+        "precipitationProbabilityPct": 70,
+        "sourceUrl": "https://weather.example/kyoto",
+        "fetchedAt": "2026-11-21T12:00:00Z"
+      },
+      {
+        "date": "2026-12-04",
+        "kind": "forecast",
+        "minTempC": 4,
+        "maxTempC": 12,
+        "precipitationProbabilityPct": 10,
+        "sourceUrl": "https://weather.example/kyoto",
+        "fetchedAt": "2026-11-21T12:00:00Z"
+      },
+      {
+        "date": "2026-12-05",
+        "kind": "unavailable",
+        "minTempC": null,
+        "maxTempC": null,
+        "precipitationProbabilityPct": null
+      }
+    ]
+  },
+  "wardrobeVersion": "hackathon-wardrobe-fixtures-v1",
+  "wardrobe": [
+    {
+      "id": "wd-01",
+      "name": "White basic T-shirt",
+      "category": "top",
+      "color": "white",
+      "styleTags": [
+        "minimal",
+        "casual"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-01.jpg"
+    },
+    {
+      "id": "wd-02",
+      "name": "White button-up shirt",
+      "category": "top",
+      "color": "white",
+      "styleTags": [
+        "classic",
+        "minimal"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-02.jpg"
+    },
+    {
+      "id": "wd-03",
+      "name": "Beige knit sweater",
+      "category": "top",
+      "color": "beige",
+      "styleTags": [
+        "cozy",
+        "minimal"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-03.jpg"
+    },
+    {
+      "id": "wd-04",
+      "name": "Beige tailored blazer",
+      "category": "outerwear",
+      "color": "beige",
+      "styleTags": [
+        "classic",
+        "tailored"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-04.jpg"
+    },
+    {
+      "id": "wd-05",
+      "name": "Black jacket",
+      "category": "outerwear",
+      "color": "black",
+      "styleTags": [
+        "edgy",
+        "casual"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-05.jpg"
+    },
+    {
+      "id": "wd-06",
+      "name": "Blue denim jeans",
+      "category": "bottom",
+      "color": "blue",
+      "styleTags": [
+        "casual",
+        "classic"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-06.jpg"
+    },
+    {
+      "id": "wd-07",
+      "name": "Pink floral dress",
+      "category": "dress",
+      "color": "pink",
+      "styleTags": [
+        "romantic",
+        "summer"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-07.jpg"
+    },
+    {
+      "id": "wd-08",
+      "name": "Black-and-white sneakers",
+      "category": "shoes",
+      "color": "black and white",
+      "styleTags": [
+        "streetwear",
+        "casual"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-08.jpg"
+    },
+    {
+      "id": "wd-09",
+      "name": "Brown leather boots",
+      "category": "shoes",
+      "color": "brown",
+      "styleTags": [
+        "classic",
+        "autumn"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-09.jpg"
+    },
+    {
+      "id": "wd-10",
+      "name": "Black leather bag",
+      "category": "accessory",
+      "color": "black",
+      "styleTags": [
+        "classic",
+        "minimal"
+      ],
+      "imageUrl": "http://127.0.0.1:8799/wardrobe/images/wd-10.jpg"
+    }
+  ],
+  "media": [],
+  "preferences": "Lots of walking each day; I'd rather not buy much.",
+  "outfitCount": 3
+}

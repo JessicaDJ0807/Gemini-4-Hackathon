@@ -20,20 +20,24 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-from .models import (MissingItem, Outfit, OutfitPiece, OutfitPlanRequest,
-                     OutfitPlanResponse, WardrobeItem)
+from .models import (MediaRef, MissingItem, Outfit, OutfitPiece, OutfitPlanRequest,
+                     OutfitPlanResponse, WardrobeItem, WeatherDay)
 from .shopping import build_search_query, identify_shopping_gaps
 
 SERVICE_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(SERVICE_DIR / ".env")
 MODEL = os.getenv("OUTFIT_MODEL", "gemini-4-hydrogen")
-PROMPT_VERSION = "outfit_planning_v2"
+PROMPT_VERSION = "outfit_planning_v3"
 PROMPT = (SERVICE_DIR / "prompts" / f"{PROMPT_VERSION}.md").read_text()
 CATEGORIES = {"top", "bottom", "dress", "outerwear", "shoes", "accessory"}
 MAX_TRIP_DAYS = 7
 ALLOWED_HOSTS = {h.strip() for h in os.getenv("MEDIA_ALLOWED_HOSTS", "").split(",") if h.strip()}
 IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
+VIDEO_TYPES = {"video/mp4", "video/webm"}
 MAX_WARDROBE_IMAGE_MB = 10
+MAX_INSPIRATION_MEDIA = 10
+RAINY_PCT = 50   # at or above: expect a rain-ready layer
+COLD_MAX_C = 12  # max temp at or below: expect outerwear
 
 
 class PlanningError(Exception):
@@ -66,6 +70,8 @@ class LlmOutfit(BaseModel):
     occasions: list[str]
     styleConnections: list[str]
     stylingTips: list[str]
+    inspirationReferenceIds: list[str] = []
+    directionId: Optional[str] = None
 
 
 class LlmPlan(BaseModel):
@@ -89,13 +95,60 @@ def outfit_slots(days: list[date], count: int) -> list[date]:
     return sorted(days[i % len(days)] for i in range(count))
 
 
-def llm_input(req: OutfitPlanRequest, slots: list[date]) -> str:
+WEATHER_VALUES = ("minTempC", "maxTempC", "precipitationProbabilityPct", "conditions", "windKph", "humidityPct")
+
+
+def normalize_weather(req: OutfitPlanRequest, days: list[date]) -> tuple[dict[date, WeatherDay], list[str]]:
+    """One clean WeatherDay per trip day from B's records. Never fills in values."""
+    trip_set = set(days)
+    by_day: dict[date, WeatherDay] = {}
+    warnings: list[str] = []
+    for w in req.trip.weather:
+        if w.date not in trip_set:
+            warnings.append(f"Weather record for {w.date} is outside the trip; ignored.")
+            continue
+        if w.date in by_day:
+            warnings.append(f"Duplicate weather records for {w.date}; used the first.")
+            continue
+        w = w.model_copy()
+        if w.precipitationProbabilityPct is not None and not 0 <= w.precipitationProbabilityPct <= 100:
+            warnings.append(f"Weather for {w.date}: rain probability {w.precipitationProbabilityPct} is out of range; ignored.")
+            w.precipitationProbabilityPct = None
+        if w.minTempC is not None and w.maxTempC is not None and w.minTempC > w.maxTempC:
+            warnings.append(f"Weather for {w.date}: min temperature above max; temperatures ignored.")
+            w.minTempC = w.maxTempC = None
+        if w.kind == "unavailable":
+            if any(getattr(w, f) is not None for f in WEATHER_VALUES):
+                warnings.append(f"Weather for {w.date} is marked unavailable but has values; values ignored.")
+            w = WeatherDay(date=w.date, kind="unavailable")
+        elif all(getattr(w, f) is None for f in WEATHER_VALUES):
+            warnings.append(f"Weather for {w.date} is marked {w.kind} but has no values; treated as unavailable.")
+            w = WeatherDay(date=w.date, kind="unavailable")
+        by_day[w.date] = w
+
+    for d in days:
+        if d not in by_day:
+            warnings.append(f"No weather record for {d}; outfits for that day are not weather-verified.")
+            by_day[d] = WeatherDay(date=d, kind="unavailable")
+        elif by_day[d].kind == "unavailable":
+            warnings.append(f"Weather unavailable for {d}; outfits for that day are not weather-verified.")
+        elif by_day[d].kind == "climate":
+            warnings.append(f"Weather for {d} is a seasonal estimate, not a forecast.")
+    return by_day, warnings
+
+
+def weather_for_llm(w: WeatherDay) -> dict:
+    return w.model_dump(mode="json", include={"kind", *WEATHER_VALUES}, exclude_none=True)
+
+
+def llm_input(req: OutfitPlanRequest, slots: list[date], weather: dict[date, WeatherDay]) -> str:
     return json.dumps({
         "styleProfile": req.styleProfile.model_dump(exclude_none=True),
-        "trip": json.loads(req.trip.model_dump_json(exclude_none=True)),
+        "trip": json.loads(req.trip.model_dump_json(exclude={"weather"}, exclude_none=True)),
         "wardrobe": [w.model_dump(exclude={"imageUrl"}, exclude_none=True) for w in req.wardrobe],
         "preferences": req.preferences,
-        "outfitsToCreate": [{"outfitNumber": i + 1, "date": d.isoformat()} for i, d in enumerate(slots)],
+        "outfitsToCreate": [{"outfitNumber": i + 1, "date": d.isoformat(), "weather": weather_for_llm(weather[d])}
+                            for i, d in enumerate(slots)],
     }, ensure_ascii=False)
 
 
@@ -129,6 +182,70 @@ def fetch_wardrobe_images(items: list[WardrobeItem]) -> tuple[dict[str, types.Pa
     return parts, warnings
 
 
+def select_inspiration(req: OutfitPlanRequest) -> tuple[list[MediaRef], list[str]]:
+    """Inspiration media to send: the profile's visual references, safe types and hosts only."""
+    warnings: list[str] = []
+    refs = set(req.styleProfile.visualReferenceIds)
+    chosen: list[MediaRef] = []
+    seen: set[str] = set()
+    for m in req.media:
+        if m.id in seen:
+            warnings.append(f"Inspiration {m.id}: duplicate id; used the first.")
+            continue
+        seen.add(m.id)
+        if refs and m.id not in refs:
+            warnings.append(f"Inspiration {m.id}: not in the profile's visualReferenceIds; not used.")
+            continue
+        allowed = IMAGE_TYPES if m.kind == "image" else VIDEO_TYPES
+        url = urlparse(m.readUrl)
+        if m.mimeType not in allowed:
+            warnings.append(f"Inspiration {m.id}: {m.mimeType} not supported for {m.kind}; not used.")
+        elif url.scheme not in ("http", "https"):
+            warnings.append(f"Inspiration {m.id}: readUrl must be http(s); not used.")
+        elif ALLOWED_HOSTS and url.hostname not in ALLOWED_HOSTS:
+            warnings.append(f"Inspiration {m.id}: media host not allowed; not used.")
+        elif len(chosen) >= MAX_INSPIRATION_MEDIA:
+            warnings.append(f"Inspiration {m.id}: over the {MAX_INSPIRATION_MEDIA}-item limit; not used.")
+        else:
+            chosen.append(m)
+    missing = [r for r in req.styleProfile.visualReferenceIds if r not in seen]
+    if missing:
+        warnings.append(f"Profile visual references with no media supplied: {missing}.")
+    return chosen, warnings
+
+
+def fetch_inspiration(client: genai.Client, items: list[MediaRef]) -> tuple[dict[str, object], list[str]]:
+    """Download inspiration media (videos go through the Files API). Failures become warnings."""
+    from ..style_analysis.service import StyleAnalysisError, download, to_part
+
+    def one(m: MediaRef):
+        try:
+            return m.id, to_part(client, m, download(m)), None
+        except StyleAnalysisError as e:
+            return m.id, None, f"Inspiration {e.message} Planned without it."
+        except Exception as e:  # never echo the signed URL
+            return m.id, None, f"Inspiration {m.id}: could not be read ({type(e).__name__}). Planned without it."
+
+    if not items:
+        return {}, []
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        results = list(pool.map(one, items))
+    return {i: p for i, p, _ in results if p is not None}, [w for _, _, w in results if w]
+
+
+def weather_warnings(oid: str, w: WeatherDay, owned: list[WardrobeItem], missing: list[MissingItem]) -> list[str]:
+    """Deterministic sanity checks: does the outfit have a layer the weather clearly calls for?"""
+    if w.kind == "unavailable":
+        return []
+    has_outer = any(x.category == "outerwear" for x in owned) or any(m.category == "outerwear" for m in missing)
+    out = []
+    if w.precipitationProbabilityPct is not None and w.precipitationProbabilityPct >= RAINY_PCT and not has_outer:
+        out.append(f"{oid}: {w.precipitationProbabilityPct:.0f}% rain chance on {w.date} but no outer layer.")
+    if w.maxTempC is not None and w.maxTempC <= COLD_MAX_C and not has_outer:
+        out.append(f"{oid}: max {w.maxTempC:.0f}°C on {w.date} but no outerwear.")
+    return out
+
+
 def is_complete(owned: list[WardrobeItem], missing: list[MissingItem]) -> bool:
     cats = {w.category for w in owned} | {m.category for m in missing if m.category}
     return ("dress" in cats or {"top", "bottom"} <= cats) and "shoes" in cats
@@ -136,11 +253,15 @@ def is_complete(owned: list[WardrobeItem], missing: list[MissingItem]) -> bool:
 
 # ---------- validation ----------
 
-def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date]) -> tuple[list[Outfit], list[str]]:
+def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date],
+             weather: dict[date, WeatherDay] | None = None,
+             inspiration_ids: set[str] = frozenset()) -> tuple[list[Outfit], list[str]]:
+    weather = weather or {}
     wardrobe = {w.id: w for w in req.wardrobe}
     attractions = {a.id: a for a in req.trip.attractions}
     days = set(slots)
     avoid = [a.lower() for a in req.styleProfile.avoidances]
+    directions = {d.id: d for d in req.styleProfile.directions}
     warnings: list[str] = []
     outfits: list[Outfit] = []
 
@@ -179,6 +300,18 @@ def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date]) -> tuple[
                 warnings.append(f"{oid}: uses {w.id} which matches avoidance {hits}.")
         if not is_complete(owned, missing):
             warnings.append(f"{oid}: may be incomplete (needs top+bottom or dress, and shoes).")
+        day_weather = weather.get(d) or WeatherDay(date=d, kind="unavailable")
+        warnings += weather_warnings(oid, day_weather, owned, missing)
+
+        insp = list(dict.fromkeys(lo.inspirationReferenceIds))
+        bad_insp = [x for x in insp if x not in inspiration_ids]
+        if bad_insp:
+            warnings.append(f"{oid}: removed inspiration ids Gemini did not see: {bad_insp}.")
+        insp = [x for x in insp if x in inspiration_ids]
+
+        direction_id = lo.directionId if lo.directionId in directions else None
+        if lo.directionId and direction_id is None:
+            warnings.append(f"{oid}: removed unknown direction id {lo.directionId!r}.")
 
         by_cat: dict[str, list[OutfitPiece]] = {}
         for w in owned:
@@ -191,8 +324,16 @@ def validate(plan: LlmPlan, req: OutfitPlanRequest, slots: list[date]) -> tuple[
             id=oid, date=d, attractionIds=att_ids, wardrobeItemIds=[w.id for w in owned],
             rationale=lo.rationale, missingItems=missing, stylingTips=lo.stylingTips,
             name=lo.name, itemsByCategory=by_cat, occasions=lo.occasions,
-            styleConnections=lo.styleConnections,
+            styleConnections=lo.styleConnections, inspirationReferenceIds=insp,
+            weatherKind=day_weather.kind, directionId=direction_id,
         ))
+
+    # A minor direction is a small accent, so it should not lead most of the trip.
+    led_by_minor = [o.id for o in outfits if o.directionId and directions[o.directionId].strength == "minor"]
+    has_stronger = any(d.strength != "minor" for d in directions.values())
+    if has_stronger and len(led_by_minor) > len(outfits) // 3:
+        warnings.append(f"Outfits {led_by_minor} are led by a minor style direction; "
+                        "minor directions should only add accents.")
     return outfits, warnings
 
 
@@ -209,13 +350,8 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
     warnings: list[str] = []
     if not req.wardrobe:
         warnings.append("Wardrobe is empty; every piece will be a suggested purchase.")
-    for w in req.trip.weather:
-        if w.kind == "unavailable":
-            warnings.append(f"Weather unavailable for {w.date}; outfits for that day are not weather-verified.")
-    weather_days = {w.date for w in req.trip.weather}
-    for d in days:
-        if d not in weather_days:
-            warnings.append(f"No weather record for {d}; outfits for that day are not weather-verified.")
+    weather, weather_warns = normalize_weather(req, days)
+    warnings += weather_warns
     per_day = max(slots.count(d) for d in days)
     if per_day > 2:
         warnings.append(f"{per_day} outfits on one day exceeds the contract's 1-2 per day.")
@@ -228,7 +364,7 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         response_mime_type="application/json",
         response_schema=LlmPlan,
     )
-    contents: list = [llm_input(req, slots)]
+    contents: list = [llm_input(req, slots, weather)]
     images: dict[str, types.Part] = {}
     if req.useWardrobeImages:
         images, image_warnings = fetch_wardrobe_images(req.wardrobe)
@@ -236,6 +372,14 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         for w in req.wardrobe:
             if w.id in images:
                 contents += [f"Wardrobe item id: {w.id}", images[w.id]]
+    inspiration: dict[str, object] = {}
+    if req.useInspirationMedia and req.media:
+        chosen, select_warnings = select_inspiration(req)
+        inspiration, fetch_warnings = fetch_inspiration(client, chosen)
+        warnings += select_warnings + fetch_warnings
+        for m in chosen:
+            if m.id in inspiration:
+                contents += [f"Inspiration media id: {m.id}", inspiration[m.id]]
 
     outfits: list[Outfit] = []
     for attempt in range(2):  # one retry if the model returns too few outfits
@@ -246,7 +390,7 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         plan = response.parsed
         if plan is None:
             continue
-        outfits, check_warnings = validate(plan, req, slots)
+        outfits, check_warnings = validate(plan, req, slots, weather, set(inspiration))
         if len(outfits) == len(slots) and all(o.wardrobeItemIds or o.missingItems for o in outfits):
             warnings += check_warnings
             break
@@ -260,4 +404,5 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         requestId=req.requestId, inputRevision=req.inputRevision, outfits=outfits,
         warnings=warnings, shoppingGaps=identify_shopping_gaps(outfits, req.wardrobe), model=MODEL,
         wardrobeImagesUsed=[w.id for w in req.wardrobe if w.id in images],
+        inspirationMediaUsed=[m.id for m in req.media if m.id in inspiration],
     )

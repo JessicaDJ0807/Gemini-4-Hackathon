@@ -9,9 +9,8 @@ import json
 import os
 import tempfile
 import time
-from datetime import datetime
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Optional
 from urllib.parse import urlparse
 
 import httpx
@@ -20,7 +19,7 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-from ..outfit_planning.models import StyleProfile
+from ..outfit_planning.models import MediaRef, StyleDirection, StyleProfile
 from .schema import StyleExtraction, invalid_image_ids
 
 SERVICE_DIR = Path(__file__).resolve().parents[2]
@@ -41,15 +40,6 @@ class StyleAnalysisError(Exception):
 
 
 # ---------- contract models ----------
-
-class MediaRef(BaseModel):
-    id: str
-    contentVersion: str = "1"
-    kind: Literal["image", "video"]
-    mimeType: str
-    readUrl: str
-    expiresAt: Optional[datetime] = None
-
 
 class StyleAnalysisRequest(BaseModel):
     requestId: str
@@ -149,6 +139,43 @@ def unique(labels) -> list[str]:
     return out
 
 
+STRENGTH_RANK = {"dominant": 0, "secondary": 1, "minor": 2}
+
+
+def profile_directions(ex: StyleExtraction, directions: list["StyleDirectionOut"],
+                       tags: list[str]) -> list[StyleDirection]:
+    """Give each direction the traits seen in its own media, strongest first.
+
+    A trait belongs to a direction when it cites at least one of that direction's
+    media ids. Traits that cite no media (from tags/notes) go to the strongest direction.
+    """
+    ordered = sorted(directions, key=lambda d: STRENGTH_RANK.get(d.strength, 3))
+    garments = {o.image_id: o.garments for o in ex.per_image}
+    out = []
+    for n, d in enumerate(ordered):
+        ids = set(d.visualReferenceIds)
+        strongest = n == 0
+
+        def pick(traits):
+            return unique(t.label for t in traits
+                          if (set(t.image_ids) & ids) or (strongest and not t.image_ids))
+
+        if not ids:
+            source = "tags"
+        elif strongest and tags:
+            source = "both"  # the user's tags also feed the strongest direction
+        else:
+            source = "media"
+        out.append(StyleDirection(
+            id=f"dir-{n + 1:02d}", name=d.name, strength=d.strength, description=d.description,
+            colors=pick(ex.colors), silhouettes=pick(ex.silhouettes),
+            stylingPatterns=pick(ex.styling_patterns),
+            keyPieces=unique(g for i in d.visualReferenceIds for g in garments.get(i, []))[:6],
+            visualReferenceIds=d.visualReferenceIds, source=source,
+        ))
+    return out
+
+
 # ---------- entry point ----------
 
 def analyze_style(req: StyleAnalysisRequest, client: genai.Client | None = None) -> StyleAnalysisResponse:
@@ -225,6 +252,7 @@ def analyze_style(req: StyleAnalysisRequest, client: genai.Client | None = None)
         aesthetics=labels(ex.aesthetics),
         silhouettes=labels(ex.silhouettes),
         stylingPatterns=labels(ex.styling_patterns),
+        directions=profile_directions(ex, directions, tags),
     )
     if not req.media:
         warnings.append("No media supplied; profile is based on tags and notes only.")

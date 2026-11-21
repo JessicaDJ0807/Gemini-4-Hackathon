@@ -33,10 +33,12 @@ type TripContext = {
 };
 
 type MissingItem = {
-  category?: string;
+  id: string; // unique within the response
   description: string;
   searchQuery: string;
   priority: 'essential' | 'optional';
+  reason: string;
+  category?: string;
 };
 
 type DailyOutfit = {

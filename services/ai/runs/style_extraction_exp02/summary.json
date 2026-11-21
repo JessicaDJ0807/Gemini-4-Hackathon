@@ -1,0 +1,527 @@
+{
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v2",
+  "scores": [
+    {
+      "case": "coherent_eclectic_maximalist",
+      "run": 1,
+      "status": "ok",
+      "seconds": 56.5,
+      "tokens": 13939,
+      "thinking_tokens": 4750,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 4,
+      "directions": [
+        "[dominant] Eclectic Maximalism ['ecl-01', 'ecl-02', 'ecl-03', 'ecl-04', 'ecl-05']",
+        "[secondary] Layered Printed Co-ords and Pattern Mixing ['ecl-01', 'ecl-02', 'ecl-03']",
+        "[minor] Retro Color-Blocking and Sporty-Glam Mix ['ecl-02', 'ecl-05']",
+        "[minor] Tactile Artisanal Craftcore ['ecl-01', 'ecl-04']"
+      ],
+      "top_direction": "Eclectic Maximalism",
+      "top_strength": "dominant",
+      "n_traits": 35,
+      "shared_traits_pct": 77,
+      "uncited_traits": [],
+      "avoidances": [
+        "muted all-neutral minimalism"
+      ],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "coherent_eclectic_maximalist",
+      "run": 2,
+      "status": "ok",
+      "seconds": 42.3,
+      "tokens": 11856,
+      "thinking_tokens": 2699,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 3,
+      "directions": [
+        "[dominant] Expressive Maximalism ['ecl-01', 'ecl-02', 'ecl-03', 'ecl-04', 'ecl-05']",
+        "[secondary] Retro Graphic & Color-Block Styling ['ecl-02', 'ecl-03', 'ecl-05']",
+        "[secondary] Tactile Artisanal & Artsy Knitwear ['ecl-01', 'ecl-04']"
+      ],
+      "top_direction": "Expressive Maximalism",
+      "top_strength": "dominant",
+      "n_traits": 29,
+      "shared_traits_pct": 83,
+      "uncited_traits": [],
+      "avoidances": [
+        "minimalist all-neutral palettes"
+      ],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "coherent_edgy_grunge",
+      "run": 1,
+      "status": "ok",
+      "seconds": 59.2,
+      "tokens": 13552,
+      "thinking_tokens": 4530,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 3,
+      "directions": [
+        "[dominant] Dark Edgy Streetwear and Grunge ['edg-01', 'edg-02', 'edg-03', 'edg-04', 'edg-05']",
+        "[secondary] Sleek Leather-Forward Dark Minimalism ['edg-01', 'edg-05']",
+        "[minor] Deconstructed Statement Streetwear ['edg-03']"
+      ],
+      "top_direction": "Dark Edgy Streetwear and Grunge",
+      "top_strength": "dominant",
+      "n_traits": 24,
+      "shared_traits_pct": 83,
+      "uncited_traits": [],
+      "avoidances": [],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "coherent_edgy_grunge",
+      "run": 2,
+      "status": "ok",
+      "seconds": 63.2,
+      "tokens": 14843,
+      "thinking_tokens": 5679,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 3,
+      "directions": [
+        "[dominant] Dark Edgy Streetwear ['edg-01', 'edg-02', 'edg-03', 'edg-04', 'edg-05']",
+        "[secondary] Grunge and Distressed Denim ['edg-02', 'edg-03', 'edg-04']",
+        "[secondary] Sleek Monochrome Leatherwear ['edg-01', 'edg-05']"
+      ],
+      "top_direction": "Dark Edgy Streetwear",
+      "top_strength": "dominant",
+      "n_traits": 28,
+      "shared_traits_pct": 71,
+      "uncited_traits": [],
+      "avoidances": [
+        "bright or pastel color palettes"
+      ],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "coherent_minimal_clean",
+      "run": 1,
+      "status": "ok",
+      "seconds": 53.5,
+      "tokens": 13046,
+      "thinking_tokens": 3561,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 4,
+      "directions": [
+        "[dominant] Minimalist Modern Tailoring ['min-01', 'min-02', 'min-03', 'min-04', 'min-05']",
+        "[secondary] Smart-Casual Neutral Separates ['min-01', 'min-05']",
+        "[secondary] Edgy Structured Tailoring ['min-03', 'min-04']",
+        "[minor] Monochrome Utilitarian Minimalism ['min-02']"
+      ],
+      "top_direction": "Minimalist Modern Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 26,
+      "shared_traits_pct": 69,
+      "uncited_traits": [],
+      "avoidances": [
+        "prints and patterns",
+        "bright or saturated colors",
+        "heavy statement accessories or embellishments"
+      ],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "coherent_minimal_clean",
+      "run": 2,
+      "status": "ok",
+      "seconds": 53.7,
+      "tokens": 11629,
+      "thinking_tokens": 2658,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 3,
+      "directions": [
+        "[dominant] Minimalist Tailoring ['min-01', 'min-02', 'min-03', 'min-04', 'min-05']",
+        "[secondary] Relaxed Smart Casual ['min-01', 'min-05']",
+        "[secondary] Sleek Monochrome and Edgy Suiting ['min-02', 'min-03', 'min-04']"
+      ],
+      "top_direction": "Minimalist Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 23,
+      "shared_traits_pct": 83,
+      "uncited_traits": [],
+      "avoidances": [
+        "prints and patterns",
+        "bright or saturated colors",
+        "heavy statement accessories"
+      ],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "coherent_romantic_cottagecore",
+      "run": 1,
+      "status": "ok",
+      "seconds": 43.7,
+      "tokens": 12183,
+      "thinking_tokens": 3081,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 3,
+      "directions": [
+        "[dominant] Romantic Cottagecore ['rom-01', 'rom-02', 'rom-03', 'rom-04', 'rom-05']",
+        "[secondary] Coquette and Corset-Inspired Romantic ['rom-01', 'rom-05']",
+        "[secondary] Rustic Vintage Pastoral ['rom-02', 'rom-03', 'rom-04']"
+      ],
+      "top_direction": "Romantic Cottagecore",
+      "top_strength": "dominant",
+      "n_traits": 25,
+      "shared_traits_pct": 96,
+      "uncited_traits": [],
+      "avoidances": [
+        "black and dark color palettes",
+        "boxy or oversized silhouettes",
+        "athletic or streetwear pieces"
+      ],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "coherent_romantic_cottagecore",
+      "run": 2,
+      "status": "ok",
+      "seconds": 51.4,
+      "tokens": 13555,
+      "thinking_tokens": 4402,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 3,
+      "directions": [
+        "[dominant] Romantic Cottagecore ['rom-01', 'rom-02', 'rom-03', 'rom-04', 'rom-05']",
+        "[secondary] Coquette Ribbon-Trimmed Romantic ['rom-01', 'rom-02', 'rom-05']",
+        "[secondary] Rustic and Retro Vintage ['rom-03', 'rom-04']"
+      ],
+      "top_direction": "Romantic Cottagecore",
+      "top_strength": "dominant",
+      "n_traits": 28,
+      "shared_traits_pct": 82,
+      "uncited_traits": [],
+      "avoidances": [
+        "dark or monochrome black color palettes",
+        "boxy or waistless silhouettes",
+        "minimalist or sporty athleisure styling"
+      ],
+      "primary_recall": "5/5",
+      "primary_extra": []
+    },
+    {
+      "case": "mixed_minimal_romantic",
+      "run": 1,
+      "status": "ok",
+      "seconds": 44.3,
+      "tokens": 11719,
+      "thinking_tokens": 2911,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 2,
+      "directions": [
+        "[dominant] Modern Minimalist Tailoring ['min-01', 'min-02', 'min-03']",
+        "[secondary] Romantic Cottagecore ['rom-01', 'rom-02']"
+      ],
+      "top_direction": "Modern Minimalist Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 31,
+      "shared_traits_pct": 71,
+      "uncited_traits": [],
+      "avoidances": [],
+      "primary_recall": "3/3",
+      "primary_extra": [],
+      "secondary_found": "[secondary] Romantic Cottagecore"
+    },
+    {
+      "case": "mixed_minimal_romantic",
+      "run": 2,
+      "status": "ok",
+      "seconds": 47.8,
+      "tokens": 11769,
+      "thinking_tokens": 2985,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 2,
+      "directions": [
+        "[dominant] Minimalist Tailoring ['min-01', 'min-02', 'min-03']",
+        "[secondary] Romantic Cottagecore ['rom-01', 'rom-02']"
+      ],
+      "top_direction": "Minimalist Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 32,
+      "shared_traits_pct": 62,
+      "uncited_traits": [],
+      "avoidances": [],
+      "primary_recall": "3/3",
+      "primary_extra": [],
+      "secondary_found": "[secondary] Romantic Cottagecore"
+    },
+    {
+      "case": "outlier_minimal_plus_edgy",
+      "run": 1,
+      "status": "ok",
+      "seconds": 46.9,
+      "tokens": 11436,
+      "thinking_tokens": 2593,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 2,
+      "directions": [
+        "[dominant] Modern Minimalist Tailoring ['min-01', 'min-02', 'min-03', 'min-04']",
+        "[minor] Edgy Textured Outerwear ['edg-01']"
+      ],
+      "top_direction": "Modern Minimalist Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 27,
+      "shared_traits_pct": 70,
+      "uncited_traits": [],
+      "avoidances": [
+        "prints and patterns",
+        "bright saturated colors",
+        "heavy or statement accessories"
+      ],
+      "primary_recall": "4/4",
+      "primary_extra": [],
+      "outlier_ids": [
+        "edg-01"
+      ],
+      "outlier_in_top": false,
+      "outlier_kept_as_direction": true
+    },
+    {
+      "case": "outlier_minimal_plus_edgy",
+      "run": 2,
+      "status": "ok",
+      "seconds": 48.1,
+      "tokens": 12353,
+      "thinking_tokens": 3521,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 2,
+      "directions": [
+        "[dominant] Modern Minimalist Tailoring ['min-01', 'min-02', 'min-03', 'min-04']",
+        "[secondary] Edgy Dark Styling ['edg-01', 'min-04', 'min-03']"
+      ],
+      "top_direction": "Modern Minimalist Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 28,
+      "shared_traits_pct": 57,
+      "uncited_traits": [],
+      "avoidances": [
+        "bold prints and patterns",
+        "bright saturated colors"
+      ],
+      "primary_recall": "4/4",
+      "primary_extra": [],
+      "outlier_ids": [
+        "edg-01"
+      ],
+      "outlier_in_top": false,
+      "outlier_kept_as_direction": true
+    },
+    {
+      "case": "reordered_eclectic",
+      "run": 1,
+      "status": "ok",
+      "seconds": 50.5,
+      "tokens": 12528,
+      "thinking_tokens": 3212,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 4,
+      "directions": [
+        "[dominant] Eclectic Maximalism ['ecl-01', 'ecl-02', 'ecl-03', 'ecl-04', 'ecl-05']",
+        "[secondary] Pattern-Mixed & Co-Ord Layering ['ecl-01', 'ecl-02', 'ecl-03']",
+        "[secondary] Retro High-Contrast Color Blocking ['ecl-02', 'ecl-05']",
+        "[minor] Tactile & Artisanal Statement Pieces ['ecl-01', 'ecl-04']"
+      ],
+      "top_direction": "Eclectic Maximalism",
+      "top_strength": "dominant",
+      "n_traits": 29,
+      "shared_traits_pct": 90,
+      "uncited_traits": [],
+      "avoidances": [
+        "understated all-neutral minimalist outfits"
+      ]
+    },
+    {
+      "case": "reordered_eclectic",
+      "run": 2,
+      "status": "ok",
+      "seconds": 44.5,
+      "tokens": 12368,
+      "thinking_tokens": 3131,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 3,
+      "directions": [
+        "[dominant] Bold Eclectic Maximalism ['ecl-03', 'ecl-04', 'ecl-05', 'ecl-01', 'ecl-02']",
+        "[secondary] Pattern-Rich Co-ords and Layered Separates ['ecl-03', 'ecl-01', 'ecl-02']",
+        "[secondary] Playful Retro and Avant-Garde Statement Dressing ['ecl-04', 'ecl-05']"
+      ],
+      "top_direction": "Bold Eclectic Maximalism",
+      "top_strength": "dominant",
+      "n_traits": 28,
+      "shared_traits_pct": 86,
+      "uncited_traits": [],
+      "avoidances": [
+        "minimalist all-neutral palettes",
+        "understated low-contrast basics without print or texture"
+      ]
+    },
+    {
+      "case": "reordered_minimal",
+      "run": 1,
+      "status": "ok",
+      "seconds": 45.6,
+      "tokens": 11986,
+      "thinking_tokens": 2969,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 4,
+      "directions": [
+        "[dominant] Minimalist Tailoring ['min-05', 'min-04', 'min-03', 'min-01']",
+        "[secondary] Tonal Neutral Matching Sets ['min-05', 'min-03', 'min-02']",
+        "[secondary] Smart Casual Tailoring ['min-05', 'min-01']",
+        "[minor] Edgy Evening Tailoring ['min-04', 'min-03']"
+      ],
+      "top_direction": "Minimalist Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 26,
+      "shared_traits_pct": 73,
+      "uncited_traits": [],
+      "avoidances": [
+        "prints and patterns",
+        "bright or saturated colors",
+        "heavy or statement jewelry"
+      ]
+    },
+    {
+      "case": "reordered_minimal",
+      "run": 2,
+      "status": "ok",
+      "seconds": 49.3,
+      "tokens": 12142,
+      "thinking_tokens": 3091,
+      "invalid_ids": [],
+      "missing_images": [],
+      "n_directions": 4,
+      "directions": [
+        "[dominant] Modern Minimalist Tailoring ['min-01', 'min-02', 'min-03', 'min-04', 'min-05']",
+        "[secondary] Relaxed Smart Casual ['min-01', 'min-05']",
+        "[secondary] Sleek Dark Tailoring ['min-03', 'min-04']",
+        "[minor] Utilitarian Monochrome ['min-02']"
+      ],
+      "top_direction": "Modern Minimalist Tailoring",
+      "top_strength": "dominant",
+      "n_traits": 26,
+      "shared_traits_pct": 65,
+      "uncited_traits": [],
+      "avoidances": [
+        "prints and patterns",
+        "bright or saturated colors",
+        "heavy embellishment or maximalist accessories"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "kind": "run1 vs run2",
+      "case": "coherent_minimal_clean",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.33
+    },
+    {
+      "kind": "run1 vs run2",
+      "case": "coherent_romantic_cottagecore",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.71
+    },
+    {
+      "kind": "run1 vs run2",
+      "case": "coherent_edgy_grunge",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.62
+    },
+    {
+      "kind": "run1 vs run2",
+      "case": "coherent_eclectic_maximalist",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.88
+    },
+    {
+      "kind": "run1 vs run2",
+      "case": "outlier_minimal_plus_edgy",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.3
+    },
+    {
+      "kind": "run1 vs run2",
+      "case": "mixed_minimal_romantic",
+      "same_grouping": true,
+      "aesthetics_jaccard": 0.7
+    },
+    {
+      "kind": "run1 vs run2",
+      "case": "reordered_minimal",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.33
+    },
+    {
+      "kind": "order (run 1)",
+      "case": "reordered_minimal vs coherent_minimal_clean",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.5,
+      "top_direction": [
+        "Minimalist Modern Tailoring",
+        "Minimalist Tailoring"
+      ]
+    },
+    {
+      "kind": "order (run 2)",
+      "case": "reordered_minimal vs coherent_minimal_clean",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.33,
+      "top_direction": [
+        "Minimalist Tailoring",
+        "Modern Minimalist Tailoring"
+      ]
+    },
+    {
+      "kind": "run1 vs run2",
+      "case": "reordered_eclectic",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.44
+    },
+    {
+      "kind": "order (run 1)",
+      "case": "reordered_eclectic vs coherent_eclectic_maximalist",
+      "same_grouping": true,
+      "aesthetics_jaccard": 0.36,
+      "top_direction": [
+        "Eclectic Maximalism",
+        "Eclectic Maximalism"
+      ]
+    },
+    {
+      "kind": "order (run 2)",
+      "case": "reordered_eclectic vs coherent_eclectic_maximalist",
+      "same_grouping": false,
+      "aesthetics_jaccard": 0.3,
+      "top_direction": [
+        "Expressive Maximalism",
+        "Bold Eclectic Maximalism"
+      ]
+    }
+  ]
+}

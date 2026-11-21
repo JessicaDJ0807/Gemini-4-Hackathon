@@ -1,0 +1,14 @@
+{
+  "outfitId": "look-01",
+  "mode": "destination",
+  "status": "ok",
+  "imageRef": "/media/generated/look-01-destination-1795291027.jpg",
+  "filePath": "/Users/hsiaoduojie/Developer/Gemini-4-Hackathon/services/ai/generated/look-01-destination-1795291027.jpg",
+  "model": "gemini-3.1-flash-image",
+  "briefModel": "gemini-4-hydrogen",
+  "prompt": "A full-body, head-to-toe fashion lookbook photograph showcasing one complete minimalist, smart-casual outfit with relaxed tailoring, worn by an anonymous model whose face is turned completely away from the camera. The ensemble is styled with a cream crew-neck knit sweater layered cleanly underneath an open, relaxed mid-thigh black minimal waterproof hooded rain coat made from matte technical breathable nylon, keeping the sweater's fine texture and crew neckline visible. Paired with the top are blue mid-wash straight-leg jeans that fall in an effortless, structured line down to crisp white leather sneakers. A sleek black leather crossbody bag is worn diagonally across the coat, resting neatly at the hip to maintain the clean, minimal silhouette. The model is captured in a serene, overcast outdoor setting inspired by the general atmosphere of Kyoto, along a generic quiet lane lined with traditional dark wood architecture, textured stone paving, and understated foliage, with no specific landmarks, readable signs, text, brand logos, or watermarks anywhere in the frame.",
+  "limitations": [
+    "Illustrative image; not an exact depiction of the garments' fit, fabric or the real destination."
+  ],
+  "error": null
+}

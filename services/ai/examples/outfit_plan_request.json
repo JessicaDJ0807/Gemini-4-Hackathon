@@ -1,0 +1,64 @@
+{
+  "requestId": "outfits-demo-001",
+  "inputRevision": 1,
+  "styleProfile": {
+    "styleTags": ["minimal", "relaxed tailoring"],
+    "aesthetics": ["minimalist", "smart casual"],
+    "colors": ["camel", "cream", "black", "navy"],
+    "silhouettes": ["oversized blazer", "wide-leg trousers", "straight-leg jeans"],
+    "stylingPatterns": ["neutral tonal layering", "blazer over plain tee", "one statement accessory"],
+    "avoidances": ["high heels"],
+    "visualReferenceIds": [],
+    "notes": "Mock profile shaped like Experiment 02's minimal board output. Comfortable for lots of walking."
+  },
+  "trip": {
+    "destination": {
+      "id": "kyoto", "name": "Kyoto", "countryCode": "JP",
+      "latitude": 35.0116, "longitude": 135.7681, "timezone": "Asia/Tokyo"
+    },
+    "startDate": "2026-12-03",
+    "endDate": "2026-12-05",
+    "attractions": [
+      {"id": "fushimi-inari", "name": "Fushimi Inari Shrine", "source": "curated",
+       "activityTags": ["outdoor", "hiking", "temple"], "date": "2026-12-03"},
+      {"id": "nishiki-market", "name": "Nishiki Market", "source": "curated",
+       "activityTags": ["indoor", "food", "shopping"], "date": "2026-12-04"},
+      {"id": "kaiseki-dinner", "name": "Kaiseki dinner", "source": "user",
+       "activityTags": ["dining", "evening"], "date": "2026-12-04",
+       "notes": "Restaurant to be confirmed."},
+      {"id": "arashiyama", "name": "Arashiyama Bamboo Grove", "source": "curated",
+       "activityTags": ["outdoor", "walking"], "date": "2026-12-05"},
+      {"id": "philosophers-path", "name": "Philosopher's Path", "source": "curated",
+       "activityTags": ["outdoor", "walking"]}
+    ],
+    "weather": [
+      {"date": "2026-12-03", "kind": "forecast", "minTempC": 3, "maxTempC": 10,
+       "precipitationProbabilityPct": 70, "sourceUrl": "https://weather.example/kyoto",
+       "fetchedAt": "2026-11-21T12:00:00Z"},
+      {"date": "2026-12-04", "kind": "forecast", "minTempC": 4, "maxTempC": 12,
+       "precipitationProbabilityPct": 10, "sourceUrl": "https://weather.example/kyoto",
+       "fetchedAt": "2026-11-21T12:00:00Z"},
+      {"date": "2026-12-05", "kind": "unavailable", "minTempC": null, "maxTempC": null,
+       "precipitationProbabilityPct": null}
+    ]
+  },
+  "wardrobeVersion": "demo-1",
+  "wardrobe": [
+    {"id": "top-01", "name": "Cream crew-neck knit sweater", "category": "top", "color": "cream", "styleTags": ["minimal", "knit"], "imageUrl": "https://assets.example/top-01.png"},
+    {"id": "top-02", "name": "White cotton t-shirt", "category": "top", "color": "white", "styleTags": ["basic"], "imageUrl": "https://assets.example/top-02.png"},
+    {"id": "top-03", "name": "Black fitted turtleneck", "category": "top", "color": "black", "styleTags": ["minimal"], "imageUrl": "https://assets.example/top-03.png"},
+    {"id": "top-04", "name": "Light blue oxford shirt", "category": "top", "color": "light blue", "styleTags": ["classic"], "imageUrl": "https://assets.example/top-04.png"},
+    {"id": "bottom-01", "name": "Black wide-leg trousers", "category": "bottom", "color": "black", "styleTags": ["tailored"], "imageUrl": "https://assets.example/bottom-01.png"},
+    {"id": "bottom-02", "name": "Mid-wash straight-leg jeans", "category": "bottom", "color": "blue", "styleTags": ["casual"], "imageUrl": "https://assets.example/bottom-02.png"},
+    {"id": "bottom-03", "name": "Camel pleated midi skirt", "category": "bottom", "color": "camel", "styleTags": ["minimal"], "imageUrl": "https://assets.example/bottom-03.png"},
+    {"id": "dress-01", "name": "Navy knit midi dress", "category": "dress", "color": "navy", "styleTags": ["minimal", "knit"], "imageUrl": "https://assets.example/dress-01.png"},
+    {"id": "outer-01", "name": "Camel oversized blazer", "category": "outerwear", "color": "camel", "styleTags": ["tailored", "oversized"], "imageUrl": "https://assets.example/outer-01.png"},
+    {"id": "outer-02", "name": "Beige wool coat", "category": "outerwear", "color": "beige", "styleTags": ["classic"], "imageUrl": "https://assets.example/outer-02.png"},
+    {"id": "shoes-01", "name": "White leather sneakers", "category": "shoes", "color": "white", "styleTags": ["casual"], "imageUrl": "https://assets.example/shoes-01.png"},
+    {"id": "shoes-02", "name": "Black leather loafers", "category": "shoes", "color": "black", "styleTags": ["classic"], "imageUrl": "https://assets.example/shoes-02.png"},
+    {"id": "acc-01", "name": "Black leather crossbody bag", "category": "accessory", "color": "black", "styleTags": ["minimal"], "imageUrl": "https://assets.example/acc-01.png"}
+  ],
+  "media": [],
+  "preferences": "Lots of walking each day; I'd rather not buy much.",
+  "outfitCount": 3
+}

@@ -1,0 +1,682 @@
+{
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v1",
+  "settings": "defaults except system_instruction + JSON schema output",
+  "images": {
+    "img-01": "elist-nguyen-ArwB2bPId6U-unsplash.jpg",
+    "img-02": "manito-silk-g4nUezDE0Yg-unsplash.jpg",
+    "img-03": "pexels-andrysso-40469219.jpg",
+    "img-04": "pexels-followingnyc-35814051.jpg",
+    "img-05": "pexels-kha-ruxury-287153-13114218.jpg",
+    "img-06": "pexels-marcelodias-2807688.jpg",
+    "img-07": "pexels-truenorthlens-33041186.jpg",
+    "img-08": "rangga-cahya-nugraha-kBRzSkOk6eo-unsplash.jpg"
+  },
+  "elapsed_seconds": 55.2,
+  "usage": {
+    "prompt_tokens": 10395,
+    "output_tokens": 2390,
+    "thinking_tokens": 4192,
+    "total_tokens": 16977
+  },
+  "invalid_image_ids": [],
+  "missing_per_image": [],
+  "style_profile": {
+    "aesthetics": [
+      "cottagecore",
+      "romantic",
+      "vintage-inspired",
+      "streetwear",
+      "maximalist",
+      "eclectic",
+      "minimalist",
+      "tailored casual",
+      "athleisure",
+      "edgy",
+      "bohemian"
+    ],
+    "colors": [
+      "white",
+      "cream / ivory",
+      "black",
+      "grey",
+      "orange / coral",
+      "red / pink",
+      "brown / beige",
+      "green / olive",
+      "neon chartreuse",
+      "yellow"
+    ],
+    "silhouettes": [
+      "relaxed trousers",
+      "oversized outerwear",
+      "puff sleeves",
+      "fitted bodice",
+      "cropped top",
+      "relaxed straight fit",
+      "midi skirt",
+      "skinny jeans"
+    ],
+    "stylingPatterns": [
+      "statement headwear and hair accessories",
+      "floral tapestry prints",
+      "lace and ruffle trims",
+      "bold print and texture mixing",
+      "exposed midriff",
+      "rolled sleeves or cuffed hems",
+      "neutral tailored separates",
+      "logo athletic details",
+      "distressed denim"
+    ],
+    "avoidances": [],
+    "visualReferenceIds": [
+      "img-01",
+      "img-02",
+      "img-03",
+      "img-04",
+      "img-05",
+      "img-06",
+      "img-07",
+      "img-08"
+    ]
+  },
+  "extraction": {
+    "per_image": [
+      {
+        "image_id": "img-01",
+        "garments": [
+          "floral jacquard corset bodice",
+          "sheer white ruffled-neckline blouse with gathered long sleeves",
+          "cream gathered skirt",
+          "white daisy hairpins",
+          "small earrings"
+        ],
+        "aesthetics": [
+          "cottagecore",
+          "romantic",
+          "vintage-inspired"
+        ],
+        "colors": [
+          "white",
+          "cream",
+          "rust red",
+          "muted orange",
+          "forest green"
+        ],
+        "silhouettes": [
+          "fitted bodice",
+          "tiered puff sleeves",
+          "flared skirt"
+        ],
+        "styling_details": [
+          "floral tapestry print",
+          "ruffled scoop neckline",
+          "sheer layered sleeves with elastic gathering",
+          "pointed corset waist",
+          "floral hair accessories"
+        ],
+        "notes": "Cropped at the upper thigh; skirt length and footwear are not visible. Bodice appears to be woven jacquard or tapestry fabric and sleeves appear to be sheer chiffon or organza."
+      },
+      {
+        "image_id": "img-02",
+        "garments": [
+          "sleeveless ivory collared button-down blouse",
+          "light grey tailored trousers"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "classic",
+          "tailored casual"
+        ],
+        "colors": [
+          "ivory",
+          "light grey"
+        ],
+        "silhouettes": [
+          "sleeveless",
+          "relaxed straight fit",
+          "curved shirttail hem"
+        ],
+        "styling_details": [
+          "pointed shirt collar",
+          "front button placket worn open at the neckline",
+          "untucked blouse",
+          "subtle satin sheen"
+        ],
+        "notes": "Cropped at the upper hips; trousers are only partially visible and footwear and accessories are not shown. Blouse appears to be silk or satin-finish woven fabric."
+      },
+      {
+        "image_id": "img-03",
+        "garments": [
+          "charcoal grey cutout sports bra with logo straps",
+          "off-white relaxed track joggers with graphic lettering",
+          "white low-top athletic sneakers",
+          "black fabric wristband",
+          "drop earrings"
+        ],
+        "aesthetics": [
+          "athleisure",
+          "streetwear",
+          "sporty"
+        ],
+        "colors": [
+          "charcoal grey",
+          "off-white",
+          "white",
+          "black"
+        ],
+        "silhouettes": [
+          "cropped fitted top",
+          "relaxed tapered joggers",
+          "chunky athletic sneakers"
+        ],
+        "styling_details": [
+          "logo taping on straps",
+          "exposed midriff",
+          "elasticated waist and cuffed ankles",
+          "athletic brand logos",
+          "sporty wristband paired with drop earrings"
+        ],
+        "notes": "Track joggers appear to be lightweight crinkled nylon or woven windbreaker fabric and the top appears to be stretch athletic knit."
+      },
+      {
+        "image_id": "img-04",
+        "garments": [
+          "long heather grey overcoat with striped faux-fur cuffs",
+          "heather grey ribbed turtleneck sweater",
+          "neon chartreuse and black snakeskin-print pleated midi skirt",
+          "black pointed-toe sock ankle boots",
+          "black structured top-handle handbag",
+          "black cat-eye sunglasses with green-tinted lenses",
+          "small rings"
+        ],
+        "aesthetics": [
+          "streetwear",
+          "maximalist",
+          "eclectic"
+        ],
+        "colors": [
+          "heather grey",
+          "neon chartreuse",
+          "black",
+          "white"
+        ],
+        "silhouettes": [
+          "oversized long coat",
+          "relaxed tunic sweater",
+          "flowing midi skirt",
+          "fitted ankle boots"
+        ],
+        "styling_details": [
+          "tonal grey layering",
+          "neon animal-print pop of color",
+          "faux-fur striped cuff trim",
+          "tinted cat-eye eyewear",
+          "contrasting knit and pleated textures"
+        ],
+        "notes": "Coat appears to be a wool-blend fabric with faux-fur trim, skirt appears to be lightweight pleated synthetic fabric, and bag appears to be leather or faux leather."
+      },
+      {
+        "image_id": "img-05",
+        "garments": [
+          "floral jacquard button-front bodice",
+          "white lace-trimmed ruffled blouse with voluminous sleeves",
+          "sheer white lace gloves",
+          "woven straw bonnet with cream crochet lace chin tie"
+        ],
+        "aesthetics": [
+          "cottagecore",
+          "romantic",
+          "vintage-inspired"
+        ],
+        "colors": [
+          "cream",
+          "white",
+          "muted peach",
+          "dusty pink",
+          "olive green",
+          "beige"
+        ],
+        "silhouettes": [
+          "structured bodice",
+          "puff sleeves"
+        ],
+        "styling_details": [
+          "floral tapestry print",
+          "crochet lace ribbon bow tie",
+          "sheer lace gloves",
+          "lace-trimmed neckline",
+          "pearl-style front buttons",
+          "straw bonnet headwear"
+        ],
+        "notes": "Tightly cropped from the lower face to mid-torso; lower garments, length, and footwear are not visible. Bodice appears to be woven tapestry fabric and gloves appear to be sheer lace."
+      },
+      {
+        "image_id": "img-06",
+        "garments": [
+          "black zip-up leather-style bomber jacket",
+          "cropped white and grey patterned top",
+          "black high-waisted ripped skinny jeans"
+        ],
+        "aesthetics": [
+          "edgy",
+          "streetwear",
+          "rock-inspired"
+        ],
+        "colors": [
+          "black",
+          "white",
+          "grey"
+        ],
+        "silhouettes": [
+          "cropped boxy jacket",
+          "cropped fitted top",
+          "skinny jeans"
+        ],
+        "styling_details": [
+          "distressed ripped knee",
+          "exposed midriff",
+          "open zip jacket layering",
+          "ribbed bomber cuffs and hem"
+        ],
+        "notes": "Cropped at the lower leg; footwear and lower hem are not visible. Jacket appears to be leather or faux leather and jeans appear to be stretch denim."
+      },
+      {
+        "image_id": "img-07",
+        "garments": [
+          "bright orange textured open-front blazer",
+          "multicolored abstract floral collared button-up shirt",
+          "multicolored chevron-print loose trousers",
+          "chunky multicolored knit loop scarf",
+          "stacked multicolored beaded bracelets",
+          "woven straw fedora hat held in hand"
+        ],
+        "aesthetics": [
+          "maximalist",
+          "bohemian",
+          "eclectic"
+        ],
+        "colors": [
+          "bright orange",
+          "coral",
+          "magenta",
+          "yellow",
+          "black"
+        ],
+        "silhouettes": [
+          "relaxed boxy jacket",
+          "loose draped trousers",
+          "voluminous scarf layering"
+        ],
+        "styling_details": [
+          "bold print mixing",
+          "vibrant warm color palette",
+          "rolled jacket sleeves",
+          "stacked beaded wrist jewelry",
+          "heavy woven and fuzzy texture contrast"
+        ],
+        "notes": "Cropped at the mid-thigh; full trouser length and footwear are not visible. Jacket appears to be fuzzy boiled wool or mohair-blend and shirt appears to be lightweight woven cotton or viscose."
+      },
+      {
+        "image_id": "img-08",
+        "garments": [
+          "brown Glen plaid oversized longline blazer",
+          "matching brown Glen plaid relaxed trousers",
+          "dark inner top",
+          "small drop earrings",
+          "thin dark wrist band"
+        ],
+        "aesthetics": [
+          "tailored casual",
+          "minimalist",
+          "vintage-inspired"
+        ],
+        "colors": [
+          "brown",
+          "taupe",
+          "beige"
+        ],
+        "silhouettes": [
+          "oversized blazer",
+          "relaxed straight-leg trousers",
+          "cuffed hems"
+        ],
+        "styling_details": [
+          "matching plaid suiting set",
+          "rolled three-quarter blazer sleeves",
+          "cuffed trouser hems",
+          "unstructured relaxed tailoring"
+        ],
+        "notes": "Cropped at the ankles; footwear is not visible and the inner top is mostly hidden. Suiting appears to be lightweight woven wool-blend or twill fabric."
+      }
+    ],
+    "style_directions": [
+      {
+        "name": "Romantic Cottagecore",
+        "description": "Vintage-inspired feminine pieces centered on woven floral tapestry bodices, white lace and ruffled trims, voluminous sleeves, and delicate headwear or hair accessories.",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Eclectic Maximalist Layering",
+        "description": "Expressive, statement-driven outfits combining bold prints, vibrant accent colors, contrasting heavy textures, and standout accessories like tinted eyewear, scarves, and stacked jewelry.",
+        "image_ids": [
+          "img-04",
+          "img-07"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Clean Neutral Tailoring",
+        "description": "Understated, polished silhouettes in soft neutral tones, spanning sleek minimalist shirting and relaxed oversized plaid suiting.",
+        "image_ids": [
+          "img-02",
+          "img-08"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Sporty Athleisure",
+        "description": "Functional athletic-inspired street styling featuring logo-trimmed activewear, relaxed cuffed track joggers, and chunky sneakers.",
+        "image_ids": [
+          "img-03"
+        ],
+        "strength": "minor"
+      },
+      {
+        "name": "Edgy Streetwear",
+        "description": "Dark, casual urban styling pairing a leather-style bomber jacket with a cropped patterned top and distressed black skinny jeans.",
+        "image_ids": [
+          "img-06"
+        ],
+        "strength": "minor"
+      }
+    ],
+    "aesthetics": [
+      {
+        "label": "cottagecore",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ]
+      },
+      {
+        "label": "romantic",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ]
+      },
+      {
+        "label": "vintage-inspired",
+        "image_ids": [
+          "img-01",
+          "img-05",
+          "img-08"
+        ]
+      },
+      {
+        "label": "streetwear",
+        "image_ids": [
+          "img-03",
+          "img-04",
+          "img-06"
+        ]
+      },
+      {
+        "label": "maximalist",
+        "image_ids": [
+          "img-04",
+          "img-07"
+        ]
+      },
+      {
+        "label": "eclectic",
+        "image_ids": [
+          "img-04",
+          "img-07"
+        ]
+      },
+      {
+        "label": "minimalist",
+        "image_ids": [
+          "img-02",
+          "img-08"
+        ]
+      },
+      {
+        "label": "tailored casual",
+        "image_ids": [
+          "img-02",
+          "img-08"
+        ]
+      },
+      {
+        "label": "athleisure",
+        "image_ids": [
+          "img-03"
+        ]
+      },
+      {
+        "label": "edgy",
+        "image_ids": [
+          "img-06"
+        ]
+      },
+      {
+        "label": "bohemian",
+        "image_ids": [
+          "img-07"
+        ]
+      }
+    ],
+    "colors": [
+      {
+        "label": "white",
+        "image_ids": [
+          "img-01",
+          "img-03",
+          "img-04",
+          "img-05",
+          "img-06"
+        ]
+      },
+      {
+        "label": "cream / ivory",
+        "image_ids": [
+          "img-01",
+          "img-02",
+          "img-03",
+          "img-05"
+        ]
+      },
+      {
+        "label": "black",
+        "image_ids": [
+          "img-03",
+          "img-04",
+          "img-06",
+          "img-07"
+        ]
+      },
+      {
+        "label": "grey",
+        "image_ids": [
+          "img-02",
+          "img-03",
+          "img-04",
+          "img-06"
+        ]
+      },
+      {
+        "label": "orange / coral",
+        "image_ids": [
+          "img-01",
+          "img-05",
+          "img-07"
+        ]
+      },
+      {
+        "label": "red / pink",
+        "image_ids": [
+          "img-01",
+          "img-05",
+          "img-07"
+        ]
+      },
+      {
+        "label": "brown / beige",
+        "image_ids": [
+          "img-05",
+          "img-08"
+        ]
+      },
+      {
+        "label": "green / olive",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ]
+      },
+      {
+        "label": "neon chartreuse",
+        "image_ids": [
+          "img-04"
+        ]
+      },
+      {
+        "label": "yellow",
+        "image_ids": [
+          "img-07"
+        ]
+      }
+    ],
+    "silhouettes": [
+      {
+        "label": "relaxed trousers",
+        "image_ids": [
+          "img-03",
+          "img-07",
+          "img-08"
+        ]
+      },
+      {
+        "label": "oversized outerwear",
+        "image_ids": [
+          "img-04",
+          "img-08"
+        ]
+      },
+      {
+        "label": "puff sleeves",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ]
+      },
+      {
+        "label": "fitted bodice",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ]
+      },
+      {
+        "label": "cropped top",
+        "image_ids": [
+          "img-03",
+          "img-06"
+        ]
+      },
+      {
+        "label": "relaxed straight fit",
+        "image_ids": [
+          "img-02",
+          "img-04",
+          "img-07"
+        ]
+      },
+      {
+        "label": "midi skirt",
+        "image_ids": [
+          "img-04"
+        ]
+      },
+      {
+        "label": "skinny jeans",
+        "image_ids": [
+          "img-06"
+        ]
+      }
+    ],
+    "styling_patterns": [
+      {
+        "label": "statement headwear and hair accessories",
+        "image_ids": [
+          "img-01",
+          "img-05",
+          "img-07"
+        ]
+      },
+      {
+        "label": "floral tapestry prints",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ]
+      },
+      {
+        "label": "lace and ruffle trims",
+        "image_ids": [
+          "img-01",
+          "img-05"
+        ]
+      },
+      {
+        "label": "bold print and texture mixing",
+        "image_ids": [
+          "img-04",
+          "img-07"
+        ]
+      },
+      {
+        "label": "exposed midriff",
+        "image_ids": [
+          "img-03",
+          "img-06"
+        ]
+      },
+      {
+        "label": "rolled sleeves or cuffed hems",
+        "image_ids": [
+          "img-07",
+          "img-08"
+        ]
+      },
+      {
+        "label": "neutral tailored separates",
+        "image_ids": [
+          "img-02",
+          "img-08"
+        ]
+      },
+      {
+        "label": "logo athletic details",
+        "image_ids": [
+          "img-03"
+        ]
+      },
+      {
+        "label": "distressed denim",
+        "image_ids": [
+          "img-06"
+        ]
+      }
+    ],
+    "avoidances": [],
+    "summary": "Your inspiration images span several distinct style directions rather than one single look, including romantic cottagecore with floral tapestry and lace details, eclectic maximalist layering with bold prints and textures, and clean neutral tailoring. You also included individual examples of sporty athleisure and edgy leather-and-denim streetwear. For a cohesive travel wardrobe, you may want to focus on one or two of these directions as your core capsule."
+  }
+}

@@ -1,0 +1,504 @@
+{
+  "case": "coherent_edgy_grunge",
+  "run": 1,
+  "case_spec": {
+    "kind": "coherent",
+    "image_ids": [
+      "edg-01",
+      "edg-02",
+      "edg-03",
+      "edg-04",
+      "edg-05"
+    ],
+    "expected_primary": "edgy_grunge",
+    "notes": "Five distinct source photos representing related aesthetic; manually review all five before labeling as ground truth"
+  },
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v2",
+  "settings": "defaults except system_instruction + JSON schema output (same as exp 01)",
+  "images": {
+    "edg-01": {
+      "path": "images/edgy_grunge/edg-01.jpg",
+      "board": "edgy_grunge",
+      "pexels_id": 8602189
+    },
+    "edg-02": {
+      "path": "images/edgy_grunge/edg-02.jpg",
+      "board": "edgy_grunge",
+      "pexels_id": 15213173
+    },
+    "edg-03": {
+      "path": "images/edgy_grunge/edg-03.jpg",
+      "board": "edgy_grunge",
+      "pexels_id": 35610286
+    },
+    "edg-04": {
+      "path": "images/edgy_grunge/edg-04.jpg",
+      "board": "edgy_grunge",
+      "pexels_id": 15213254
+    },
+    "edg-05": {
+      "path": "images/edgy_grunge/edg-05.jpg",
+      "board": "edgy_grunge",
+      "pexels_id": 13689697
+    }
+  },
+  "elapsed_seconds": 59.2,
+  "usage": {
+    "prompt_tokens": 7206,
+    "output_tokens": 1816,
+    "thinking_tokens": 4530,
+    "total_tokens": 13552
+  },
+  "invalid_image_ids": [],
+  "missing_per_image": [],
+  "style_profile": {
+    "aesthetics": [
+      "edgy",
+      "streetwear",
+      "grunge",
+      "dark minimalism",
+      "moto",
+      "punk-inspired"
+    ],
+    "colors": [
+      "black",
+      "silver metallic",
+      "white",
+      "charcoal",
+      "blue denim"
+    ],
+    "silhouettes": [
+      "relaxed and oversized outerwear",
+      "straight-leg jeans and trousers",
+      "chunky platform and lug-sole footwear",
+      "structured hip-length jacket",
+      "cropped fitted top",
+      "longline maxi coat"
+    ],
+    "stylingPatterns": [
+      "monochrome black dressing",
+      "metal hardware and chain accents",
+      "leather and leather-look statement outerwear",
+      "distressed and deconstructed denim",
+      "open casual outerwear layering",
+      "subtle inner pattern contrast",
+      "narrow or compact dark sunglasses"
+    ],
+    "avoidances": [],
+    "visualReferenceIds": [
+      "edg-01",
+      "edg-02",
+      "edg-03",
+      "edg-04",
+      "edg-05"
+    ]
+  },
+  "extraction": {
+    "per_image": [
+      {
+        "image_id": "edg-01",
+        "garments": [
+          "black croc-embossed moto jacket",
+          "dark top",
+          "dark bottoms"
+        ],
+        "aesthetics": [
+          "edgy",
+          "moto",
+          "dark minimalism"
+        ],
+        "colors": [
+          "black",
+          "silver"
+        ],
+        "silhouettes": [
+          "structured hip-length jacket",
+          "fitted shoulders"
+        ],
+        "styling_details": [
+          "croc-embossed texture",
+          "exposed metal zipper",
+          "belted jacket hem tab",
+          "all-black layering"
+        ],
+        "notes": "Cropped at the upper thigh from a side angle so lower garments and footwear are not visible. The jacket appears to be croc-embossed leather or faux leather."
+      },
+      {
+        "image_id": "edg-02",
+        "garments": [
+          "washed black button-up overshirt",
+          "black-and-white plaid flannel layer or lining",
+          "black cropped scoop-neck tank top",
+          "black distressed straight-leg jeans",
+          "black leather-look belt",
+          "black chunky lug-sole lace-up boots",
+          "small dark oval sunglasses",
+          "thin dark necklace"
+        ],
+        "aesthetics": [
+          "grunge",
+          "edgy",
+          "streetwear",
+          "90s alternative"
+        ],
+        "colors": [
+          "black",
+          "charcoal",
+          "white",
+          "silver"
+        ],
+        "silhouettes": [
+          "oversized outerwear",
+          "cropped fitted top",
+          "straight-leg jeans",
+          "chunky footwear"
+        ],
+        "styling_details": [
+          "open layered outerwear",
+          "large knee cutouts and thigh distressing",
+          "plaid lining contrast",
+          "belted high-to-mid waist",
+          "small dark sunglasses",
+          "monochrome black base"
+        ],
+        "notes": "The overshirt appears to be heavy washed cotton or denim and either has a plaid flannel lining or is layered directly over a plaid shirt. Footwear appears to be matte leather or faux leather with heavy lug soles."
+      },
+      {
+        "image_id": "edg-03",
+        "garments": [
+          "black-and-white colorblock zip-up blouson jacket",
+          "deconstructed patchwork denim trousers",
+          "black chunky platform shoes",
+          "black graphic baseball cap",
+          "rectangular white-framed dark sunglasses",
+          "silver wallet chain",
+          "multicolored beaded necklace"
+        ],
+        "aesthetics": [
+          "streetwear",
+          "punk-inspired",
+          "edgy",
+          "moto"
+        ],
+        "colors": [
+          "black",
+          "white",
+          "blue denim",
+          "charcoal",
+          "silver",
+          "multicolor accents"
+        ],
+        "silhouettes": [
+          "relaxed blouson jacket",
+          "straight-leg stacked trousers",
+          "chunky platform footwear"
+        ],
+        "styling_details": [
+          "high-contrast colorblocking",
+          "heavily frayed patchwork denim strips",
+          "silver hip chain",
+          "shoulder stud details",
+          "sporty cap paired with leather-look outerwear",
+          "bold rectangular eyewear"
+        ],
+        "notes": "The jacket appears to be leather or faux leather with an elasticated hem. The shoes are partially in shadow and appear to have matte black uppers with thick platform soles."
+      },
+      {
+        "image_id": "edg-04",
+        "garments": [
+          "dark charcoal button-up overshirt",
+          "black-and-white plaid cuff layer or lining",
+          "black scoop-neck top",
+          "black ripped-knee jeans",
+          "black chunky lug-sole platform lace-up boots",
+          "thin dark necklace"
+        ],
+        "aesthetics": [
+          "grunge",
+          "edgy",
+          "streetwear",
+          "90s alternative"
+        ],
+        "colors": [
+          "black",
+          "charcoal",
+          "white",
+          "silver"
+        ],
+        "silhouettes": [
+          "relaxed oversized overshirt",
+          "straight-leg jeans",
+          "chunky platform footwear"
+        ],
+        "styling_details": [
+          "large ripped knees",
+          "plaid cuffs peeking from sleeves",
+          "all-black tonal outfit",
+          "metal boot eyelets",
+          "heavy lug soles"
+        ],
+        "notes": "Seated pose obscures the length of the top and outerwear. This appears to be the same outfit seen in edg-02, with the overshirt appearing to be washed denim or heavy cotton."
+      },
+      {
+        "image_id": "edg-05",
+        "garments": [
+          "glossy black longline trench coat",
+          "printed inner sleeve layer",
+          "sheer black tights",
+          "black round-toe boots"
+        ],
+        "aesthetics": [
+          "edgy",
+          "dark minimalism",
+          "urban chic"
+        ],
+        "colors": [
+          "black",
+          "sheer dark charcoal",
+          "muted olive and tan accent"
+        ],
+        "silhouettes": [
+          "longline maxi coat",
+          "draped outerwear"
+        ],
+        "styling_details": [
+          "high-shine leather-look outerwear",
+          "monochrome black styling",
+          "subtle peek of patterned fabric at the cuff",
+          "sheer hosiery paired with heavy coat"
+        ],
+        "notes": "Crouched pose behind a railing hides the inner garment silhouette and most of the footwear. The coat appears to be glossy faux leather, vinyl, or patent leather, and the inner printed sleeve appears to be lightweight woven fabric."
+      }
+    ],
+    "style_directions": [
+      {
+        "name": "Dark Edgy Streetwear and Grunge",
+        "description": "An urban, black-dominated aesthetic built around statement outerwear, relaxed layering, distressed denim, metal hardware, and heavy black footwear.",
+        "image_ids": [
+          "edg-01",
+          "edg-02",
+          "edg-03",
+          "edg-04",
+          "edg-05"
+        ],
+        "strength": "dominant"
+      },
+      {
+        "name": "Sleek Leather-Forward Dark Minimalism",
+        "description": "A cleaner, streamlined take on dark dressing anchored by glossy or textured leather-look coats and jackets with minimal ornamentation.",
+        "image_ids": [
+          "edg-01",
+          "edg-05"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Deconstructed Statement Streetwear",
+        "description": "An expressive, punk-influenced direction featuring heavy patchwork frayed denim, colorblock outerwear, wallet chains, and bold streetwear accessories.",
+        "image_ids": [
+          "edg-03"
+        ],
+        "strength": "minor"
+      }
+    ],
+    "aesthetics": [
+      {
+        "label": "edgy",
+        "image_ids": [
+          "edg-01",
+          "edg-02",
+          "edg-03",
+          "edg-04",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "streetwear",
+        "image_ids": [
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "grunge",
+        "image_ids": [
+          "edg-02",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "dark minimalism",
+        "image_ids": [
+          "edg-01",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "moto",
+        "image_ids": [
+          "edg-01",
+          "edg-03"
+        ]
+      },
+      {
+        "label": "punk-inspired",
+        "image_ids": [
+          "edg-03"
+        ]
+      }
+    ],
+    "colors": [
+      {
+        "label": "black",
+        "image_ids": [
+          "edg-01",
+          "edg-02",
+          "edg-03",
+          "edg-04",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "silver metallic",
+        "image_ids": [
+          "edg-01",
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "white",
+        "image_ids": [
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "charcoal",
+        "image_ids": [
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "blue denim",
+        "image_ids": [
+          "edg-03"
+        ]
+      }
+    ],
+    "silhouettes": [
+      {
+        "label": "relaxed and oversized outerwear",
+        "image_ids": [
+          "edg-02",
+          "edg-03",
+          "edg-04",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "straight-leg jeans and trousers",
+        "image_ids": [
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "chunky platform and lug-sole footwear",
+        "image_ids": [
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "structured hip-length jacket",
+        "image_ids": [
+          "edg-01",
+          "edg-03"
+        ]
+      },
+      {
+        "label": "cropped fitted top",
+        "image_ids": [
+          "edg-02"
+        ]
+      },
+      {
+        "label": "longline maxi coat",
+        "image_ids": [
+          "edg-05"
+        ]
+      }
+    ],
+    "styling_patterns": [
+      {
+        "label": "monochrome black dressing",
+        "image_ids": [
+          "edg-01",
+          "edg-02",
+          "edg-04",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "metal hardware and chain accents",
+        "image_ids": [
+          "edg-01",
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "leather and leather-look statement outerwear",
+        "image_ids": [
+          "edg-01",
+          "edg-03",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "distressed and deconstructed denim",
+        "image_ids": [
+          "edg-02",
+          "edg-03",
+          "edg-04"
+        ]
+      },
+      {
+        "label": "open casual outerwear layering",
+        "image_ids": [
+          "edg-02",
+          "edg-04",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "subtle inner pattern contrast",
+        "image_ids": [
+          "edg-02",
+          "edg-04",
+          "edg-05"
+        ]
+      },
+      {
+        "label": "narrow or compact dark sunglasses",
+        "image_ids": [
+          "edg-02",
+          "edg-03"
+        ]
+      }
+    ],
+    "avoidances": [],
+    "summary": "Your style centers on dark, edgy urban streetwear anchored by an all-black palette, statement leather-look outerwear, and chunky black footwear. You gravitate toward relaxed layering and strong textural contrast, balancing sleek embossed or glossy coats with 90s grunge staples like ripped straight-leg denim and plaid accents. For bolder looks, you also embrace deconstructed streetwear details such as patchwork denim, colorblocking, and metallic hardware."
+  },
+  "status": "ok"
+}

@@ -1,0 +1,567 @@
+{
+  "case": "coherent_eclectic_maximalist",
+  "run": 2,
+  "case_spec": {
+    "kind": "coherent",
+    "image_ids": [
+      "ecl-01",
+      "ecl-02",
+      "ecl-03",
+      "ecl-04",
+      "ecl-05"
+    ],
+    "expected_primary": "eclectic_maximalist",
+    "notes": "Five distinct source photos representing related aesthetic; manually review all five before labeling as ground truth"
+  },
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v2",
+  "settings": "defaults except system_instruction + JSON schema output (same as exp 01)",
+  "images": {
+    "ecl-01": {
+      "path": "images/eclectic_maximalist/ecl-01.jpg",
+      "board": "eclectic_maximalist",
+      "pexels_id": 33041186
+    },
+    "ecl-02": {
+      "path": "images/eclectic_maximalist/ecl-02.jpg",
+      "board": "eclectic_maximalist",
+      "pexels_id": 7913101
+    },
+    "ecl-03": {
+      "path": "images/eclectic_maximalist/ecl-03.jpg",
+      "board": "eclectic_maximalist",
+      "pexels_id": 11627274
+    },
+    "ecl-04": {
+      "path": "images/eclectic_maximalist/ecl-04.jpg",
+      "board": "eclectic_maximalist",
+      "pexels_id": 29967002
+    },
+    "ecl-05": {
+      "path": "images/eclectic_maximalist/ecl-05.jpg",
+      "board": "eclectic_maximalist",
+      "pexels_id": 36868185
+    }
+  },
+  "elapsed_seconds": 42.3,
+  "usage": {
+    "prompt_tokens": 7182,
+    "output_tokens": 1975,
+    "thinking_tokens": 2699,
+    "total_tokens": 11856
+  },
+  "invalid_image_ids": [],
+  "missing_per_image": [],
+  "style_profile": {
+    "aesthetics": [
+      "maximalist",
+      "eclectic",
+      "retro",
+      "artsy",
+      "streetwear",
+      "bohemian",
+      "avant-garde"
+    ],
+    "colors": [
+      "orange and orange-red",
+      "red",
+      "black",
+      "white",
+      "yellow and gold",
+      "turquoise and bright blue",
+      "emerald and neon green",
+      "multicolor"
+    ],
+    "silhouettes": [
+      "relaxed and oversized tops or outerwear",
+      "fitted base layers",
+      "wide-leg and loose trousers",
+      "cropped or waist-knotted outerwear",
+      "voluminous sculptural pieces",
+      "high-waisted shorts"
+    ],
+    "stylingPatterns": [
+      "high-saturation color blocking and vivid palettes",
+      "tactile statement textures (fuzzy knits, pom-poms, lace, ribbing, weaves) ",
+      "statement accessories (oversized or tassel earrings, stacked bracelets, mini top-handle bag, draped scarf) ",
+      "bold print mixing",
+      "matching patterned co-ord sets",
+      "fitted turtleneck layered under short-sleeve tops",
+      "pushed-up sleeves on outerwear",
+      "genre mixing sporty or relaxed pieces with dressy footwear or accessories"
+    ],
+    "avoidances": [
+      "minimalist all-neutral palettes"
+    ],
+    "visualReferenceIds": [
+      "ecl-01",
+      "ecl-02",
+      "ecl-03",
+      "ecl-04",
+      "ecl-05"
+    ]
+  },
+  "extraction": {
+    "per_image": [
+      {
+        "image_id": "ecl-01",
+        "garments": [
+          "orange open-front jacket",
+          "floral-print collared button-up shirt",
+          "chevron-print loose trousers",
+          "multicolor draped knit scarf",
+          "woven patterned hat",
+          "stacked beaded and charm bracelets"
+        ],
+        "aesthetics": [
+          "maximalist",
+          "eclectic",
+          "bohemian",
+          "artsy"
+        ],
+        "colors": [
+          "bright orange",
+          "peach",
+          "burgundy",
+          "yellow",
+          "black",
+          "multicolor"
+        ],
+        "silhouettes": [
+          "relaxed fit",
+          "layered",
+          "loose trousers"
+        ],
+        "styling_details": [
+          "print mixing with floral shirt and chevron trousers",
+          "layered contrasting textures",
+          "pushed-up jacket sleeves",
+          "long looped scarf",
+          "stacked statement bracelets",
+          "held woven hat"
+        ],
+        "notes": "Cropped around mid-thigh so full trouser length and footwear are not visible. Jacket appears to be brushed wool or mohair knit; shirt appears to be lightweight woven fabric."
+      },
+      {
+        "image_id": "ecl-02",
+        "garments": [
+          "red ribbed turtleneck top",
+          "geometric-print short-sleeve button-up shirt",
+          "matching geometric-print drawstring shorts",
+          "large brown hoop earrings"
+        ],
+        "aesthetics": [
+          "retro",
+          "eclectic",
+          "maximalist",
+          "bold casual"
+        ],
+        "colors": [
+          "bright red",
+          "orange-red",
+          "black",
+          "white",
+          "brown"
+        ],
+        "silhouettes": [
+          "fitted base layer",
+          "relaxed knotted shirt",
+          "high-waisted flared shorts"
+        ],
+        "styling_details": [
+          "matching patterned co-ord set",
+          "turtleneck layered under open short-sleeve button-up",
+          "front-knotted shirt defining the waist",
+          "color-coordinated solid base layer",
+          "statement hoop earrings"
+        ],
+        "notes": "Cropped at mid-thigh so footwear is not visible. Base layer appears to be a ribbed stretch knit; co-ord set appears to be lightweight woven fabric."
+      },
+      {
+        "image_id": "ecl-03",
+        "garments": [
+          "leopard-print long-sleeve turtleneck top",
+          "ornate graphic-print oversized short-sleeve tunic",
+          "matching graphic-print wide-leg trousers",
+          "emerald green structured top-handle mini bag",
+          "white block-heel ankle boots",
+          "layered chunky necklaces",
+          "rings",
+          "beaded bracelet"
+        ],
+        "aesthetics": [
+          "maximalist",
+          "eclectic",
+          "streetwear",
+          "bold editorial"
+        ],
+        "colors": [
+          "emerald green",
+          "beige",
+          "gold",
+          "black",
+          "red",
+          "white",
+          "brown"
+        ],
+        "silhouettes": [
+          "fitted base layer",
+          "oversized boxy tunic",
+          "wide-leg trousers"
+        ],
+        "styling_details": [
+          "print mixing leopard print with ornate graphic co-ord",
+          "matching patterned two-piece set",
+          "fitted turtleneck layered under oversized short-sleeve top",
+          "color-matched statement mini bag",
+          "contrasting white ankle boots",
+          "layered jewelry"
+        ],
+        "notes": "Full outfit is visible. Co-ord set appears to be medium-weight woven fabric; turtleneck appears to be stretch knit; boots and bag appear to be smooth leather or faux leather."
+      },
+      {
+        "image_id": "ecl-04",
+        "garments": [
+          "multicolor yarn pom-pom statement garment",
+          "mismatched red and neon green tassel drop earrings with blue beads"
+        ],
+        "aesthetics": [
+          "maximalist",
+          "avant-garde",
+          "artsy",
+          "eclectic"
+        ],
+        "colors": [
+          "multicolor",
+          "turquoise",
+          "yellow",
+          "red",
+          "orange",
+          "purple",
+          "neon green",
+          "pink",
+          "white"
+        ],
+        "silhouettes": [
+          "voluminous",
+          "sculptural",
+          "oversized"
+        ],
+        "styling_details": [
+          "heavy 3D pom-pom texture",
+          "vibrant rainbow color palette",
+          "mismatched statement tassel earrings"
+        ],
+        "notes": "Tightly framed and posed so lower garments and footwear are not visible. Exact garment structure (sweater, vest, or cape) is hard to read due to dense pom-pom coverage; embellishment appears to be thick yarn over a knit base."
+      },
+      {
+        "image_id": "ecl-05",
+        "garments": [
+          "orange-red fitted bodysuit",
+          "cropped turquoise zip-up windbreaker",
+          "white floral lace tights",
+          "metallic silver pointed-toe stiletto pumps"
+        ],
+        "aesthetics": [
+          "1980s retro",
+          "maximalist",
+          "eclectic",
+          "sporty glam"
+        ],
+        "colors": [
+          "orange-red",
+          "turquoise",
+          "white",
+          "metallic silver"
+        ],
+        "silhouettes": [
+          "bodycon bodysuit",
+          "cropped boxy jacket",
+          "fitted legs"
+        ],
+        "styling_details": [
+          "high-contrast color blocking",
+          "genre mixing sporty outerwear with dressy lace tights and stilettos",
+          "patterned lace hosiery",
+          "pushed-up jacket sleeves",
+          "cropped outerwear layered over fitted base"
+        ],
+        "notes": "Full outfit is visible, though the upper neckline of the bodysuit and jacket collar are partially obscured by raised hands. Jacket appears to be lightweight nylon; bodysuit appears to be stretch synthetic fabric; tights appear to be sheer lace knit."
+      }
+    ],
+    "style_directions": [
+      {
+        "name": "Expressive Maximalism",
+        "description": "Bold saturated colors, unapologetic print and texture mixing, and statement accessories across both relaxed and sculpted outfits.",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-03",
+          "ecl-04",
+          "ecl-05"
+        ],
+        "strength": "dominant"
+      },
+      {
+        "name": "Retro Graphic & Color-Block Styling",
+        "description": "Playful throwback silhouettes pairing bold geometric or ornate co-ord sets, fitted layering tops, sporty cropped jackets, and high-contrast color combinations.",
+        "image_ids": [
+          "ecl-02",
+          "ecl-03",
+          "ecl-05"
+        ],
+        "strength": "secondary"
+      },
+      {
+        "name": "Tactile Artisanal & Artsy Knitwear",
+        "description": "Rich surface texture using fuzzy brushed knits, heavy yarn pom-poms, woven details, and eclectic layered accessories.",
+        "image_ids": [
+          "ecl-01",
+          "ecl-04"
+        ],
+        "strength": "secondary"
+      }
+    ],
+    "aesthetics": [
+      {
+        "label": "maximalist",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-03",
+          "ecl-04",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "eclectic",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-03",
+          "ecl-04",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "retro",
+        "image_ids": [
+          "ecl-02",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "artsy",
+        "image_ids": [
+          "ecl-01",
+          "ecl-04"
+        ]
+      },
+      {
+        "label": "streetwear",
+        "image_ids": [
+          "ecl-03"
+        ]
+      },
+      {
+        "label": "bohemian",
+        "image_ids": [
+          "ecl-01"
+        ]
+      },
+      {
+        "label": "avant-garde",
+        "image_ids": [
+          "ecl-04"
+        ]
+      }
+    ],
+    "colors": [
+      {
+        "label": "orange and orange-red",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-04",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "red",
+        "image_ids": [
+          "ecl-02",
+          "ecl-03",
+          "ecl-04"
+        ]
+      },
+      {
+        "label": "black",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-03"
+        ]
+      },
+      {
+        "label": "white",
+        "image_ids": [
+          "ecl-02",
+          "ecl-03",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "yellow and gold",
+        "image_ids": [
+          "ecl-01",
+          "ecl-03",
+          "ecl-04"
+        ]
+      },
+      {
+        "label": "turquoise and bright blue",
+        "image_ids": [
+          "ecl-04",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "emerald and neon green",
+        "image_ids": [
+          "ecl-03",
+          "ecl-04"
+        ]
+      },
+      {
+        "label": "multicolor",
+        "image_ids": [
+          "ecl-01",
+          "ecl-04"
+        ]
+      }
+    ],
+    "silhouettes": [
+      {
+        "label": "relaxed and oversized tops or outerwear",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-03",
+          "ecl-04"
+        ]
+      },
+      {
+        "label": "fitted base layers",
+        "image_ids": [
+          "ecl-02",
+          "ecl-03",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "wide-leg and loose trousers",
+        "image_ids": [
+          "ecl-01",
+          "ecl-03"
+        ]
+      },
+      {
+        "label": "cropped or waist-knotted outerwear",
+        "image_ids": [
+          "ecl-02",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "voluminous sculptural pieces",
+        "image_ids": [
+          "ecl-04"
+        ]
+      },
+      {
+        "label": "high-waisted shorts",
+        "image_ids": [
+          "ecl-02"
+        ]
+      }
+    ],
+    "styling_patterns": [
+      {
+        "label": "high-saturation color blocking and vivid palettes",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-04",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "tactile statement textures (fuzzy knits, pom-poms, lace, ribbing, weaves) ",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-04",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "statement accessories (oversized or tassel earrings, stacked bracelets, mini top-handle bag, draped scarf) ",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-03",
+          "ecl-04"
+        ]
+      },
+      {
+        "label": "bold print mixing",
+        "image_ids": [
+          "ecl-01",
+          "ecl-03"
+        ]
+      },
+      {
+        "label": "matching patterned co-ord sets",
+        "image_ids": [
+          "ecl-02",
+          "ecl-03"
+        ]
+      },
+      {
+        "label": "fitted turtleneck layered under short-sleeve tops",
+        "image_ids": [
+          "ecl-02",
+          "ecl-03"
+        ]
+      },
+      {
+        "label": "pushed-up sleeves on outerwear",
+        "image_ids": [
+          "ecl-01",
+          "ecl-05"
+        ]
+      },
+      {
+        "label": "genre mixing sporty or relaxed pieces with dressy footwear or accessories",
+        "image_ids": [
+          "ecl-03",
+          "ecl-05"
+        ]
+      }
+    ],
+    "avoidances": [
+      {
+        "label": "minimalist all-neutral palettes",
+        "image_ids": [
+          "ecl-01",
+          "ecl-02",
+          "ecl-03",
+          "ecl-04",
+          "ecl-05"
+        ]
+      }
+    ],
+    "summary": "Your style is boldly maximalist and eclectic, anchored by saturated colors—especially orange, red, turquoise, and green—paired with clashing prints and rich textures. You lean toward expressive layering, such as fitted turtlenecks under patterned co-ord sets, cropped or oversized statement outerwear, and eye-catching accessories like chunky jewelry, draped scarves, and sculptural earrings. For a travel wardrobe, versatile statement sets, bold knit or woven layers, and vivid base pieces will let you mix prints and color-block effortlessly."
+  },
+  "status": "ok"
+}

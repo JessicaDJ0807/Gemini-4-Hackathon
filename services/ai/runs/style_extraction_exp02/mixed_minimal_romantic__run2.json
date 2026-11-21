@@ -1,0 +1,508 @@
+{
+  "case": "mixed_minimal_romantic",
+  "run": 2,
+  "case_spec": {
+    "kind": "two_preferences",
+    "image_ids": [
+      "min-01",
+      "min-02",
+      "min-03",
+      "rom-01",
+      "rom-02"
+    ],
+    "expected_primary": "minimal_clean",
+    "expected_secondary": "romantic_cottagecore"
+  },
+  "model": "gemini-4-neon",
+  "prompt_version": "style_analysis_v2",
+  "settings": "defaults except system_instruction + JSON schema output (same as exp 01)",
+  "images": {
+    "min-01": {
+      "path": "images/minimal_clean/min-01.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 23531833
+    },
+    "min-02": {
+      "path": "images/minimal_clean/min-02.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 9142805
+    },
+    "min-03": {
+      "path": "images/minimal_clean/min-03.jpg",
+      "board": "minimal_clean",
+      "pexels_id": 12400328
+    },
+    "rom-01": {
+      "path": "images/romantic_cottagecore/rom-01.jpg",
+      "board": "romantic_cottagecore",
+      "pexels_id": 12793879
+    },
+    "rom-02": {
+      "path": "images/romantic_cottagecore/rom-02.jpg",
+      "board": "romantic_cottagecore",
+      "pexels_id": 29748902
+    }
+  },
+  "elapsed_seconds": 47.8,
+  "usage": {
+    "prompt_tokens": 7178,
+    "output_tokens": 1606,
+    "thinking_tokens": 2985,
+    "total_tokens": 11769
+  },
+  "invalid_image_ids": [],
+  "missing_per_image": [],
+  "style_profile": {
+    "aesthetics": [
+      "minimalist",
+      "tailored",
+      "monochrome",
+      "romantic",
+      "cottagecore",
+      "smart casual",
+      "utilitarian",
+      "coquette"
+    ],
+    "colors": [
+      "white and cream",
+      "beige and camel",
+      "light blue",
+      "black",
+      "blush pink and dusty rose",
+      "red"
+    ],
+    "silhouettes": [
+      "relaxed blazer",
+      "high-waisted trousers",
+      "cinched waist",
+      "voluminous sleeves",
+      "square neckline",
+      "full A-line skirt",
+      "cropped fitted top",
+      "straight-leg jeans",
+      "belted utility jacket",
+      "wide-leg trousers"
+    ],
+    "stylingPatterns": [
+      "minimal accessories",
+      "smocked detailing",
+      "monochrome neutral dressing",
+      "open blazer styling",
+      "floral print dresses",
+      "ribbon and bow accents",
+      "utility pocket detailing",
+      "lace and ruffle trim"
+    ],
+    "avoidances": [],
+    "visualReferenceIds": [
+      "min-01",
+      "min-02",
+      "min-03",
+      "rom-01",
+      "rom-02"
+    ]
+  },
+  "extraction": {
+    "per_image": [
+      {
+        "image_id": "min-01",
+        "garments": [
+          "oversized tan notched-lapel blazer",
+          "white smocked bandeau crop top",
+          "light-wash high-waisted straight-leg jeans"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "smart casual",
+          "tailored"
+        ],
+        "colors": [
+          "camel",
+          "white",
+          "light blue"
+        ],
+        "silhouettes": [
+          "oversized blazer",
+          "cropped fitted top",
+          "high-waisted straight-leg jeans"
+        ],
+        "styling_details": [
+          "relaxed tailoring paired with casual denim",
+          "open blazer layering over a cropped base layer",
+          "neutral color palette with light-wash denim",
+          "minimal accessories"
+        ],
+        "notes": "Subject is seated and barefoot with no footwear visible. The blazer appears to be a lightweight woven suiting or linen-blend fabric, and the jeans appear to be mid-weight cotton denim."
+      },
+      {
+        "image_id": "min-02",
+        "garments": [
+          "beige collared belted utility jacket with patch chest pockets",
+          "matching beige trousers"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "monochrome",
+          "utilitarian"
+        ],
+        "colors": [
+          "beige",
+          "taupe"
+        ],
+        "silhouettes": [
+          "relaxed drop-shoulder jacket",
+          "belted waist",
+          "matching relaxed trousers"
+        ],
+        "styling_details": [
+          "head-to-toe monochrome dressing",
+          "self-tie waist belt creating waist definition",
+          "large utilitarian patch pockets",
+          "open collar worn without a visible inner layer",
+          "no visible accessories"
+        ],
+        "notes": "Image is cropped at mid-thigh, so lower trouser silhouette and footwear are not visible. The fabric appears to be a matte faux leather or smooth coated synthetic. Editorial wire props are excluded from outfit analysis."
+      },
+      {
+        "image_id": "min-03",
+        "garments": [
+          "black tailored single-breasted blazer",
+          "black high-waisted wide-leg trousers",
+          "thin red string bracelet"
+        ],
+        "aesthetics": [
+          "minimalist",
+          "monochrome",
+          "tailored"
+        ],
+        "colors": [
+          "black"
+        ],
+        "silhouettes": [
+          "relaxed tailored blazer",
+          "high-waisted wide-leg trousers"
+        ],
+        "styling_details": [
+          "all-black monochrome suiting",
+          "blazer worn open with no inner top",
+          "clean structured lapels",
+          "minimal jewelry"
+        ],
+        "notes": "Image is cropped at mid-thigh while seated, so full trouser length and footwear are not visible. The suiting appears to be a smooth mid-weight woven wool or crepe blend."
+      },
+      {
+        "image_id": "rom-01",
+        "garments": [
+          "cream and pale blush floral print dress with sheer long bishop sleeves",
+          "dusty pink satin ribbon bows at neckline, waist, and cuffs",
+          "small stud earrings",
+          "thin metal ring"
+        ],
+        "aesthetics": [
+          "romantic",
+          "cottagecore",
+          "coquette"
+        ],
+        "colors": [
+          "cream",
+          "blush pink",
+          "dusty rose"
+        ],
+        "silhouettes": [
+          "voluminous bishop sleeves",
+          "fitted embellished bodice",
+          "square neckline",
+          "flared A-line skirt"
+        ],
+        "styling_details": [
+          "subtle pastel floral print",
+          "layered lace and ruffle trims",
+          "pearl button bodice accents",
+          "ribbon bow accents",
+          "sheer sleeves finished with smocked ruffled cuffs"
+        ],
+        "notes": "Image is cropped at upper thigh, so full skirt length and footwear are not visible. The sleeves appear to be sheer chiffon or tulle over a lightweight woven dress fabric."
+      },
+      {
+        "image_id": "rom-02",
+        "garments": [
+          "white-ground ditsy floral print midi or maxi dress with puff sleeves",
+          "red fabric hair bow",
+          "delicate pendant necklace"
+        ],
+        "aesthetics": [
+          "cottagecore",
+          "romantic"
+        ],
+        "colors": [
+          "white",
+          "red",
+          "light blue",
+          "multicolor floral"
+        ],
+        "silhouettes": [
+          "puff sleeves",
+          "square neckline",
+          "smocked fitted bodice",
+          "full gathered A-line skirt"
+        ],
+        "styling_details": [
+          "all-over ditsy floral print",
+          "statement red hair bow accessory",
+          "smocked bodice for waist definition",
+          "single-piece dress styling with minimal jewelry"
+        ],
+        "notes": "Lower hem and footwear are obscured by grass, so exact dress length and shoes cannot be confirmed. The dress appears to be a lightweight woven cotton or linen-cotton blend."
+      }
+    ],
+    "style_directions": [
+      {
+        "name": "Minimalist Tailoring",
+        "description": "Clean-lined, structured yet relaxed separates anchored by blazers, collared outerwear, and high-waisted trousers or jeans in neutral monochrome and understated palettes with minimal accessories.",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03"
+        ],
+        "strength": "dominant"
+      },
+      {
+        "name": "Romantic Cottagecore",
+        "description": "Soft, vintage-inspired floral dresses featuring square necklines, voluminous puff or bishop sleeves, waist definition, smocking, and bow accents in light and pastel palettes.",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ],
+        "strength": "secondary"
+      }
+    ],
+    "aesthetics": [
+      {
+        "label": "minimalist",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03"
+        ]
+      },
+      {
+        "label": "tailored",
+        "image_ids": [
+          "min-01",
+          "min-03"
+        ]
+      },
+      {
+        "label": "monochrome",
+        "image_ids": [
+          "min-02",
+          "min-03"
+        ]
+      },
+      {
+        "label": "romantic",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "cottagecore",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "smart casual",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "utilitarian",
+        "image_ids": [
+          "min-02"
+        ]
+      },
+      {
+        "label": "coquette",
+        "image_ids": [
+          "rom-01"
+        ]
+      }
+    ],
+    "colors": [
+      {
+        "label": "white and cream",
+        "image_ids": [
+          "min-01",
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "beige and camel",
+        "image_ids": [
+          "min-01",
+          "min-02"
+        ]
+      },
+      {
+        "label": "light blue",
+        "image_ids": [
+          "min-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "black",
+        "image_ids": [
+          "min-03"
+        ]
+      },
+      {
+        "label": "blush pink and dusty rose",
+        "image_ids": [
+          "rom-01"
+        ]
+      },
+      {
+        "label": "red",
+        "image_ids": [
+          "rom-02"
+        ]
+      }
+    ],
+    "silhouettes": [
+      {
+        "label": "relaxed blazer",
+        "image_ids": [
+          "min-01",
+          "min-03"
+        ]
+      },
+      {
+        "label": "high-waisted trousers",
+        "image_ids": [
+          "min-01",
+          "min-03"
+        ]
+      },
+      {
+        "label": "cinched waist",
+        "image_ids": [
+          "min-02",
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "voluminous sleeves",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "square neckline",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "full A-line skirt",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "cropped fitted top",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "straight-leg jeans",
+        "image_ids": [
+          "min-01"
+        ]
+      },
+      {
+        "label": "belted utility jacket",
+        "image_ids": [
+          "min-02"
+        ]
+      },
+      {
+        "label": "wide-leg trousers",
+        "image_ids": [
+          "min-03"
+        ]
+      }
+    ],
+    "styling_patterns": [
+      {
+        "label": "minimal accessories",
+        "image_ids": [
+          "min-01",
+          "min-02",
+          "min-03"
+        ]
+      },
+      {
+        "label": "smocked detailing",
+        "image_ids": [
+          "min-01",
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "monochrome neutral dressing",
+        "image_ids": [
+          "min-02",
+          "min-03"
+        ]
+      },
+      {
+        "label": "open blazer styling",
+        "image_ids": [
+          "min-01",
+          "min-03"
+        ]
+      },
+      {
+        "label": "floral print dresses",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "ribbon and bow accents",
+        "image_ids": [
+          "rom-01",
+          "rom-02"
+        ]
+      },
+      {
+        "label": "utility pocket detailing",
+        "image_ids": [
+          "min-02"
+        ]
+      },
+      {
+        "label": "lace and ruffle trim",
+        "image_ids": [
+          "rom-01"
+        ]
+      }
+    ],
+    "avoidances": [],
+    "summary": "Your style blends two distinct moods: a dominant minimalist tailoring direction built around relaxed blazers, high-waisted trousers or denim, and monochrome neutral palettes, paired with a secondary romantic cottagecore side. On the romantic side, you gravitate toward floral-print dresses with square necklines, voluminous puff or bishop sleeves, smocked details, and bow accents. Across both directions, you favor clear silhouette definition and cohesive outfits over heavy accessorizing."
+  },
+  "status": "ok"
+}

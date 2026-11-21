@@ -7,7 +7,7 @@ Travel AI Stylist is a multimodal travel-outfit planner built for the **Gemini 4
 ## Demo journey
 
 1. **Create a style profile** — Select aesthetic tags and/or upload outfit inspiration images or short videos. Gemini identifies recurring aesthetics, colors, silhouettes, layering, and styling patterns. Review and edit the result.
-2. **Plan a trip** — Enter destination and travel dates; choose attractions. The app retrieves weather forecasts where available (otherwise labels estimates). Optional text, image, or video inspiration adds context.
+2. **Plan a trip** — Enter destination and travel dates; choose attractions. The app retrieves weather forecasts where available (otherwise marks weather unavailable). Optional text, image, or video inspiration adds context.
 3. **Get daily looks** — Gemini combines trip context, the style profile, raw visual references, and a preloaded synthetic wardrobe to suggest outfits and identify missing essentials.
 4. **Preview** — Rotate and animate a 3D avatar, generate an approximate virtual try-on, or create an inspirational destination photo.
 5. **Shop missing pieces** — Find relevant products, add items to a cart, and start an available, user-confirmed checkout flow.
@@ -64,7 +64,9 @@ See [shared contracts](packages/contracts/README.md). Keep media stored securely
 
 ## Getting started
 
-> This repository is an initial architecture. Exact setup commands will be added as the implementation stack is chosen.
+The current B flow supports inspiration photos and optional manual tags. Photos are analyzed automatically through server-side Gemini. The screen shows compact style labels; richer direction details are saved for styling and can be edited through an optional disclosure. The full confirmed profile stays in this browser session, and reanalysis preserves manual tags and lets users review replacements for edited styles. Continue to trip setup to select a destination and dates, edit attraction suggestions, and confirm the trip. Weather is saved in the background for styling. The next page lets you select items from the demo wardrobe and generate clearly labeled mock daily outfits. With Node.js 22.9+, run `npm run dev` and open http://127.0.0.1:3000. No dependency installation is required. Run `npm test` for integration checks.
+
+The local outfit flow uses an explicitly labeled mock of A; photo analysis uses Gemini only when configured. The broader demo journey above describes the project vision, while this runnable B flow omits video, raw-photo handoff, 3D, and commerce. See [B's app setup](apps/web/README.md) to connect A's real service, and the [A/B API agreement](docs/integrations/ai-app-api.md) for request/response fields.
 
 1. Agree on the data contracts and sample payloads in `packages/contracts/`.
 2. B builds the app with mock `StyleProfile` and `DailyOutfit` responses.

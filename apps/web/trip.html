@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your trip · Travel AI Stylist</title>
+  <link rel="stylesheet" href="/style.css"><script type="module" src="/trip.mjs"></script>
+</head>
+<body><main>
+  <header><a class="brand" href="/">TRAVEL AI STYLIST</a><a href="/">Edit my style</a></header>
+  <p class="eyebrow">02 / YOUR TRIP</p><h1>Where are we going?</h1>
+  <p class="intro">A few places you’ll love. A little room to make the trip your own.</p>
+  <p id="profile-required" hidden>First, <a href="/">confirm your style profile</a> to plan a trip.</p>
+  <div id="trip-editor" hidden>
+    <form id="location-form">
+      <label class="field" for="location">Destination city</label>
+      <div class="inline-form"><input id="location" required minlength="2" maxlength="100" placeholder="Try New York, Paris, or Tokyo" autocomplete="off"><button id="search-city" type="submit">Find city</button></div>
+    </form>
+    <div id="city-results" aria-live="polite"></div>
+    <p id="destination-label" role="status">Choose a city from the search results.</p>
+    <form id="dates-form">
+      <div class="date-grid">
+        <div><label class="field" for="start-date">Start date</label><input type="date" id="start-date" required></div>
+        <div><label class="field" for="end-date">End date</label><input type="date" id="end-date" required></div>
+      </div>
+      <p class="hint">1–7 days, using local dates at your destination.</p>
+      <button id="suggest" type="submit">Suggest places for my trip</button>
+    </form>
+    <p id="trip-status" role="status"></p><p id="trip-error" role="alert" hidden></p>
+    <section id="places-section" hidden aria-labelledby="places-title">
+      <div class="places-heading">
+        <div><p class="eyebrow">MAKE IT YOURS</p><h2 id="places-title" tabindex="-1">Your places <span id="place-count" class="place-count" aria-live="polite"></span></h2></div>
+        <a id="places-source" target="_blank" rel="noopener noreferrer" hidden>City guide ↗</a>
+      </div>
+      <p id="suggestion-note" class="hint"></p>
+      <ul id="places" class="place-list" aria-label="Selected places"></ul>
+      <div id="place-photo-credits"></div>
+      <form id="custom-form">
+        <label class="field" for="custom-place">Add a place</label>
+        <div class="inline-form"><input id="custom-place" required maxlength="120" placeholder="Museum, café, shop…" autocomplete="off" aria-describedby="place-search-status"><button type="submit">Add place</button></div>
+      </form>
+      <p id="place-search-status" class="hint" role="status">Enter a place name to add it.</p>
+      <div id="place-results" aria-label="Place suggestions"></div>
+      <button id="confirm-trip" type="button">Confirm my trip →</button>
+    </section>
+  </div>
+  <footer>Confirmed trips stay in this tab for this session. City search: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> / <a href="https://www.geonames.org/" target="_blank" rel="noopener noreferrer">GeoNames</a>.</footer>
+</main></body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "dataset": "hackathon-wardrobe-fixtures-v1",
+  "description": "10 example wardrobe images for outfit planning and shopping-gap detection. Clothing descriptions are fixture labels, not model outputs.",
+  "license": "Pexels License; check https://www.pexels.com/license/ for current terms, identifiable people, and third-party brands.",
+  "items": [
+    {"id":"wd-01","name":"White basic T-shirt","category":"top","subcategory":"t-shirt","color":"white","style_tags":["minimal","casual"],"photo_id":"18186106","source_url":"https://www.pexels.com/photo/a-basic-white-t-shirt-18186106/"},
+    {"id":"wd-02","name":"White button-up shirt","category":"top","subcategory":"button-down shirt","color":"white","style_tags":["classic","minimal"],"photo_id":"28576622","source_url":"https://www.pexels.com/photo/minimalist-white-shirt-hanging-on-hanger-28576622/"},
+    {"id":"wd-03","name":"Beige knit sweater","category":"top","subcategory":"sweater","color":"beige","style_tags":["cozy","minimal"],"photo_id":"14377376","source_url":"https://www.pexels.com/photo/beige-knitted-sweater-14377376/"},
+    {"id":"wd-04","name":"Beige tailored blazer","category":"outerwear","subcategory":"blazer","color":"beige","style_tags":["classic","tailored"],"photo_id":"32427323","source_url":"https://www.pexels.com/photo/elegant-beige-blazer-hanging-on-hanger-indoors-32427323/"},
+    {"id":"wd-05","name":"Black jacket","category":"outerwear","subcategory":"jacket","color":"black","style_tags":["edgy","casual"],"photo_id":"16341730","source_url":"https://www.pexels.com/photo/jacket-on-hanger-16341730/"},
+    {"id":"wd-06","name":"Blue denim jeans","category":"bottom","subcategory":"jeans","color":"blue","style_tags":["casual","classic"],"photo_id":"1082528","source_url":"https://www.pexels.com/photo/two-hanged-blue-stonewash-and-blue-jeans-1082528/","note":"Source photo contains two pairs; select one as the sample wardrobe item."},
+    {"id":"wd-07","name":"Pink floral dress","category":"dress","subcategory":"floral dress","color":"pink","style_tags":["romantic","summer"],"photo_id":"36213224","source_url":"https://www.pexels.com/photo/elegant-floral-dress-on-wooden-hanger-36213224/"},
+    {"id":"wd-08","name":"Black-and-white sneakers","category":"shoes","subcategory":"sneakers","color":"black and white","style_tags":["streetwear","casual"],"photo_id":"13600672","source_url":"https://www.pexels.com/photo/a-grayscale-photo-of-a-sneakers-13600672/"},
+    {"id":"wd-09","name":"Brown leather boots","category":"shoes","subcategory":"boots","color":"brown","style_tags":["classic","autumn"],"photo_id":"10939830","source_url":"https://www.pexels.com/photo/close-up-shot-a-person-wearing-brown-leather-shoes-10939830/"},
+    {"id":"wd-10","name":"Black leather bag","category":"accessory","subcategory":"handbag","color":"black","style_tags":["classic","minimal"],"photo_id":"26736144","source_url":"https://www.pexels.com/photo/leather-bag-in-black-and-white-26736144/"}
+  ]
+}

@@ -26,14 +26,15 @@ Set `MEDIA_ALLOWED_HOSTS` (comma-separated) to the hosts B's media URLs use; uns
 | Endpoint | Python entry point | What it does | Typical time |
 | --- | --- | --- | --- |
 | `POST /v1/style-analysis` | `src.style_analysis.service.analyze_style(req)` | Tags + notes + images/videos (B's `readUrl`s) → editable `suggestedProfile`, per-media `observations`, `styleDirections`. Avoidances only from the user | ~12 s tags only, ~35–50 s with media |
-| `POST /v1/outfit-plans` | `src.outfit_planning.planner.generate_outfits(req)` | Style profile + wardrobe + trip → outfits (default 3, spread over the trip days) with missing items and `shoppingGaps` | ~20–25 s |
+| `POST /v1/outfit-plans` | `src.outfit_planning.planner.generate_outfits(req)` | Style profile + wardrobe (incl. photos from `imageUrl`) + trip → outfits (default 3, spread over the trip days) with missing items and `shoppingGaps` | ~20–30 s |
 | `POST /v1/shopping-gaps` | `src.outfit_planning.shopping.identify_shopping_gaps(outfits, wardrobe)` | Outfits → deduplicated shop searches. No model call. Already included in the outfit-plans response | instant |
 | `POST /v1/outfit-previews` | `src.preview_generation.visualize.visualize_outfit(req)` | One outfit → generated image (`mode: "outfit"` studio, or `"destination"` scene). Gemini 4 writes the image prompt; a Gemini image model draws it. Image served at the returned `imageRef` | ~14 s |
 | `GET /health` | | Liveness | |
 
 Examples (real outputs from the demo run):
 - Style analysis: [request](examples/style_analysis_request.json) / [response](examples/style_analysis_response.json) (URLs point at a local test server: `cd tests/fixtures/media && python3 -m http.server 8799`)
-- Request: [examples/outfit_plan_request.json](examples/outfit_plan_request.json) (3-day Kyoto trip, 13 wardrobe items)
+- Request: [examples/outfit_plan_request.json](examples/outfit_plan_request.json) (3-day Kyoto trip, 13 text-only wardrobe items)
+- With wardrobe photos: [request](examples/outfit_plan_request_wardrobe_images.json) / [response](examples/outfit_plan_response_wardrobe_images.json) (10 items from `tests/fixtures/wardrobe/`; serve them with `cd tests/fixtures && python3 -m http.server 8799`)
 - Response: [examples/outfit_plan_response.json](examples/outfit_plan_response.json)
 - Preview response: [examples/outfit_preview_response.json](examples/outfit_preview_response.json)
 
@@ -56,7 +57,8 @@ All additive and optional; see [docs/ai/contract-notes.md](../../docs/ai/contrac
 - MissingItem: `category`, `color`, `silhouette`, `material`, `styleDescriptors`
 - Response: `shoppingGaps` (input for the Shopify integration), `model`
 - Style analysis response: `styleDirections` (dominant/secondary/minor with supporting media ids), `model`
-- Request: `preferences` (free text), `outfitCount` (default 3)
+- Request: `preferences` (free text), `outfitCount` (default 3), `useWardrobeImages` (default true)
+- Response: `wardrobeImagesUsed` (ids whose photo Gemini saw)
 
 ## Tests
 

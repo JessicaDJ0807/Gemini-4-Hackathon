@@ -1,0 +1,33 @@
+# Dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Secrets: never commit. .env.example (names only) is the template.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+service-account*.json
+
+# Personal photos, user uploads and generated results (may contain faces / identity)
+spike-results/
+uploads/
+work/
+public/demo/
+**/person_*.png
+**/person_*.jpg
+**/person-*.png
+**/person-*.jpg
+**/person-*.webp
+
+# Local tooling / OS noise
+*.log
+.DS_Store
+.vscode/
+.idea/
+.claude/settings.local.json
+__pycache__/
+*.pyc

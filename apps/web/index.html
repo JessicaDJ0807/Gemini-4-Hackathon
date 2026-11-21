@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your style · Travel AI Stylist</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body class="style-page">
+  <main>
+    <header><span class="brand">TRAVEL AI STYLIST</span><span class="step-label">Style → Trip → Outfits</span></header>
+    <p class="eyebrow">01 / YOUR STYLE</p>
+    <h1>What’s your style?</h1>
+    <p class="intro">Upload looks you love. Fine-tune your styles, or add your own tags.</p>
+    <section class="inspiration" aria-labelledby="photos-title">
+      <div class="section-heading"><h2 id="photos-title">Your inspiration</h2></div>
+      <p class="hint">Add up to 3 outfit photos you love. JPG, PNG, or WebP · 2 MB each.</p>
+      <label class="upload-button" for="photos">＋ Add photos</label>
+      <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="photo-help" disabled>
+      <div id="photo-previews" class="photo-previews"></div>
+      <p id="photo-help" class="hint">Checking photo suggestions…</p>
+      <p id="photo-status" role="status" aria-live="polite"></p>
+    </section>
+    <section id="photo-result" hidden aria-labelledby="suggestions-title">
+      <h2 id="suggestions-title" tabindex="-1">Your style</h2>
+      <div id="style-labels"></div>
+      <details id="style-details" class="style-details">
+        <summary>Edit style details</summary>
+        <p id="style-summary" class="hint"></p>
+        <div id="style-directions"></div>
+      </details>
+    </section>
+    <section id="pending-analysis" class="analysis-review" hidden aria-labelledby="pending-title">
+      <h3 id="pending-title">New inspiration, new suggestions</h3>
+      <p id="pending-summary"></p>
+      <details><summary>Review new details</summary><ul id="pending-details"></ul></details>
+      <p class="hint">Replacing styles updates their names and details. Your personal tags stay.</p>
+      <div class="review-actions"><button id="apply-analysis" type="button">Replace styles with new analysis</button><button id="keep-edits" class="secondary" type="button">Keep my edits</button></div>
+    </section>
+    <section class="personal-tags" aria-labelledby="manual-title">
+      <h2 id="manual-title">Make it personal <span class="optional">Optional</span></h2>
+      <p class="hint">Anything else you love? Add your own tags.</p>
+      <div id="manual-tags"></div>
+      <form id="manual-tag-form" class="tag-entry">
+        <label for="manual-tag" class="visually-hidden">Your personal style tag</label>
+        <input id="manual-tag" maxlength="100" placeholder="e.g. vintage, comfortable" autocomplete="off">
+        <button class="secondary" type="submit">Add tag</button>
+      </form>
+    </section>
+    <p id="error" role="alert" hidden></p>
+    <button id="retry-photos" class="secondary" type="button" hidden>Retry photo analysis</button>
+    <div class="style-actions"><p id="selection-count" class="hint" role="status">Add photos or a personal tag to continue.</p><button id="continue" type="button" disabled>Continue to trip →</button></div>
+    <footer>Your style details and tags stay in this browser tab. Original photos aren’t saved by this app.</footer>
+  </main>
+</body>
+</html>

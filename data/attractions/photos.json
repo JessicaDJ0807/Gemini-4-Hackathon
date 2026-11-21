@@ -1,0 +1,182 @@
+{
+  "nyc-central-park": {
+    "imageUrl": "/place-photos/nyc-central-park.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Central Park",
+    "author": "Anthony Quintano from Hillsborough, NJ, United States",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Global_Citizen_Festival_Central_Park_New_York_City_from_NYonAir_(15351915006).jpg",
+    "originalFile": "Global_Citizen_Festival_Central_Park_New_York_City_from_NYonAir_(15351915006).jpg"
+  },
+  "nyc-times-square": {
+    "imageUrl": "/place-photos/nyc-times-square.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Times Square",
+    "author": "Terabass",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:New_york_times_square-terabass.jpg",
+    "originalFile": "New_york_times_square-terabass.jpg"
+  },
+  "nyc-empire-state": {
+    "imageUrl": "/place-photos/nyc-empire-state.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Empire State Building",
+    "author": "Sam Valadi",
+    "license": "Public domain",
+    "licenseUrl": null,
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Empire_State_Building_(aerial_view).jpg",
+    "originalFile": "Empire_State_Building_(aerial_view).jpg"
+  },
+  "nyc-statue-liberty": {
+    "imageUrl": "/place-photos/nyc-statue-liberty.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Statue of Liberty",
+    "author": "AskALotl",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Front_view_of_Statue_of_Liberty_(cropped).jpg",
+    "originalFile": "Front_view_of_Statue_of_Liberty_(cropped).jpg"
+  },
+  "nyc-rockefeller": {
+    "imageUrl": "/place-photos/nyc-rockefeller.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "30 Rockefeller Plaza",
+    "author": "David Shankbone",
+    "license": "Public domain",
+    "licenseUrl": null,
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:GE_Building_by_David_Shankbone.JPG",
+    "originalFile": "GE_Building_by_David_Shankbone.JPG"
+  },
+  "nyc-911-memorial": {
+    "imageUrl": "/place-photos/nyc-911-memorial.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "National September 11 Memorial & Museum",
+    "author": "Paul Sableman",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:9-11_Memorial_and_Museum_(28815276064).jpg",
+    "originalFile": "9-11_Memorial_and_Museum_(28815276064).jpg"
+  },
+  "paris-eiffel": {
+    "imageUrl": "/place-photos/paris-eiffel.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Eiffel Tower",
+    "author": "Benh LIEU SONG",
+    "license": "Public domain",
+    "licenseUrl": null,
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tour_Eiffel_Wikimedia_Commons_(cropped).jpg",
+    "originalFile": "Tour_Eiffel_Wikimedia_Commons_(cropped).jpg"
+  },
+  "paris-louvre": {
+    "imageUrl": "/place-photos/paris-louvre.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Louvre",
+    "author": "Benh LIEU SONG (Flickr)",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Louvre_Museum_Wikimedia_Commons.jpg",
+    "originalFile": "Louvre_Museum_Wikimedia_Commons.jpg"
+  },
+  "paris-montmartre": {
+    "imageUrl": "/place-photos/paris-montmartre.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Sacré-Cœur, Paris",
+    "author": "Tonchino",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Le_sacre_coeur.jpg",
+    "originalFile": "Le_sacre_coeur.jpg"
+  },
+  "paris-notre-dame": {
+    "imageUrl": "/place-photos/paris-notre-dame.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Notre-Dame de Paris",
+    "author": "Ali Sabbagh",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Notre-Dame_de_Paris,_4_October_2017.jpg",
+    "originalFile": "Notre-Dame_de_Paris,_4_October_2017.jpg"
+  },
+  "paris-champs-elysees": {
+    "imageUrl": "/place-photos/paris-champs-elysees.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Champs-Élysées",
+    "author": "Josh Hallett",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Avenue_des_Champs-%C3%89lys%C3%A9es_July_24,_2009_N1.jpg",
+    "originalFile": "Avenue_des_Champs-Élysées_July_24,_2009_N1.jpg"
+  },
+  "paris-arc-triomphe": {
+    "imageUrl": "/place-photos/paris-arc-triomphe.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Arc de Triomphe",
+    "author": "ZeusUpsistos",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Arc_de_Triomphe_-_Ao%C3%BBt_2026.jpg",
+    "originalFile": "Arc_de_Triomphe_-_Août_2026.jpg"
+  },
+  "tokyo-sensoji": {
+    "imageUrl": "/place-photos/tokyo-sensoji.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Sensō-ji",
+    "author": "Akonnchiroll",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sensoji_2023.jpg",
+    "originalFile": "Sensoji_2023.jpg"
+  },
+  "tokyo-meiji": {
+    "imageUrl": "/place-photos/tokyo-meiji.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Meiji Shrine",
+    "author": "Akonnchiroll",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Meiji_Jingu_2023-3.jpg",
+    "originalFile": "Meiji_Jingu_2023-3.jpg"
+  },
+  "tokyo-tokyo-tower": {
+    "imageUrl": "/place-photos/tokyo-tokyo-tower.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Tokyo Tower",
+    "author": "Akonnchiroll",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tokyo_Tower_2023.jpg",
+    "originalFile": "Tokyo_Tower_2023.jpg"
+  },
+  "tokyo-shibuya": {
+    "imageUrl": "/place-photos/tokyo-shibuya.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Shibuya Crossing",
+    "author": "David Kernan",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Shibuya_Crossing,_Aerial.jpg",
+    "originalFile": "Shibuya_Crossing,_Aerial.jpg"
+  },
+  "tokyo-skytree": {
+    "imageUrl": "/place-photos/tokyo-skytree.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Tokyo Skytree",
+    "author": "Kakidai",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tokyo_Skytree_2014_%E2%85%A2.jpg",
+    "originalFile": "Tokyo_Skytree_2014_Ⅲ.jpg"
+  },
+  "tokyo-ueno": {
+    "imageUrl": "/place-photos/tokyo-ueno.jpg",
+    "mimeType": "image/jpeg",
+    "alt": "Ueno Park",
+    "author": "Bernard Gagnon",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ueno_park.jpg",
+    "originalFile": "Ueno_park.jpg"
+  }
+}

@@ -60,7 +60,12 @@ export function attachOutfits() {
       const credits = result.credits ?? [];
       $('wardrobe-credits').hidden = !credits.length;
       $('wardrobe-credit-list').replaceChildren(...credits.map(credit => {
-        const li = node('li'), link = node('a', credit.name); link.href = credit.url; link.target = '_blank'; link.rel = 'noopener noreferrer'; li.append(link); return li;
+        const li = node('li'), external = (text, href) => { const a = node('a', text); a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; return a; };
+        li.append(credit.url ? external(credit.name, credit.url) : node('span', credit.name));
+        const by = [credit.author && `by ${credit.author}`, credit.source].filter(Boolean).join(' · ');
+        if (by) li.append(` — ${by}`);
+        if (credit.license) li.append(' · ', credit.licenseUrl ? external(credit.license, credit.licenseUrl) : credit.license);
+        return li;
       }));
       renderWardrobe(); invalidate();
       if (!result.enabled) error('Outfit generation is unavailable. Please try again later.');

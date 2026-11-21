@@ -37,8 +37,11 @@ test('catalog and original images are served and the full B-to-mock flow preserv
     captured = JSON.parse(options.body); return fetch(url, options);
   } });
   const data = await (await fetch(base + '/api/demo-wardrobe')).json();
-  assert.equal(data.wardrobe.length, 10); assert.equal(data.wardrobeVersion, photoWardrobeVersion);
-  assert.equal(data.credits.length, 10);
+  assert.equal(data.wardrobe.length, 37); assert.equal(data.wardrobeVersion, photoWardrobeVersion);
+  assert.equal(data.credits.length, 37);
+  // CC BY / BY-SA photos carry author and license; photos without a known source are not linked.
+  assert.ok(data.credits.filter((c) => /^CC BY/.test(c.license ?? '')).every((c) => c.author && /^https?:\/\//.test(c.licenseUrl)));
+  assert.ok(data.credits.every((c) => c.url === null || c.url.startsWith('https://')));
   for (const item of data.wardrobe) {
     const image = await fetch(base + item.imageUrl);
     assert.equal(image.status, 200); assert.match(image.headers.get('content-type'), /image\/jpeg/);
@@ -138,9 +141,11 @@ test('edited nested profile reaches outfit planning intact alongside derived com
 
 test('mock rotates the photo wardrobe: separates on even days, the dress on odd days', () => {
   const request = serverInput(); request.trip = buildTrip(catalog[1].destination, '2026-11-24', '2026-11-27', []);
-  const looks = mockOutfits(request).outfits;
-  assert.ok(!looks[0].wardrobeItemIds.includes('wd-07') && looks[0].wardrobeItemIds.includes('wd-06'));
-  assert.ok(looks[1].wardrobeItemIds.includes('wd-07') && !looks[1].wardrobeItemIds.includes('wd-06'));
+  const looks = mockOutfits(request).outfits, category = (id) => request.wardrobe.find((item) => item.id === id).category;
+  const kinds = looks.map((look) => look.wardrobeItemIds.map(category));
+  assert.ok(kinds[0].includes('bottom') && !kinds[0].includes('dress'));
+  assert.ok(kinds[1].includes('dress') && !kinds[1].includes('bottom'));
+  assert.notDeepEqual(looks[1].wardrobeItemIds, looks[3].wardrobeItemIds); // the dresses rotate too
 });
 
 test('A shopping list merges missing items across looks, ranks buys and keeps owned swaps', () => {
@@ -171,4 +176,13 @@ test('an invalid or incomplete A shopping list falls back to per-look shopping',
     [gap({ decision: 'use_owned', ownedAlternativeId: 'not-selected' })], [gap({ decision: 'maybe' })],
     [gap({ fallbackQueries: [''] })], [gap({ rank: 0 })], [gap({ searchQuery: '' })]
   ]) assert.equal(shoppingListFrom({ ...base, shoppingGaps: gaps }, request), null);
+});
+
+test('requests take up to 40 wardrobe items, and A may report seeing all their photos', () => {
+  const request = serverInput(); assert.equal(request.wardrobe.length, 37);
+  const plan = mockOutfits(request); plan.wardrobeImagesUsed = request.wardrobe.map((item) => item.id);
+  validateOutfitResponse(plan, request); // more than 30 photo ids is fine
+  const extra = (n) => Array.from({ length: n }, (_, i) => ({ ...request.wardrobe[0], id: `extra-${i}` }));
+  validateOutfitRequest({ ...request, wardrobe: [...request.wardrobe, ...extra(3)] });
+  assert.throws(() => validateOutfitRequest({ ...request, wardrobe: [...request.wardrobe, ...extra(4)] }), { code: 'INVALID_OUTFIT_REQUEST' });
 });

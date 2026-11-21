@@ -7,7 +7,11 @@ attractions that exist in the request.
 
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
+from urllib.parse import urlparse
+
+import httpx
 from pathlib import Path
 from typing import Literal, Optional
 
@@ -23,9 +27,13 @@ from .shopping import build_search_query, identify_shopping_gaps
 SERVICE_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(SERVICE_DIR / ".env")
 MODEL = os.getenv("OUTFIT_MODEL", "gemini-4-hydrogen")
-PROMPT = (SERVICE_DIR / "prompts" / "outfit_planning_v1.md").read_text()
+PROMPT_VERSION = "outfit_planning_v2"
+PROMPT = (SERVICE_DIR / "prompts" / f"{PROMPT_VERSION}.md").read_text()
 CATEGORIES = {"top", "bottom", "dress", "outerwear", "shoes", "accessory"}
 MAX_TRIP_DAYS = 7
+ALLOWED_HOSTS = {h.strip() for h in os.getenv("MEDIA_ALLOWED_HOSTS", "").split(",") if h.strip()}
+IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
+MAX_WARDROBE_IMAGE_MB = 10
 
 
 class PlanningError(Exception):
@@ -89,6 +97,36 @@ def llm_input(req: OutfitPlanRequest, slots: list[date]) -> str:
         "preferences": req.preferences,
         "outfitsToCreate": [{"outfitNumber": i + 1, "date": d.isoformat()} for i, d in enumerate(slots)],
     }, ensure_ascii=False)
+
+
+def fetch_image(item: WardrobeItem) -> tuple[str, types.Part | None, str | None]:
+    """Download one wardrobe photo. Returns (id, part or None, warning or None)."""
+    url = urlparse(item.imageUrl or "")
+    if url.scheme not in ("http", "https"):
+        return item.id, None, f"{item.id}: no usable imageUrl; planned from text only."
+    if ALLOWED_HOSTS and url.hostname not in ALLOWED_HOSTS:
+        return item.id, None, f"{item.id}: image host not allowed; planned from text only."
+    try:
+        r = httpx.get(item.imageUrl, timeout=15, follow_redirects=False)
+        r.raise_for_status()
+        mime = r.headers.get("content-type", "").split(";")[0].strip()
+        if mime not in IMAGE_TYPES:
+            return item.id, None, f"{item.id}: unsupported image type {mime or 'unknown'}; planned from text only."
+        if len(r.content) > MAX_WARDROBE_IMAGE_MB * 1024 * 1024:
+            return item.id, None, f"{item.id}: image too large; planned from text only."
+        return item.id, types.Part.from_bytes(data=r.content, mime_type=mime), None
+    except Exception as e:  # never echo the URL (may be signed)
+        return item.id, None, f"{item.id}: image could not be downloaded ({type(e).__name__}); planned from text only."
+
+
+def fetch_wardrobe_images(items: list[WardrobeItem]) -> tuple[dict[str, types.Part], list[str]]:
+    if not items:
+        return {}, []
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        results = list(pool.map(fetch_image, items))
+    parts = {i: p for i, p, _ in results if p is not None}
+    warnings = [w for _, _, w in results if w]
+    return parts, warnings
 
 
 def is_complete(owned: list[WardrobeItem], missing: list[MissingItem]) -> bool:
@@ -190,7 +228,14 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
         response_mime_type="application/json",
         response_schema=LlmPlan,
     )
-    contents = llm_input(req, slots)
+    contents: list = [llm_input(req, slots)]
+    images: dict[str, types.Part] = {}
+    if req.useWardrobeImages:
+        images, image_warnings = fetch_wardrobe_images(req.wardrobe)
+        warnings += image_warnings
+        for w in req.wardrobe:
+            if w.id in images:
+                contents += [f"Wardrobe item id: {w.id}", images[w.id]]
 
     outfits: list[Outfit] = []
     for attempt in range(2):  # one retry if the model returns too few outfits
@@ -214,4 +259,5 @@ def generate_outfits(req: OutfitPlanRequest, client: genai.Client | None = None)
     return OutfitPlanResponse(
         requestId=req.requestId, inputRevision=req.inputRevision, outfits=outfits,
         warnings=warnings, shoppingGaps=identify_shopping_gaps(outfits, req.wardrobe), model=MODEL,
+        wardrobeImagesUsed=[w.id for w in req.wardrobe if w.id in images],
     )

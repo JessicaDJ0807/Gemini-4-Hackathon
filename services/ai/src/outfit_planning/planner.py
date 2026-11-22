@@ -27,7 +27,7 @@ from .shopping import build_search_query, clean_descriptors, plan_shopping
 SERVICE_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(SERVICE_DIR / ".env")
 MODEL = os.getenv("OUTFIT_MODEL", "gemini-4-hydrogen")
-PROMPT_VERSION = "outfit_planning_v4"
+PROMPT_VERSION = "outfit_planning_v5"
 PROMPT = (SERVICE_DIR / "prompts" / f"{PROMPT_VERSION}.md").read_text()
 CATEGORIES = {"top", "bottom", "dress", "outerwear", "shoes", "accessory"}
 MAX_TRIP_DAYS = 7

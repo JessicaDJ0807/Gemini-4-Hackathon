@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { createMockAiServer } from './mock-ai.mjs';
 import { createWebServer } from '../apps/web/server.mjs';
+import { assertAiCompatibility } from './ai-compatibility.mjs';
 
 let aiBaseUrl = process.env.AI_BASE_URL?.replace(/\/$/, '');
 let token = process.env.AI_SERVICE_TOKEN;
@@ -12,6 +13,7 @@ if (aiBaseUrl) {
   if (url.protocol !== 'https:' && !(url.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(url.hostname))) {
     throw new Error('AI_BASE_URL must use HTTPS, except for local development.');
   }
+  await assertAiCompatibility(aiBaseUrl);
 } else {
   token = randomBytes(32).toString('hex');
   mock = createMockAiServer({ token });

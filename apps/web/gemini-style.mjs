@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { buildStyleProfile, DETAIL_FIELDS } from '../../packages/contracts/style-profile.mjs';
 import { ApiError } from '../../packages/contracts/style-analysis.mjs';
-import { validateInspirationRequest, validateInspirationResponse } from '../../packages/contracts/style-inspiration.mjs';
+import { validateInspirationRequest, validateInspirationResponse, PHOTO_LIMIT } from '../../packages/contracts/style-inspiration.mjs';
 
 export function createGeminiStyle({ apiKey, model = 'gemini-4-hydrogen', fetchImpl = fetch, timeoutMs = 25000 } = {}) {
   if (!/^[a-zA-Z0-9._-]+$/.test(model)) throw new Error('GEMINI_MODEL must be a model ID.');
@@ -37,7 +37,7 @@ export function createGeminiStyle({ apiKey, model = 'gemini-4-hydrogen', fetchIm
                       name: { type: 'string', maxLength: 100 }, description: { type: 'string', maxLength: 500 },
                       strength: { type: 'string', enum: ['dominant', 'secondary', 'minor'] },
                       ...Object.fromEntries(DETAIL_FIELDS.map(key => [key, { type: 'array', maxItems: 8, items: { type: 'string', maxLength: 100 } }])),
-                      visualReferenceIds: { type: 'array', minItems: 1, maxItems: 3, items: { type: 'string' } }
+                      visualReferenceIds: { type: 'array', minItems: 1, maxItems: PHOTO_LIMIT, items: { type: 'string' } }
                     }, required: ['name', 'description', 'strength', ...DETAIL_FIELDS, 'visualReferenceIds'], additionalProperties: false
                   } }
                 }, required: ['summary', 'directions'], additionalProperties: false

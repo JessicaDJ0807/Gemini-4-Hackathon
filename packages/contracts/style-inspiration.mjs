@@ -1,14 +1,15 @@
 import { ApiError, stringList } from './style-analysis.mjs';
-import { buildStyleProfile, validNestedProfile } from './style-profile.mjs';
+import { buildStyleProfile, validNestedProfile, PHOTO_REFERENCE_LIMIT } from './style-profile.mjs';
 
-export const PHOTO_LIMIT = 3;
+export const PHOTO_LIMIT = PHOTO_REFERENCE_LIMIT;
+export const PHOTO_REQUEST_BYTES = 30 * 1024 * 1024;
 export const PHOTO_BYTES = 2 * 1024 * 1024;
 export const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 export function validateInspirationRequest(body) {
   const invalid = (message) => { throw new ApiError(400, 'INVALID_INSPIRATION', message); };
   if (!body || typeof body.requestId !== 'string' || !body.requestId.trim() || body.requestId.length > 128 ||
       !Number.isSafeInteger(body.inputRevision) || body.inputRevision < 0 || !stringList(body.tags)) invalid('Invalid style request.');
-  if (!Array.isArray(body.photos) || body.photos.length < 1 || body.photos.length > PHOTO_LIMIT) invalid('Choose 1–3 inspiration photos.');
+  if (!Array.isArray(body.photos) || body.photos.length < 1 || body.photos.length > PHOTO_LIMIT) invalid(`Choose 1–${PHOTO_LIMIT} inspiration photos.`);
   const ids = body.photos.map((photo, index) => photo?.id ?? `photo-${index + 1}`);
   if (!stringList(ids) || new Set(ids).size !== ids.length) invalid('Photo IDs must be unique short strings.');
   for (const photo of body.photos) {

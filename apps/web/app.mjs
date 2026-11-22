@@ -1,23 +1,26 @@
 import { validProfile } from '/contracts.mjs';
 import { PHOTO_LIMIT, PHOTO_BYTES, PHOTO_TYPES, validateInspirationRequest, validateInspirationResponse } from '/shared/style-inspiration.mjs';
-import { DETAIL_FIELDS, DETAIL_LIMIT, addLabel, buildStyleProfile, emptyStyleProfile, validNestedProfile,
-  applyStyleAnalysis, restoreStyleProfile } from '/shared/style-profile.mjs';
+import { DETAIL_FIELDS, addLabel, buildStyleProfile, emptyStyleProfile, validNestedProfile,
+  applyStyleAnalysis } from '/shared/style-profile.mjs';
 
 const $ = id => document.getElementById(id);
 const storageKey = 'travel-stylist.confirmed-profile.v1';
-const draftKey = 'travel-stylist.style-draft.v1';
+// A visit to this page starts a new style; only confirmation passes it to the trip.
+try {
+  sessionStorage.removeItem('travel-stylist.style-draft.v1');
+  sessionStorage.removeItem(storageKey);
+} catch { /* Confirmation reports unavailable session storage. */ }
+window.addEventListener('pageshow', event => {
+  if (event.persisted) window.location.reload();
+});
 let profile = emptyStyleProfile(), edited = false, pending = null;
 let photos = [], revision = 0, controller, available = false, reading = false, analyzing = false;
 function error(message) { $('error').textContent = message; $('error').hidden = false; }
-function saveDraft() {
-  if (!validNestedProfile(profile)) return;
-  try { sessionStorage.setItem(draftKey, JSON.stringify({ profile: buildStyleProfile(profile), edited })); }
-  catch { /* Confirmation reports a storage failure and prevents navigation. */ }
-}
 function changed(nested = false) {
   if (nested) edited = true;
   try { sessionStorage.removeItem(storageKey); } catch { /* Handled on confirmation. */ }
-  saveDraft(); update();
+  update();
+  if (nested) renderStyleLabels();
 }
 function update() {
   const count = profile.directions.length;
@@ -25,9 +28,11 @@ function update() {
   $('continue').disabled = !validNestedProfile(profile) || (!count && !profile.userTags.length) || reading || analyzing;
   $('continue').textContent = pending ? 'Continue with current style →' : 'Continue to trip →';
   $('selection-count').textContent = analyzing ? 'Finding your style…' : count || profile.userTags.length ?
-    [count ? `${count} style${count === 1 ? '' : 's'}` : '', profile.userTags.length ? `${profile.userTags.length} personal tag${profile.userTags.length === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · ') :
-    'Add photos or a personal tag to continue.';
-  $('photos').disabled = !available || reading;
+    '' :
+    (available ? 'Add photos or a personal tag to continue.' : 'Add a personal style tag to continue.');
+  const atPhotoLimit = photos.length >= PHOTO_LIMIT;
+  document.querySelector('.upload-button').hidden = atPhotoLimit;
+  $('photos').disabled = !available || reading || atPhotoLimit;
   $('retry-photos').disabled = !available || reading || analyzing;
   for (const button of $('photo-previews').querySelectorAll('button')) button.disabled = reading;
   $('pending-analysis').hidden = !pending;
@@ -35,7 +40,7 @@ function update() {
 function invalidatePhotos() {
   revision++; controller?.abort(); analyzing = false; pending = null;
   $('error').hidden = true; $('retry-photos').hidden = true;
-  $('photo-status').textContent = photos.length ? '' : 'Photos removed. Your saved style details are kept.';
+  $('photo-status').textContent = photos.length ? '' : 'Photos removed. Your current style details are kept.';
   update();
 }
 function chipList(values, remove, label) {
@@ -53,66 +58,35 @@ function renderManualTags() {
   }, 'your tags'));
 }
 const labels = { colors: 'Colors', silhouettes: 'Silhouettes', stylingPatterns: 'Styling details', keyPieces: 'Key pieces' };
-function renderDirections() {
-  const open = new Set([...$('style-directions').querySelectorAll('details[open]')].map(item => item.dataset.id));
-  $('style-directions').replaceChildren();
-  profile.directions.forEach(direction => {
-    const card = document.createElement('details'); card.className = 'direction-card'; card.dataset.id = direction.id; card.open = open.has(direction.id);
-    const summary = document.createElement('summary'), title = document.createElement('span'), meta = document.createElement('span');
-    title.textContent = direction.name; meta.textContent = 'Edit details'; meta.className = 'direction-meta'; summary.append(title, meta);
-    const body = document.createElement('div'); body.className = 'direction-body';
-    for (const [key, caption, max] of [['name', 'Style name', 100], ['description', 'Description', 500]]) {
-      const label = document.createElement('label'), input = document.createElement(key === 'description' ? 'textarea' : 'input');
-      label.className = 'editor-field'; label.textContent = caption; input.value = direction[key]; input.maxLength = max;
-      if (key === 'name') input.required = true; else input.rows = 2;
-      input.addEventListener('input', () => {
-        const previousName = direction.name; direction[key] = input.value;
-        if (key === 'name') {
-          title.textContent = input.value || 'Name your style';
-          for (const button of body.querySelectorAll('button[aria-label]')) {
-            button.setAttribute('aria-label', button.getAttribute('aria-label').replace(previousName, input.value));
-          }
-          const chip = $('style-labels').querySelectorAll('button')[profile.directions.indexOf(direction)];
-          if (chip) { chip.textContent = `${input.value || 'Name your style'} ×`; chip.setAttribute('aria-label', `Remove ${input.value} from your styles`); }
-        }
-        changed(true);
-      });
-      input.addEventListener('change', () => { direction[key] = input.value.trim(); input.value = direction[key]; changed(true); });
-      label.append(input); body.append(label);
+function renderStyleLabels() {
+  const names = profile.directions.map(direction => direction.name);
+  const seen = new Set(names.map(name => name.trim().toLowerCase()));
+  const tags = [];
+  // Interleave categories so the preview includes more than just a color palette.
+  const groups = ['stylingPatterns', 'silhouettes', 'colors', 'keyPieces']
+    .map(key => profile.directions.flatMap(direction => direction[key]));
+  for (let index = 0; index < Math.max(0, ...groups.map(group => group.length)) && tags.length < 8; index++) {
+    for (const group of groups) {
+      const value = group[index], key = value?.trim().toLowerCase();
+      if (!key || seen.has(key) || tags.length >= 8) continue;
+      seen.add(key); tags.push(value);
     }
-    DETAIL_FIELDS.forEach(key => {
-      const section = document.createElement('div'), label = document.createElement('label'), form = document.createElement('form');
-      section.className = 'detail-category'; label.textContent = labels[key]; label.htmlFor = `${direction.id}-${key}`;
-      const chips = document.createElement('div');
-      const input = document.createElement('input'), add = document.createElement('button');
-      input.id = label.htmlFor; input.maxLength = 100; input.placeholder = `Add ${labels[key].toLowerCase()}`; input.autocomplete = 'off';
-      add.type = 'submit'; add.textContent = 'Add'; add.className = 'secondary'; add.setAttribute('aria-label', `Add to ${labels[key].toLowerCase()} for ${direction.name}`);
-      const render = () => chips.replaceChildren(chipList(direction[key], index => {
-        direction[key].splice(index, 1); changed(true); render(); input.focus();
-      }, `${direction.name}: ${labels[key].toLowerCase()}`));
-      render(); form.className = 'tag-entry'; form.append(input, add);
-      form.addEventListener('submit', event => {
-        event.preventDefault();
-        try { direction[key] = addLabel(direction[key], input.value, DETAIL_LIMIT); input.value = ''; $('error').hidden = true; changed(true); render(); input.focus(); }
-        catch (cause) { error(cause.message); input.focus(); }
-      });
-      section.append(label, chips, form); body.append(section);
-    });
-    const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'remove-direction'; remove.textContent = 'Remove this style';
-    remove.addEventListener('click', () => {
-      profile.directions = profile.directions.filter(item => item.id !== direction.id); changed(true); renderProfile();
-      ($('style-directions').querySelector('summary') ?? $('manual-tag')).focus();
-    });
-    body.append(remove); card.append(summary, body); $('style-directions').append(card);
-  });
+  }
+  $('style-labels').replaceChildren(chipList(names, index => {
+    profile.directions.splice(index, 1); changed(true); renderProfile(); $('manual-tag').focus();
+  }, 'your styles'), chipList(tags, index => {
+    const key = tags[index].trim().toLowerCase();
+    // Remove every matching nested label so a duplicate cannot reappear in the preview.
+    for (const direction of profile.directions) {
+      for (const field of DETAIL_FIELDS) direction[field] = direction[field].filter(value => value.trim().toLowerCase() !== key);
+    }
+    changed(true); renderProfile(); $('manual-tag').focus();
+  }, 'your style details'));
 }
 function renderProfile() {
   $('photo-result').hidden = !profile.directions.length;
-  $('style-summary').textContent = profile.summary;
-  $('style-labels').replaceChildren(chipList(profile.directions.map(direction => direction.name), index => {
-    profile.directions.splice(index, 1); changed(true); renderProfile(); $('manual-tag').focus();
-  }, 'your styles'));
-  renderDirections(); renderManualTags(); update();
+  renderStyleLabels();
+  renderManualTags(); update();
 }
 $('manual-tag-form').addEventListener('submit', event => {
   event.preventDefault();
@@ -127,25 +101,44 @@ $('apply-analysis').addEventListener('click', () => {
 });
 $('keep-edits').addEventListener('click', () => { pending = null; update(); $('manual-tag').focus(); });
 function renderPhotos() {
-  $('photo-previews').replaceChildren();
-  photos.forEach(photo => {
-    const figure = document.createElement('figure'), img = document.createElement('img'), button = document.createElement('button');
-    img.src = photo.url; img.alt = 'Your style inspiration';
-    button.type = 'button'; button.textContent = 'Remove'; button.className = 'remove-photo';
+  const row = $('photo-previews');
+  row.replaceChildren(); row.hidden = !photos.length;
+  row.style.setProperty('--photo-count', photos.length || 1);
+  photos.forEach((photo, index) => {
+    const figure = document.createElement('figure'), img = document.createElement('img');
+    figure.tabIndex = 0;
+    figure.setAttribute('role', 'group');
+    figure.setAttribute('aria-label', `Inspiration photo ${index + 1} of ${photos.length}`);
+    figure.style.setProperty('--photo-position', photos.length > 1 ? index / (photos.length - 1) : .5);
+    figure.style.setProperty('--photo-layer', index + 1);
+    img.src = photo.url; img.alt = 'Your style inspiration'; img.draggable = false;
+    const button = document.createElement('button');
+    button.type = 'button'; button.textContent = '×'; button.className = 'remove-photo'; button.disabled = reading;
     button.setAttribute('aria-label', `Remove ${photo.file.name}`);
     button.addEventListener('click', () => {
       photos = photos.filter(item => item !== photo); URL.revokeObjectURL(photo.url);
       invalidatePhotos(); renderPhotos();
+      (photos.length ? row.children[Math.min(index, photos.length - 1)] : $('photos')).focus();
       void analyzePhotos();
     });
-    figure.append(img, button); $('photo-previews').append(figure);
+    // Tap or keyboard focus gives touch users the same expanded preview as hover.
+    figure.addEventListener('click', event => { if (!event.target.closest('button')) figure.focus(); });
+    figure.addEventListener('keydown', event => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        const next = (index + (event.key === 'ArrowLeft' ? -1 : 1) + photos.length) % photos.length;
+        row.children[next].focus();
+      }
+      if (event.key === 'Escape') figure.blur();
+    });
+    figure.append(img, button); row.append(figure);
   });
 }
 $('photos').addEventListener('change', async () => {
   const files = [...$('photos').files]; $('photos').value = '';
   if (!files.length) return;
   $('error').hidden = true;
-  if (photos.length + files.length > PHOTO_LIMIT) return error('You can add up to 3 photos. Remove one before adding another.');
+  if (photos.length + files.length > PHOTO_LIMIT) return error(`You can add up to ${PHOTO_LIMIT} photos. Remove one before adding another.`);
   if (files.some(file => !PHOTO_TYPES.includes(file.type))) return error('Choose JPG, PNG, or WebP photos.');
   if (files.some(file => !file.size || file.size > PHOTO_BYTES)) return error('Each photo must be between 1 byte and 2 MB.');
   reading = true; update();
@@ -201,7 +194,7 @@ async function analyzePhotos() {
       $('photo-status').textContent = 'New analysis is ready. Your edits are kept until you choose to replace them.';
     } else {
       profile = applyStyleAnalysis(profile, result.suggestedProfile); changed(); renderProfile();
-      $('photo-status').textContent = 'Your styles are ready. Open a style to fine-tune it.';
+      $('photo-status').textContent = '';
     }
   } catch (cause) {
     if (revision !== requestRevision || cause.name === 'AbortError') return;
@@ -215,21 +208,23 @@ $('continue').addEventListener('click', () => {
     const confirmed = buildStyleProfile(profile);
     if (!validProfile(confirmed)) return error('Add at least one style or personal tag to continue.');
     sessionStorage.setItem(storageKey, JSON.stringify(confirmed));
-    saveDraft(); photos.forEach(photo => URL.revokeObjectURL(photo.url));
+    photos.forEach(photo => URL.revokeObjectURL(photo.url));
     window.location.assign('/trip');
   } catch { error('Could not save your style. Check your edits and enable browser session storage, then try again.'); }
 });
-try {
-  const draft = JSON.parse(sessionStorage.getItem(draftKey));
-  const saved = JSON.parse(sessionStorage.getItem(storageKey));
-  if (validNestedProfile(draft?.profile)) { profile = buildStyleProfile(draft.profile); edited = Boolean(draft.edited); }
-  else if (validProfile(saved)) { profile = restoreStyleProfile(saved); edited = profile.directions.length > 0; }
-} catch { /* Start fresh if stored data cannot be read. */ }
 renderProfile();
 try {
   const response = await fetch('/api/config', { signal: AbortSignal.timeout(10000) });
   if (!response.ok) throw new Error();
-  available = (await response.json()).photoAnalysis === true;
-  $('photo-help').textContent = available ? 'Photos are analyzed automatically with Google Gemini.' : 'Photo analysis is unavailable. You can still add your own tags below.';
-} catch { $('photo-help').textContent = 'Photo analysis is unavailable. You can still add your own tags below.'; }
+  const config = await response.json();
+  available = config.photoAnalysis === true && !config.shoppingTestMode;
+  if (config.shoppingTestMode) {
+    $('payment-test-notice').hidden = false;
+    document.querySelector('.inspiration').hidden = true;
+    document.querySelector('.intro').textContent = 'Add a personal style tag to start the payment demo.';
+    document.querySelector('.personal-tags .optional')?.remove();
+  }
+  $('photo-help').hidden = available || config.shoppingTestMode;
+  $('photo-help').textContent = available ? '' : 'Photo analysis is unavailable. You can still add your own tags below.';
+} catch { $('photo-help').hidden = false; $('photo-help').textContent = 'Photo analysis is unavailable. You can still add your own tags below.'; }
 update();

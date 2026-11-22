@@ -9,27 +9,27 @@
 </head>
 <body class="style-page">
   <main>
-    <header><span class="brand">TRAVEL AI STYLIST</span><span class="step-label">Style → Trip → Outfits</span></header>
-    <p class="eyebrow">01 / YOUR STYLE</p>
-    <h1>What’s your style?</h1>
-    <p class="intro">Upload looks you love. Fine-tune your styles, or add your own tags.</p>
+    <header class="app-header"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">✳</span> TRAVEL AI STYLIST</a><ol class="flow-steps" aria-label="Your journey"><li aria-current="step"><span>01</span> Your style</li><li><span>02</span> The trip</li><li><span>03</span> Your looks</li></ol></header>
+    <p id="payment-test-notice" class="shopping-test-banner" role="status" hidden>PAYMENT TEST · Simulated shopping only. Add a personal style tag below to continue. Photo analysis is off here.</p>
+    <div class="page-hero">
+      <div><p class="eyebrow">A LITTLE INSPIRATION. A LOT OF POSSIBILITY.</p>
+      <h1>Your next trip.<br><mark>Your kind of style.</mark></h1>
+      <p class="intro">Start with the looks you love. We’ll take it from there.</p></div>
+      <div class="hero-doodle" aria-hidden="true"><svg viewBox="0 0 180 140" fill="none" aria-hidden="true"><path d="M16 118C51 138 94 113 76 90C62 73 45 91 56 105C69 121 109 90 119 69" stroke="currentColor" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"/><path d="M90 45L166 15L140 91L123 62L90 45Z" fill="#dcfa56" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M123 62L166 15M123 62L118 81L133 77" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M44 33V47M37 40H51M156 113V123M151 118H161" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Made for your<br>next adventure.</span></div>
+    </div>
+    <div class="style-bento">
     <section class="inspiration" aria-labelledby="photos-title">
-      <div class="section-heading"><h2 id="photos-title">Your inspiration</h2></div>
-      <p class="hint">Add up to 3 outfit photos you love. JPG, PNG, or WebP · 2 MB each.</p>
-      <label class="upload-button" for="photos">＋ Add photos</label>
+      <div class="section-heading"><h2 id="photos-title">The inspiration board</h2><span class="card-number" aria-hidden="true">01</span></div>
+      <p class="hint">A saved outfit. A favorite look. Whatever feels like you.</p>
+      <label class="upload-button" for="photos"><svg viewBox="0 0 160 110" fill="none" aria-hidden="true"><path d="M67 28C67 9 96 9 95 27C95 36 80 36 80 47V54L27 83C21 86 23 94 30 94H131C138 94 140 87 133 83L80 54" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 22V38M12 30H28M127 39L132 48L141 51L132 55L127 64L123 55L114 51L123 48Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M37 84H123" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>＋ Add photos</span><small>Up to 10 JPG, PNG or WebP images · 2 MB each</small></label>
       <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="photo-help" disabled>
-      <div id="photo-previews" class="photo-previews"></div>
-      <p id="photo-help" class="hint">Checking photo suggestions…</p>
+      <div id="photo-previews" class="photo-previews" role="group" aria-label="Inspiration photos" hidden></div>
+      <p id="photo-help" class="hint" hidden></p>
       <p id="photo-status" role="status" aria-live="polite"></p>
     </section>
     <section id="photo-result" hidden aria-labelledby="suggestions-title">
       <h2 id="suggestions-title" tabindex="-1">Your style</h2>
       <div id="style-labels"></div>
-      <details id="style-details" class="style-details">
-        <summary>Edit style details</summary>
-        <p id="style-summary" class="hint"></p>
-        <div id="style-directions"></div>
-      </details>
     </section>
     <section id="pending-analysis" class="analysis-review" hidden aria-labelledby="pending-title">
       <h3 id="pending-title">New inspiration, new suggestions</h3>
@@ -39,19 +39,20 @@
       <div class="review-actions"><button id="apply-analysis" type="button">Replace styles with new analysis</button><button id="keep-edits" class="secondary" type="button">Keep my edits</button></div>
     </section>
     <section class="personal-tags" aria-labelledby="manual-title">
-      <h2 id="manual-title">Make it personal <span class="optional">Optional</span></h2>
-      <p class="hint">Anything else you love? Add your own tags.</p>
-      <div id="manual-tags"></div>
+      <div class="personal-copy"><div class="section-heading"><h2 id="manual-title">Make it yours</h2><span class="optional">Optional</span></div>
+      <p class="hint">Anything else you love? Add a tag.</p></div>
       <form id="manual-tag-form" class="tag-entry">
         <label for="manual-tag" class="visually-hidden">Your personal style tag</label>
         <input id="manual-tag" maxlength="100" placeholder="e.g. vintage, comfortable" autocomplete="off">
         <button class="secondary" type="submit">Add tag</button>
       </form>
+      <div id="manual-tags"></div>
     </section>
+    </div>
     <p id="error" role="alert" hidden></p>
     <button id="retry-photos" class="secondary" type="button" hidden>Retry photo analysis</button>
     <div class="style-actions"><p id="selection-count" class="hint" role="status">Add photos or a personal tag to continue.</p><button id="continue" type="button" disabled>Continue to trip →</button></div>
-    <footer>Your style details and tags stay in this browser tab. Original photos aren’t saved by this app.</footer>
+    <footer>Your style is used for this trip. Returning here starts fresh. Original photos aren’t saved.</footer>
   </main>
 </body>
 </html>

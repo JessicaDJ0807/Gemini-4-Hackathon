@@ -3,6 +3,7 @@ export const DETAIL_FIELDS = ['colors', 'silhouettes', 'stylingPatterns', 'keyPi
 export const USER_TAG_LIMIT = 20;
 export const DETAIL_LIMIT = 8;
 export const DIRECTION_LIMIT = 3;
+export const PHOTO_REFERENCE_LIMIT = 10;
 const text = (value, max, required = false) => typeof value === 'string' && value.length <= max && (!required || Boolean(value.trim()));
 const list = (value, max = 30) => Array.isArray(value) && value.length <= max && value.every(item => text(item, 100, true));
 export const uniqueLabels = values => [...new Map(values.map(value => [value.trim().toLowerCase(), value.trim()])).values()];
@@ -16,7 +17,7 @@ export function addLabel(values, value, limit = USER_TAG_LIMIT) {
 export function validDirection(direction) {
   return Boolean(direction && text(direction.id, 100, true) && text(direction.name, 100, true) &&
     text(direction.description, 500) && ['dominant', 'secondary', 'minor'].includes(direction.strength) &&
-    ['media', 'tags', 'both'].includes(direction.source) && list(direction.visualReferenceIds, 3) &&
+    ['media', 'tags', 'both'].includes(direction.source) && list(direction.visualReferenceIds, PHOTO_REFERENCE_LIMIT) &&
     DETAIL_FIELDS.every(key => list(direction[key], DETAIL_LIMIT) && uniqueLabels(direction[key]).length === direction[key].length));
 }
 export function validNestedProfile(profile) {

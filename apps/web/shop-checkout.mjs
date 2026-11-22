@@ -26,7 +26,7 @@ export function createShopCheckout({ fetchImpl = fetch, timeoutMs = 20000, now =
       return offer;
     } catch { throw new ApiError(400, 'EXPIRED_OFFER', 'This product selection has expired. Search for the piece again and add it to your bag.'); }
   }
-  async function checkout(body) {
+  function prepare(body) {
     if (!body || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.requestId) ||
         !Array.isArray(body.items) || !body.items.length || body.items.length > 20) {
       throw new ApiError(400, 'INVALID_BAG', 'Choose at least one item to check out.');
@@ -38,6 +38,10 @@ export function createShopCheckout({ fetchImpl = fetch, timeoutMs = 20000, now =
     if (new Set(lines.map(line => line.shop)).size !== 1 || new Set(lines.map(line => line.variantId)).size !== lines.length) {
       throw new ApiError(400, 'INVALID_BAG', 'Check out each store separately.');
     }
+    return lines;
+  }
+  async function checkout(body) {
+    const lines = prepare(body);
     try {
       const response = await fetchImpl('https://mcp.shop.com/', {
         method: 'POST', redirect: 'error', signal: AbortSignal.timeout(timeoutMs),
@@ -82,5 +86,5 @@ export function createShopCheckout({ fetchImpl = fetch, timeoutMs = 20000, now =
       throw new ApiError(502, 'CHECKOUT_UNAVAILABLE', 'Checkout could not be loaded. Retry with the same bag; no payment has been made.', true);
     }
   }
-  return { issueOffer, checkout };
+  return { issueOffer, checkout, prepare };
 }

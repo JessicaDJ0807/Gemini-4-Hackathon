@@ -26,7 +26,10 @@ test('live adapter preserves user style grouping, trip-level places and sets exa
     const prepared=prepareAiOutfitRequest(request,'https://app.example');
     assert.equal(prepared.outfitCount,request.trip.weather.length); assert.equal(prepared.useWardrobeImages,true);
     assert.deepEqual(prepared.styleProfile,request.styleProfile);assert.deepEqual(prepared.trip,request.trip);
-    assert.match(prepared.preferences,/Edited roomy layers/);assert.match(prepared.preferences,/"keyPieces":\["blazer"\]/);
+    assert.equal(prepared.styleProfile.directions[0].description,'Edited roomy layers.');
+    assert.deepEqual(prepared.styleProfile.directions[0].keyPieces,['blazer']);
+    assert.ok(!prepared.preferences.includes('Edited roomy layers'));
+    assert.ok(!prepared.preferences.includes('"directions"'));
     assert.match(prepared.preferences,/keep outfit attractionIds empty/);
     assert.ok(prepared.wardrobe.every(item=>item.imageUrl.startsWith('https://app.example/wardrobe-photos/')));
     assert.ok(request.wardrobe.every(item=>item.imageUrl.startsWith('/')));
@@ -36,7 +39,7 @@ test('live adapter preserves user style grouping, trip-level places and sets exa
   assert.throws(()=>prepareAiOutfitRequest(input(),'https://user:password@app.example'));
 });
 
-test('B sends photo wardrobe and nested preferences to A with auth; A missing items survive unchanged',async t=>{
+test('B sends photo wardrobe and native nested profile to A with auth; A missing items survive unchanged',async t=>{
   const request=input();let sent;
   const upstream=mockOutfits(request);upstream.model='test-A-model';upstream.wardrobeImagesUsed=request.wardrobe.map(item=>item.id);
   upstream.warnings=['A long but legitimate warning. '.repeat(8)];
@@ -51,7 +54,9 @@ test('B sends photo wardrobe and nested preferences to A with auth; A missing it
   const photo=await fetch(base+inventory.wardrobe[0].imageUrl);assert.match(photo.headers.get('Content-Type'),/image\/jpeg/);
   assert.deepEqual([...new Uint8Array(await photo.arrayBuffer()).slice(0,3)],[255,216,255]);
   const response=await post(base,request);assert.equal(response.status,200);const result=await response.json();
-  assert.equal(sent.outfitCount,3);assert.equal(sent.useWardrobeImages,true);assert.match(sent.preferences,/Relaxed tailoring/);
+  assert.equal(sent.outfitCount,3);assert.equal(sent.useWardrobeImages,true);
+  assert.deepEqual(sent.styleProfile,request.styleProfile);
+  assert.ok(!sent.preferences.includes('Relaxed tailoring'));
   assert.deepEqual(result.outfits.flatMap(o=>o.missingItems),upstream.outfits.flatMap(o=>o.missingItems));
   assert.deepEqual(result.wardrobeImagesUsed,request.wardrobe.map(item=>item.id));validateOutfitResponse(result,request);
 });

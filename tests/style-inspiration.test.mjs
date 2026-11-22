@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createWebServer } from '../apps/web/server.mjs';
-import { validateInspirationRequest, profileFromTags, validateInspirationResponse, PHOTO_BYTES } from '../packages/contracts/style-inspiration.mjs';
+import { validateInspirationRequest, profileFromTags, validateInspirationResponse, PHOTO_BYTES, PHOTO_REQUEST_BYTES } from '../packages/contracts/style-inspiration.mjs';
 import { validProfile } from '../packages/contracts/style-analysis.mjs';
 
 const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=';
@@ -63,14 +63,14 @@ test('no Gemini key disables analysis without fabricated suggestions or network 
 test('rejects too many, oversized, malformed and mismatched image uploads before Gemini', async t => {
   const base = await app(t, { geminiFetch: () => { throw new Error('Must not call'); } });
   for (const [photos, status] of [
-    [[], 400], [Array(4).fill(input.photos[0]), 400],
+    [[], 400], [Array(11).fill(input.photos[0]), 400],
     [[{ mimeType: 'image/svg+xml', data: png }], 415],
     [[{ mimeType: 'image/jpeg', data: png }], 415],
     [[{ mimeType: 'image/png', data: 'not-base64' }], 400],
     [[{ mimeType: 'image/png', data: Buffer.alloc(PHOTO_BYTES + 1).toString('base64') }], 413]
   ]) assert.equal((await post(base, { ...input, photos })).status, status);
   assert.equal((await post(base, input, { Origin: 'https://foreign.example' })).status, 403);
-  const tooLarge = await post(base, { ...input, padding: 'x'.repeat(9 * 1024 * 1024) });
+  const tooLarge = await post(base, { ...input, padding: 'x'.repeat(PHOTO_REQUEST_BYTES) });
   assert.equal(tooLarge.status, 413);
 });
 
@@ -108,4 +108,38 @@ test('blocked, truncated, invalid nested and unsupported photo-reference outputs
 test('unrelated images can return no tags with an explanation', async t => {
   const base = await app(t, { geminiFetch: async () => modelResponse({ directions: [], summary: 'No clothing is visible. Try an outfit photo.' }) });
   const response = await post(base); assert.equal(response.status, 200); assert.deepEqual((await response.json()).styleTags, []);
+});
+
+test('payment-test mode disables photos even with a fake Gemini key; photo uploads never reach the chat fixture', async t => {
+  let calls = 0;
+  const base = await app(t, { shoppingTestMode: true, geminiFetch: async () => { calls++; return modelResponse(); } });
+  const config = await (await fetch(base + '/api/config')).json();
+  assert.equal(config.shoppingTestMode, true); assert.equal(config.photoAnalysis, false);
+  const response = await post(base); assert.equal(response.status, 503);
+  const error = (await response.json()).error;
+  assert.equal(error.code, 'PHOTO_ANALYSIS_DISABLED_IN_TEST'); assert.match(error.message, /manual style tag/);
+  assert.equal(calls, 0);
+});
+
+test('ten maximum-size photos reach Gemini and all ten references survive confirmation', async t => {
+  const bytes = Buffer.alloc(PHOTO_BYTES); Buffer.from(png, 'base64').copy(bytes);
+  const photos = Array.from({ length: 10 }, (_, i) => ({ id: `photo-${i + 1}`, mimeType: 'image/png', data: bytes.toString('base64') }));
+  const refs = photos.map(photo => photo.id);
+  let called = 0;
+  const base = await app(t, { geminiFetch: async (_url, options) => {
+    called++;
+    const request = JSON.parse(options.body);
+    assert.equal(request.contents[0].parts.filter(part => part.inlineData).length, 10);
+    assert.equal(request.generationConfig.responseJsonSchema.properties.directions.items.properties.visualReferenceIds.maxItems, 10);
+    return modelResponse({ ...suggestion, directions: [{ ...direction, visualReferenceIds: refs }] });
+  } });
+  const response = await post(base, { ...input, photos });
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.deepEqual(result.suggestedProfile.visualReferenceIds, refs);
+  assert.equal(validProfile(result.suggestedProfile), true);
+  assert.equal(called, 1);
+  const overflow = [...photos.map(({id,mimeType}) => ({id,mimeType,data:png})), {id:'photo-11',mimeType:'image/png',data:png}];
+  assert.equal((await post(base, { ...input, photos: overflow })).status, 400);
+  assert.equal(called, 1);
 });

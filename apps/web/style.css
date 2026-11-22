@@ -162,7 +162,8 @@ figcaption { font-size: 14px; font-weight: 600; margin-top: 8px; }
 .direction-body { padding: 4px 18px 18px; }
 .editor-field, .detail-category > label { display: block; font-size: 13px; font-weight: 600; margin: 18px 0 8px; }
 .editor-field input, .editor-field textarea { display: block; margin-top: 8px; font-size: 14px; font-weight: 400; }
-.editable-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.editable-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+#style-labels { display: grid; gap: 10px; }
 .style-chip { background: #e8ede3; color: #33472e; border-radius: 20px; padding: 8px 12px; margin: 0; font-size: 13px; max-width: 100%; overflow-wrap: anywhere; }
 .style-chip:hover { background: #dbe4d3; }
 .tag-entry { display: flex; align-items: stretch; gap: 8px; margin-top: 10px; }
@@ -325,3 +326,289 @@ figcaption { font-size: 14px; font-weight: 600; margin-top: 8px; }
 }
 @media (max-width: 360px) { .shop-product-grid { grid-template-columns: 1fr; } .wardrobe-page .wardrobe-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: reduce) { .wardrobe-page .wardrobe-choice { transition: none; } }
+
+/* A single corner panel for discovery, the bag and explicit Shop Pay confirmation. */
+.shopping-launcher { position: fixed; right: 28px; bottom: 24px; z-index: 20; border-radius: 30px; padding: 16px 22px; margin: 0; box-shadow: 0 8px 30px #25372825; font-size: 13px; }
+.shopping-panel { position: fixed; right: 24px; bottom: 24px; width: min(432px, calc(100vw - 32px)); height: min(720px, calc(100dvh - 48px)); z-index: 30; display: flex; flex-direction: column; border: 1px solid #dce1d5; border-radius: 22px; background: #fffefa; box-shadow: 0 18px 80px #25372830; overflow: hidden; }
+.shopping-panel[hidden], .shopping-panel [hidden] { display: none !important; }
+.shopping-header { display: flex; align-items: center; justify-content: space-between; padding: 22px 22px 16px; gap: 12px; }
+.shopping-header .eyebrow { font-size: 9px; letter-spacing: 1.7px; margin: 0 0 6px; color: #6c7566; }
+.shopping-header h2 { font: 27px/1.2 Georgia, serif; margin: 0; }
+.shopping-tabs { display: flex; padding: 0 20px 12px; gap: 6px; border-bottom: 1px solid #e7e9e1; }
+.shopping-tabs button { flex: 1; margin: 0; padding: 9px; font-size: 12px; border-radius: 18px; color: #626a61; background: transparent; }
+.shopping-tabs button[aria-pressed=true] { background: #eaf0e3; color: #33472e; }
+.shopping-chat-view { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.shopping-log { padding: 8px 20px 18px; overflow-y: auto; flex: 1; overscroll-behavior: contain; }
+.shopping-message { font-size: 14px; line-height: 1.6; max-width: 95%; margin: 16px 0; overflow-wrap: anywhere; }
+.shopping-message.user { margin-left: auto; border-radius: 16px 16px 3px 16px; background: #edf0e6; padding: 10px 14px; width: fit-content; }
+.shopping-prompts { display: flex; flex-wrap: wrap; gap: 7px; }
+.shopping-prompts button { background: transparent; border: 1px solid #dce1d5; border-radius: 20px; font-size: 11px; color: #48563a; padding: 10px 12px; margin: 0; width: auto; }
+.shopping-composer { display: flex; align-items: center; margin: 0 16px; padding: 6px; background: #f1f3ec; border: 1px solid #dce1d5; border-radius: 26px; }
+.shopping-composer input { min-width: 0; flex: 1; padding: 10px 12px; border: 0; background: transparent; font-size: 13px; width: auto; margin: 0; }
+.shopping-composer button { border-radius: 50%; flex: 0 0 36px; height: 36px; width: 36px; font-size: 20px; margin: 0; padding: 0; }
+.shopping-privacy { font-size: 10px; text-align: center; color: #72796c; margin: 9px 16px 14px; }
+.shopping-chat-view > .shop-status { margin: 0 22px 10px; font-size: 12px; }
+.shopping-chat-view > .shop-status:empty { display: none; }
+.shopping-panel .shop-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.shopping-panel .shop-product-photo { aspect-ratio: 1; }
+.shopping-panel .shop-product-info { padding: 11px; }
+.shopping-panel .shop-product h5 { font-size: 12px; }
+.shopping-panel .shop-product .shop-price { font-size: 13px; margin-bottom: 10px; }
+.shopping-panel .hint { font-size: 12px; }
+.shopping-panel .bag-empty { font-size: 25px; margin-top: 32px; }
+.shopping-bag-view, .shopping-checkout-view { overflow-y: auto; padding: 10px 22px 24px; flex: 1; min-height: 0; overscroll-behavior: contain; }
+.shopping-checkout-view h3 { font: 25px Georgia, serif; margin: 26px 0 10px; }
+.shopping-checkout-view label { display: block; font-size: 12px; margin-top: 18px; }
+.shopping-checkout-view select { margin-top: 7px; font-size: 12px; padding: 10px; }
+.shopping-panel .checkout-button { padding: 13px; font-size: 13px; }
+.wallet-account { border-bottom: 1px solid #e7e9e1; padding-bottom: 16px; }
+.wallet-connected { font-size: 14px; font-weight: 600; }
+.checkout-item { border-bottom: 1px solid #e7e9e1; padding: 10px 0; }
+.checkout-item-title { font-size: 13px; margin: 0; }
+.shop-pay-button { width: 100%; border-radius: 24px; background: #5433eb; padding: 14px 10px; font-size: 13px; margin: 18px 0 0; }
+.shopping-panel button:focus-visible, .shopping-panel a:focus-visible, .shopping-panel input:focus-visible, .shopping-panel select:focus-visible { outline: 2px solid #566949; outline-offset: 3px; }
+@media (max-width: 480px) {
+  .shopping-launcher { right: 16px; bottom: 16px; width: auto; }
+  .shopping-panel { right: 8px; bottom: 8px; width: calc(100vw - 16px); height: min(720px, calc(100dvh - 16px)); border-radius: 18px; }
+  .shopping-panel button { width: auto; }
+  .shopping-panel .checkout-button, .shopping-panel .shop-pay-button, .shopping-panel .add-to-bag { width: 100%; }
+}
+.shopping-test-banner { margin: 0 20px 10px; background: #fff2d8; color: #78550c; padding: 8px; border-radius: 8px; text-align: center; font-size: 10px; }
+
+/* Bento theme: paper, ink and a little lime. Shared by all three journey steps. */
+:root { --ink: #20211d; --muted: #707168; --paper: #fffefa; --cream: #f0ece2; --lime: #dfff62; --line: #e6e4db; color: var(--ink); background: #fdfdf9; }
+body, .wardrobe-page { background: #fdfdf9; color: var(--ink); }
+main, .style-page main, .wardrobe-page main { max-width: 1140px; padding: 26px 38px 40px; }
+.app-header, .style-page .app-header, .wardrobe-page .app-header { display: flex; align-items: center; justify-content: space-between; gap: 22px; border-bottom: 1px solid var(--line); padding-bottom: 22px; margin-bottom: 38px; }
+.brand { display: flex; align-items: center; gap: 9px; font-size: 10px; font-weight: 750; letter-spacing: .12em; color: var(--ink); white-space: nowrap; }
+.brand-mark { display: inline-grid; place-items: center; font-size: 29px; letter-spacing: 0; width: 35px; height: 35px; border-radius: 50%; background: var(--lime); }
+.flow-steps { display: flex; gap: 7px; list-style: none; padding: 0; margin: 0; }
+.flow-steps li { display: flex; align-items: center; gap: 7px; border-radius: 22px; padding: 9px 12px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.flow-steps li span { font-size: 9px; opacity: .7; }
+.flow-steps [aria-current=step] { color: var(--ink); background: var(--lime); }
+.header-edit, .wardrobe-page nav a { font-size: 11px; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.wardrobe-page nav { gap: 14px; }
+.page-hero { display: flex; justify-content: space-between; align-items: center; gap: 30px; margin-bottom: 30px; }
+.eyebrow { color: var(--muted); font-size: 9px; letter-spacing: .15em; }
+h1, .wardrobe-page h1 { color: var(--ink); font-family: Georgia, 'Times New Roman', serif; font-size: clamp(43px, 5.5vw, 67px); line-height: 1.06; font-weight: 400; letter-spacing: -.045em; margin: 16px 0 18px; }
+mark { display: inline; padding: 0 .08em .02em; background: linear-gradient(transparent 16%, var(--lime) 16%, var(--lime) 90%, transparent 90%); color: inherit; font-style: italic; }
+.page-hero .intro, .style-page .intro, .wardrobe-page .intro { font-size: 14px; color: var(--muted); margin: 0; max-width: 510px; line-height: 1.65; }
+.hero-doodle { width: 190px; flex: 0 0 190px; margin-right: 45px; transform: rotate(5deg); color: var(--ink); }
+.hero-doodle svg { width: 160px; display: block; margin: 0 auto; }
+.hero-doodle span { display: block; font: italic 17px/1.3 Georgia, serif; text-align: center; margin-top: -5px; }
+.wardrobe-doodle { background: var(--cream); border-radius: 30px; padding: 18px 12px 24px; transform: rotate(-5deg); }
+.wardrobe-doodle svg { width: 125px; }
+.style-bento { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.inspiration { grid-column: 1; border: 0; border-radius: 26px; background: var(--cream); padding: 26px; }
+.section-heading { gap: 12px; align-items: center; }
+.section-heading h2, .personal-tags h2 { font: 500 24px/1.25 Georgia, serif; margin: 0; color: var(--ink); }
+.card-number { flex-shrink: 0; display: grid; place-items: center; width: 29px; height: 29px; border: 1px solid #26271f35; border-radius: 50%; font-size: 10px; }
+.inspiration > .hint { font-size: 12px; color: #64645b; margin: 10px 0 18px; }
+.upload-button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 175px; padding: 16px; border: 1px dashed #b5b2a4; border-radius: 18px; background: #fffefa99; color: var(--ink); }
+.upload-button svg { width: 90px; height: 62px; }
+.upload-button > span { font-size: 13px; font-weight: 600; }
+.upload-button small { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.5; }
+.upload-button:hover { background: #fffefa; border-color: var(--ink); }
+#photo-help { font-size: 10px; color: var(--muted); margin: 12px 0 0; text-align: center; }
+#photo-status:empty { display: none; }
+.inspiration:has(.photo-previews figure) .upload-button { flex-direction: row; min-height: 60px; flex-wrap: wrap; }
+.inspiration:has(.photo-previews figure) .upload-button svg { width: 40px; height: 32px; }
+.inspiration:has(.photo-previews figure) .upload-button small { flex-basis: 100%; }
+.photo-previews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.photo-previews figure { position: relative; width: auto; min-width: 0; }
+.photo-previews img { width: 100%; height: auto; aspect-ratio: 3 / 4; border-radius: 14px; }
+.personal-tags { grid-column: 1; grid-row: auto; border: 0; border-radius: 26px; padding: 26px; margin: 0; background: var(--lime); display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.personal-tags .hint { font-size: 13px; line-height: 1.7; color: #414832; margin: 4px 0 18px; }
+.personal-tags .tag-entry { margin-top: auto; }
+.personal-tags .tag-entry input { background: #ffffffb5; border-color: #23251a25; min-width: 0; }
+.personal-tags .tag-entry button { color: #fff; background: var(--ink); padding: 11px 15px; border-radius: 15px; }
+.personal-tags .style-chip { background: #fffefaaf; border: 1px solid #23251a25; color: var(--ink); }
+#photo-result { grid-column: 1 / -1; background: var(--cream); border-radius: 24px; padding: 24px; margin: 0; }
+#photo-result h2 { font-size: 25px; margin: 0 0 12px; }
+#pending-analysis { grid-column: 1 / -1; border: 1px solid #dbcda3; border-radius: 24px; }
+.style-chip { background: #fffefa; border-color: #ccc8bb; color: var(--ink); }
+.style-details > summary, .direction-meta { color: #63645b; }
+.direction-card { border-color: var(--line); background: #fffefa; }
+.style-actions { padding: 20px 4px 0; margin: 0; }
+.style-actions .hint { font-size: 11px; }
+.style-page footer, footer { text-align: center; font-size: 10px; color: var(--muted); margin-top: 25px; }
+button, .button-link { background: var(--ink); color: #fffefa; border-radius: 18px; padding: 13px 20px; font-size: 12px; }
+button:hover:not(:disabled), .button-link:hover { background: #3b3d31; }
+.style-chip:hover:not(:disabled) { background: #fffefa; color: var(--ink); border-color: #b4b79d; }
+button:disabled { cursor: not-allowed; opacity: .45; }
+.secondary { background: #eae6da; color: var(--ink); }
+.secondary:hover:not(:disabled) { background: #ded9ca; }
+input:not([type=checkbox]), textarea, select { border-color: #d7d4c8; border-radius: 13px; padding: 12px; font-size: 13px; color: var(--ink); }
+:focus-visible, .shopping-panel button:focus-visible, .shopping-panel a:focus-visible, .shopping-panel input:focus-visible, .shopping-panel select:focus-visible { outline: 2px solid #565e32; outline-offset: 4px; }
+a { color: var(--ink); }
+.style-bento:has(.inspiration[hidden]) { grid-template-columns: 1fr; max-width: 560px; margin: auto; }
+.style-bento:has(.inspiration[hidden]) .personal-tags { grid-column: 1; }
+.trip-page #trip-editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 18px; }
+.destination-card, .dates-card { background: var(--cream); border-radius: 26px; padding: 26px; }
+.destination-card { background: #eef0e7; }
+.destination-card .field, .dates-card .field { margin-top: 24px; font-size: 11px; color: #595c50; }
+#destination-label { color: var(--muted); font-size: 11px; margin-bottom: 0; }
+#dates-form .hint { font-size: 11px; }
+#dates-form > button { margin-top: 4px; }
+#trip-status, #trip-error { grid-column: 1 / -1; margin: 0; }
+#trip-status:empty { display: none; }
+#places-section { grid-column: 1 / -1; background: var(--cream); border: 0; border-radius: 26px; margin-top: 0; padding: 26px; }
+.place-count { background: var(--lime); color: var(--ink); font-size: 10px; }
+.places-heading h2 { font-size: 30px; }
+#suggestion-note { font-size: 12px; }
+.place-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; border: 0; background: transparent; border-radius: 0; overflow: visible; }
+.place-row, .place-row + .place-row { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 0; padding: 0; border: 0; border-radius: 19px; overflow: hidden; background: #fffefa; align-items: center; }
+.place-photo { grid-column: 1 / -1; width: 100%; height: auto; aspect-ratio: 16 / 10; border-radius: 0; background: #e2dfd4; }
+.place-info { padding: 13px; }
+.place-info h3 { font-size: 13px; font-weight: 550; }
+.place-info .hint { font-size: 10px; }
+.remove-place { width: 28px; height: 28px; margin-right: 4px; font-size: 19px; color: var(--ink); }
+.remove-place:hover:not(:disabled) { background: #e9e5da; }
+.places-empty { grid-column: 1 / -1; }
+#custom-form { max-width: 660px; }
+#custom-form button { background: var(--ink); color: white; }
+#confirm-trip { display: block; margin: 20px 0 0 auto; }
+.wardrobe-page #outfit-context { display: inline-block; background: #ece9df; border-radius: 20px; padding: 10px 17px; font-size: 11px; color: #626257; margin: 0 0 24px; }
+.wardrobe-page .mock-badge { float: none; border: 0; background: transparent; padding: 0; font-size: 10px; color: var(--muted); margin: 12px 0 0; }
+.wardrobe-page #wardrobe-selection { background: var(--cream); padding: 26px; border: 0; border-radius: 26px; }
+#wardrobe-selection > summary { font: 26px Georgia, serif; }
+#wardrobe-selection > .hint { font-size: 11px; }
+#wardrobe-count { background: var(--lime); color: var(--ink); padding: 6px 10px; border-radius: 20px; margin: 0; font: 11px system-ui, sans-serif; }
+.wardrobe-page .wardrobe-grid { gap: 14px; }
+.wardrobe-page .wardrobe-choice, .wardrobe-page .wardrobe-choice:has(input:checked) { padding: 0 0 10px; border-radius: 17px; border: 1px solid transparent; background: #fffefa; }
+.wardrobe-page .wardrobe-choice:has(input:checked) { border-color: #b6b8a7; }
+.wardrobe-page .wardrobe-choice input { accent-color: var(--ink); }
+.wardrobe-page .wardrobe-garment img { border-radius: 16px 16px 0 0; aspect-ratio: 4 / 5; }
+.wardrobe-page .wardrobe-garment figcaption { font-size: 11px; }
+.wardrobe-page .wardrobe-choice > .hint { color: var(--muted); font-size: 9px; }
+.generate-bar { margin-top: 18px; }
+.generate-bar button { border-radius: 20px; font-size: 13px; }
+.day-button { border-color: #d6d3c5; color: #626257; }
+.day-button[aria-pressed=true] { background: var(--lime); border-color: var(--lime); color: var(--ink); }
+.wardrobe-page .daily-look { background: var(--cream); border-radius: 26px; padding: 26px; }
+.wardrobe-page .outfit-garment img { border-radius: 18px; }
+.wardrobe-page .missing-items { border-color: #dcd7c9; }
+.missing-items h4 { font-size: 28px; }
+.shop-piece-button, .bag-trigger { color: var(--ink); background: var(--lime); border-radius: 22px; }
+.shop-piece-button:hover:not(:disabled), .bag-trigger:hover:not(:disabled) { background: #d0ed50; }
+.shop-product-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+.shop-product { background: #fffefa; border-radius: 18px; }
+.shop-product-info { padding: 15px; }
+.shop-product-photo { aspect-ratio: 4 / 5; }
+.add-to-bag { border-radius: 16px; }
+.shop-status { color: #555b40; }
+.shop-status.is-loading::before { border-color: #e0e3d1; border-top-color: var(--ink); }
+.shopping-launcher { background: var(--ink); color: #fffefa; border-radius: 24px; box-shadow: 0 8px 24px #20211d16; }
+.shopping-panel { background: #fffefa; border-color: #e1dfd4; border-radius: 27px; box-shadow: 0 16px 65px #20211d20; }
+.shopping-header { background: var(--cream); }
+.shopping-header h2 { font-size: 27px; }
+.shopping-tabs { padding-top: 10px; border-color: var(--line); background: var(--cream); }
+.shopping-tabs button { color: #616257; }
+.shopping-tabs button[aria-pressed=true] { background: var(--lime); color: var(--ink); }
+.shopping-panel .icon-button { color: var(--ink); background: transparent; }
+.shopping-panel .icon-button:hover { background: #e4e0d4; }
+.bag-store { border-color: var(--line); }
+.bag-line img { border-radius: 12px; }
+.bag-subtotal, .wallet-account, .checkout-item { border-color: var(--line); }
+.shop-pay-button { background: #5433eb; }
+.shop-pay-button:hover:not(:disabled) { background: #4324c9; }
+.connection-note { padding: 14px; background: var(--cream); border-radius: 16px; font-size: 12px; line-height: 1.6; }
+.connection-code { letter-spacing: .12em; font: 600 14px ui-monospace, monospace; background: #f0ece2; border-radius: 10px; padding: 10px 13px; width: fit-content; }
+@media (max-width: 900px) {
+  .app-header, .wardrobe-page .app-header { flex-wrap: wrap; }
+  .wardrobe-page .flow-steps { order: 3; width: 100%; }
+  .hero-doodle { margin-right: 0; width: 140px; flex-basis: 140px; }
+  .hero-doodle svg { width: 130px; }
+  .personal-tags, .inspiration, .destination-card, .dates-card, #places-section { padding: 22px; }
+  .tag-entry { flex-wrap: wrap; }
+  .tag-entry input { flex-basis: 150px; }
+  .place-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  main, .style-page main, .wardrobe-page main { padding: 20px 18px 35px; }
+  .app-header, .style-page .app-header, .wardrobe-page .app-header { gap: 15px; margin-bottom: 28px; padding-bottom: 17px; }
+  .brand { max-width: none; font-size: 9px; }
+  .brand-mark { width: 30px; height: 30px; font-size: 25px; }
+  .flow-steps { order: 3; width: 100%; justify-content: space-between; gap: 0; }
+  .flow-steps li { padding: 8px 11px; font-size: 10px; }
+  .page-hero { gap: 8px; align-items: flex-start; margin-bottom: 24px; }
+  h1, .wardrobe-page h1 { font-size: 44px; margin: 13px 0; }
+  .page-hero .intro { font-size: 12px; }
+  .hero-doodle { display: none; }
+  .style-bento, .trip-page #trip-editor { grid-template-columns: 1fr; gap: 14px; }
+  .personal-tags { grid-column: 1; grid-row: auto; padding: 22px; }
+  .personal-tags .hint { margin: 17px 0 22px; padding-right: 45px; }
+  .personal-tags .tag-entry { margin-top: 0; }
+  .section-heading h2 { font-size: 23px; }
+  .upload-button { min-height: 155px; }
+  .style-actions { gap: 14px; flex-direction: column; align-items: stretch; padding-top: 17px; }
+  .style-actions .hint { margin: 0; }
+  button { width: auto; }
+  .style-actions button { width: 100%; }
+  .date-grid { gap: 12px; }
+  .destination-card .inline-form { flex-direction: row; }
+  #search-city { padding-inline: 12px; }
+  #places-section { padding: 20px; }
+  .place-list { gap: 10px; }
+  .place-info { padding: 10px; }
+  .place-info h3 { font-size: 11px; }
+  .place-photo { width: 100%; height: auto; }
+  .places-heading h2 { font-size: 25px; }
+  .place-count { font-size: 9px; }
+  .wardrobe-page #wardrobe-selection { padding: 20px; }
+  .wardrobe-page .wardrobe-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+  .wardrobe-page .wardrobe-garment figcaption { font-size: 10px; padding-inline: 7px; }
+  #wardrobe-selection > summary { font-size: 23px; }
+  .wardrobe-page .daily-look { padding: 20px; }
+  .missing-piece-heading { flex-direction: column; align-items: flex-start; }
+  .shop-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .upload-button, button, .wardrobe-choice { transition: background-color .18s, border-color .18s, opacity .18s; }
+}
+
+/* Optional preferences form one compact row beneath the inspiration board. */
+.personal-tags { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 0 28px; padding: 18px 24px; border-radius: 20px; }
+.personal-copy .section-heading { justify-content: flex-start; }
+.personal-tags h2 { font-size: 19px; }
+.personal-tags .optional { font-size: 10px; color: #4b5435; white-space: nowrap; }
+.personal-tags .hint { font-size: 12px; margin: 6px 0 0; padding: 0; }
+.personal-tags .tag-entry { margin: 0; gap: 8px; }
+.personal-tags .tag-entry input { font-size: 12px; padding: 10px; }
+.personal-tags .tag-entry button { font-size: 11px; padding: 10px 12px; white-space: nowrap; }
+#manual-tags { grid-column: 1 / -1; }
+#manual-tags:has(button) { margin-top: 12px; }
+@media (max-width: 600px) {
+  .personal-tags { grid-template-columns: minmax(0, 1fr); padding: 18px; gap: 14px; }
+  #manual-tags:has(button) { margin-top: 0; }
+  #manual-tags:not(:has(button)) { display: none; }
+}
+
+.photo-previews .remove-photo { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 30px; height: 30px; margin: 0; padding: 0; border: 1px solid #20211d20; border-radius: 50%; background: #fffefaed; color: var(--ink); font: 20px/1 system-ui, sans-serif; box-shadow: 0 1px 5px #00000014; }
+.photo-previews .remove-photo:hover:not(:disabled) { background: #fffefa; border-color: #b4b79d; }
+
+/* A lightly overlapping row; expanded cards remain inside its edges. */
+.photo-previews { position: relative; display: block; width: min(100%, max(280px, calc(var(--photo-count, 1) * 140px + 48px))); height: 290px; margin: 8px auto 0; overflow: clip; isolation: isolate; }
+.photo-previews figure { --card-width: min(160px, calc((100% - 48px) / var(--photo-count, 1) + 24px)); position: absolute; top: 42px; left: calc(24px + (100% - 48px - var(--card-width)) * var(--photo-position)); width: var(--card-width); height: 205px; margin: 0; aspect-ratio: auto; z-index: var(--photo-layer); border: 0; border-radius: 17px; background: transparent; overflow: hidden; transform: rotate(var(--photo-tilt, -2deg)); box-shadow: 0 4px 12px #20211d18; cursor: pointer; }
+.photo-previews figure:nth-child(3n + 2) { --photo-tilt: 2.5deg; }
+.photo-previews figure:nth-child(3n) { --photo-tilt: -3deg; }
+.photo-previews img { display: block; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; border-radius: 0; }
+.photo-previews figure:focus-within img { transform: scale(1.06); }
+.photo-previews figure:focus-within { --card-width: min(180px, calc(100% - 48px)); height: 235px; transform: translateY(-16px) rotate(0deg); z-index: 90; box-shadow: 0 12px 24px #20211d30; }
+.photo-previews .remove-photo { opacity: 0; }
+.photo-previews figure:focus-within .remove-photo { opacity: 1; }
+@media (hover: hover) {
+  .photo-previews figure:hover { --card-width: min(180px, calc(100% - 48px)); height: 235px; transform: translateY(-16px) rotate(0deg); z-index: 100; box-shadow: 0 12px 24px #20211d30; }
+  .photo-previews figure:hover .remove-photo { opacity: 1; }
+  .photo-previews figure:hover img { transform: scale(1.06); }
+}
+@media (max-width: 600px) {
+  .photo-previews { height: 255px; }
+  .photo-previews figure { top: 38px; height: 175px; }
+  .photo-previews figure:hover, .photo-previews figure:focus-within { height: 210px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .photo-previews figure { transition: width .24s ease, left .24s ease, height .24s ease, transform .24s ease, box-shadow .24s ease; }
+  .photo-previews img { transition: transform .28s ease; }
+  .photo-previews .remove-photo { transition: opacity .16s ease, background-color .16s ease; }
+}

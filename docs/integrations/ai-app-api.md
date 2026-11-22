@@ -25,7 +25,7 @@ The two A-hosted endpoints below remain available as integration contracts; the 
 
 | Object | Required fields | Optional fields / rules |
 | --- | --- | --- |
-| `StyleProfile` | `styleTags: string[]`, `colors: string[]`, `avoidances: string[]`, `visualReferenceIds: string[]` | B requires at least one style direction or manual tag. Optional proposed fields: `summary`, `directions`, `userTags`, `aesthetics`, `silhouettes`, `stylingPatterns`. Flat fields are derived from the edited nested profile. A adoption is pending PR #2 alignment. |
+| `StyleProfile` | `styleTags: string[]`, `colors: string[]`, `avoidances: string[]`, `visualReferenceIds: string[]` | B requires at least one style direction or manual tag. Optional extension fields: `summary`, `directions`, `userTags`, `aesthetics`, `silhouettes`, `stylingPatterns`. Flat fields are derived from the edited nested profile. B's native handoff requires A's implementation in PR #5. |
 | `MediaRef` | `id: string`, `contentVersion: string`, `kind: "image" or "video"`, `mimeType: string`, `readUrl: string`, `expiresAt: timestamp` | B supplies an authorized HTTPS URL usable by A through the processing deadline. JPEG/PNG/WebP images and MP4/WebM video are proposed formats, subject to A's actual decoder support. |
 | `Destination` | `id: string`, `name: string`, `countryCode: string`, `latitude: number`, `longitude: number`, `timezone: string` | B resolves these; the user only enters the location. |
 | `Attraction` | `id: string`, `name: string`, `source: "curated", "provider", or "user"`, `activityTags: string[]` | `notes: string`, `coordinates: {latitude, longitude}`. B scopes all records to the selected destination. No per-place date is sent. |
@@ -90,7 +90,7 @@ B lets the user accept or edit suggestions before committing the profile. A pres
 
 **Request:** `requestId`, `inputRevision`, `styleProfile`, `trip`, `wardrobeVersion`, `wardrobe`, and `media` are required. B’s live adapter additionally sends `outfitCount` equal to the trip-day count, `useWardrobeImages: true`, and `preferences` containing confirmed nested style details. Wardrobe URLs are canonical, absolute URLs reachable by A. Live server/browser timeouts are 120/130 seconds. B rejects missing-day plans rather than inventing replacements.
 
-`trip` contains `destination`, `startDate`, `endDate`, `attractions`, and `weather`, plus optional `notes`. Attractions are full confirmed place records, not just IDs or the unaccepted suggestion list. The current UI sends `media: []` and `visualReferenceIds: []`; photo-derived preferences are user-confirmed style tags.
+`trip` contains `destination`, `startDate`, `endDate`, `attractions`, and `weather`, plus optional `notes`. Attractions are full confirmed place records, not just IDs or the unaccepted suggestion list. The current UI sends `media: []` and the complete user-confirmed nested style profile. `visualReferenceIds` may retain photo provenance IDs; they cannot retrieve the original images. Raw inspiration photos are not handed to A.
 
 This shortened one-day example uses synthetic garment URLs on a reserved example domain. The URLs are not live assets.
 

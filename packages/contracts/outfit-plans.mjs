@@ -4,6 +4,7 @@ import { validateWeather } from './weather.mjs';
 const text = (value) => typeof value === 'string' && value.trim().length > 0;
 const proseList = (value) => Array.isArray(value) && value.length <= 100 && value.every(item => text(item) && item.length <= 4000);
 const unique = (items) => new Set(items).size === items.length;
+export const MAX_WARDROBE_ITEMS = 40;
 
 export function validateOutfitRequest(body) {
   try {
@@ -13,7 +14,7 @@ export function validateOutfitRequest(body) {
     buildTrip(trip?.destination, trip?.startDate, trip?.endDate, trip?.attractions);
     validateWeather(trip.weather, tripDates(trip.startDate, trip.endDate));
     if (trip.attractions.some((place) => place.date !== undefined)) throw new Error('Places belong to the whole trip; remove per-place dates.');
-    if (!text(body.wardrobeVersion) || !Array.isArray(body.wardrobe) || !body.wardrobe.length || body.wardrobe.length > 30 || !unique(body.wardrobe.map((item) => item?.id))) throw new Error('Choose at least one wardrobe item with a unique ID.');
+    if (!text(body.wardrobeVersion) || !Array.isArray(body.wardrobe) || !body.wardrobe.length || body.wardrobe.length > MAX_WARDROBE_ITEMS || !unique(body.wardrobe.map((item) => item?.id))) throw new Error('Choose at least one wardrobe item with a unique ID.');
     for (const item of body.wardrobe) {
       if (!item || ![item.id, item.name, item.imageUrl, item.color].every(text) || !stringList(item.styleTags) ||
           !['top', 'bottom', 'dress', 'outerwear', 'shoes', 'accessory'].includes(item.category)) throw new Error('Invalid wardrobe item.');
@@ -28,7 +29,7 @@ export function validateOutfitResponse(body, request) {
   const dates = tripDates(request.trip.startDate, request.trip.endDate);
   if (!body || body.requestId !== request.requestId || body.inputRevision !== request.inputRevision ||
       !Array.isArray(body.outfits) || !proseList(body.warnings)) fail();
-  if (body.wardrobeImagesUsed !== undefined && (!stringList(body.wardrobeImagesUsed) || !unique(body.wardrobeImagesUsed) ||
+  if (body.wardrobeImagesUsed !== undefined && (!Array.isArray(body.wardrobeImagesUsed) || !body.wardrobeImagesUsed.every(text) || !unique(body.wardrobeImagesUsed) ||
       body.wardrobeImagesUsed.some(id => !request.wardrobe.some(item => item.id === id)))) fail();
   const ids = new Set(), gaps = new Set();
   for (const outfit of body.outfits) {
@@ -45,4 +46,30 @@ export function validateOutfitResponse(body, request) {
   }
   if (dates.some((date) => { const count = body.outfits.filter((outfit) => outfit.date === date).length; return count < 1 || count > 2; })) fail();
   return body;
+}
+
+// A's optional `shoppingGaps`: one entry per purchase, merging missing items across outfits.
+// Returns the list (buys by rank, then owned swaps) only if it accounts for every missing item exactly once;
+// otherwise null, and the page keeps shopping each outfit's missing items directly.
+export function shoppingListFrom(body, request) {
+  const missing = new Map(body.outfits.flatMap((outfit) => outfit.missingItems.map((item) => [item.id, outfit.id])));
+  const gaps = body.shoppingGaps;
+  if (!missing.size || !Array.isArray(gaps) || !gaps.length || gaps.length > 30) return null;
+  const outfitIds = new Set(body.outfits.map((outfit) => outfit.id)), ids = new Set(), covered = new Set(), list = [];
+  for (const gap of gaps) {
+    const decision = gap?.decision ?? 'buy';
+    const fallbackQueries = gap?.fallbackQueries ?? [];
+    if (!gap || !text(gap.id) || ids.has(gap.id) || ![gap.searchQuery, gap.reason].every(text) || gap.searchQuery.length > 1000 ||
+        !['essential', 'optional'].includes(gap.priority) || !['buy', 'use_owned'].includes(decision) ||
+        !stringList(gap.missingItemIds) || !gap.missingItemIds.length || gap.missingItemIds.some((id) => !missing.has(id) || covered.has(id)) ||
+        !stringList(gap.outfitIds) || gap.outfitIds.some((id) => !outfitIds.has(id)) ||
+        !stringList(fallbackQueries) || fallbackQueries.length > 3 || fallbackQueries.some((query) => !text(query) || query.length > 1000) ||
+        (gap.rank != null && (!Number.isSafeInteger(gap.rank) || gap.rank < 1)) ||
+        (decision === 'use_owned' && !request.wardrobe.some((item) => item.id === gap.ownedAlternativeId))) return null;
+    ids.add(gap.id); gap.missingItemIds.forEach((id) => covered.add(id));
+    list.push({ ...gap, decision, fallbackQueries, rank: decision === 'buy' ? gap.rank : null, outfitIds: [...new Set(gap.missingItemIds.map((id) => missing.get(id)))] });
+  }
+  if (covered.size !== missing.size) return null;
+  const buys = list.filter((gap) => gap.decision === 'buy').sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+  return [...buys.map((gap, index) => ({ ...gap, rank: index + 1 })), ...list.filter((gap) => gap.decision === 'use_owned')];
 }

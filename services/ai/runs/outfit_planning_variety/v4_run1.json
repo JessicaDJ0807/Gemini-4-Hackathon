@@ -1,0 +1,390 @@
+{
+  "requestId": "plan-demo-inspiration-001",
+  "inputRevision": 1,
+  "outfits": [
+    {
+      "id": "look-01",
+      "date": "2026-12-03",
+      "attractionIds": [
+        "fushimi-inari"
+      ],
+      "wardrobeItemIds": [
+        "wd-01",
+        "wd-02",
+        "wd-05",
+        "wd-06",
+        "wd-09",
+        "wd-10"
+      ],
+      "rationale": "Built for Fushimi Inari's 3-10C forecast with 70% light rain and 15 kph wind, this pairs traction-ready brown leather boots and straight-leg jeans with warm core layering. Because wd-05 is actually a sleeveless quilted puffer vest in its photo, adding a packable waterproof shell over the button-up keeps arms dry on exposed shrine steps.",
+      "missingItems": [
+        {
+          "id": "miss-01-01",
+          "description": "Packable black waterproof hooded rain jacket",
+          "searchQuery": "black minimal waterproof hooded rain jacket",
+          "priority": "essential",
+          "reason": "Forecast calls for 70% probability of light rain and 15 kph wind at 3-10C, and the photo for wd-05 shows a sleeveless puffer vest rather than a sleeved waterproof jacket.",
+          "category": "outerwear",
+          "color": "black",
+          "silhouette": "relaxed hooded shell",
+          "material": "waterproof nylon or technical blend",
+          "styleDescriptors": [
+            "minimal",
+            "packable",
+            "weatherproof"
+          ]
+        }
+      ],
+      "stylingTips": [
+        "Wear wd-01 as an invisible thermal base under wd-02, leaving wd-02 buttoned to the collar under the wd-05 vest.",
+        "Cuff wd-06 slightly at the ankle so the jeans sit cleanly above the shaft of wd-09 on wet paths.",
+        "Keep wd-10 crossbody or tucked closely under the rain shell to protect leather hardware from light rain."
+      ],
+      "name": "Trail-Ready Layered Vest & Denim",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-01",
+            "name": "White basic T-shirt",
+            "owned": true
+          },
+          {
+            "id": "wd-02",
+            "name": "White button-up shirt",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-05",
+            "name": "Black jacket",
+            "owned": true
+          },
+          {
+            "id": "miss-01-01",
+            "name": "Packable black waterproof hooded rain jacket",
+            "owned": false
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-09",
+            "name": "Brown leather boots",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor hiking",
+        "temple sightseeing",
+        "rainy day walking"
+      ],
+      "styleConnections": [
+        "minimalist black-and-white base layering",
+        "smart casual button-up structure",
+        "comfortable flat footwear for heavy walking (no high heels)"
+      ],
+      "inspirationReferenceIds": [],
+      "directionId": null,
+      "weatherKind": "forecast"
+    },
+    {
+      "id": "look-02",
+      "date": "2026-12-04",
+      "attractionIds": [
+        "nishiki-market",
+        "kaiseki-dinner"
+      ],
+      "wardrobeItemIds": [
+        "wd-03",
+        "wd-04",
+        "wd-07",
+        "wd-09",
+        "wd-10"
+      ],
+      "rationale": "Tailored for a 4-12C partly cloudy forecast with only 10% rain risk, this transitions smoothly from indoor browsing at Nishiki Market to an evening Kaiseki dinner. Layering the cable-knit sweater and tailored blazer over the lightweight floral slip dress adapts a summer piece for early December while grounding it with flat walking boots.",
+      "missingItems": [
+        {
+          "id": "miss-02-01",
+          "description": "Opaque black fleece-lined thermal tights",
+          "searchQuery": "black opaque fleece lined thermal tights",
+          "priority": "essential",
+          "reason": "Temperatures dip to 4C for the evening Kaiseki dinner, and wd-07 is a lightweight sleeveless satin slip dress that requires warm leg coverage.",
+          "category": "accessory",
+          "color": "black",
+          "silhouette": "fitted full-length tights",
+          "material": "fleece-lined nylon or wool blend",
+          "styleDescriptors": [
+            "minimal",
+            "warm",
+            "opaque"
+          ]
+        }
+      ],
+      "stylingTips": [
+        "Pull wd-03 over wd-07 so the floral dress reads as a fluid midi skirt beneath the chunky knit.",
+        "Tuck the front hem of wd-03 slightly to define the waist, then drape wd-04 open over the shoulders or wear it unbuttoned.",
+        "Anchor the soft blush-and-cream palette with black opaque tights, wd-09 boots, and wd-10 as a clean dark accent."
+      ],
+      "name": "Winterized Romantic Knit & Blazer",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-03",
+            "name": "Beige knit sweater",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-04",
+            "name": "Beige tailored blazer",
+            "owned": true
+          }
+        ],
+        "dress": [
+          {
+            "id": "wd-07",
+            "name": "Pink floral dress",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-09",
+            "name": "Brown leather boots",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          },
+          {
+            "id": "miss-02-01",
+            "name": "Opaque black fleece-lined thermal tights",
+            "owned": false
+          }
+        ]
+      },
+      "occasions": [
+        "indoor market shopping",
+        "casual food tour",
+        "evening dining"
+      ],
+      "styleConnections": [
+        "soft romantic touch via floral dress (rom-02)",
+        "neutral tonal layering in cream and beige (min-05)",
+        "relaxed tailoring with comfortable flat boots"
+      ],
+      "inspirationReferenceIds": [
+        "rom-02",
+        "min-05"
+      ],
+      "directionId": null,
+      "weatherKind": "forecast"
+    },
+    {
+      "id": "look-03",
+      "date": "2026-12-05",
+      "attractionIds": [
+        "arashiyama"
+      ],
+      "wardrobeItemIds": [
+        "wd-01",
+        "wd-03",
+        "wd-04",
+        "wd-06",
+        "wd-08",
+        "wd-10"
+      ],
+      "rationale": "Designed around a seasonal climate estimate of 2-9C and mostly dry conditions rather than a live forecast, this uses adaptable three-piece tonal layering for morning chill and midday walking in Arashiyama. Low-top sneakers keep miles of bamboo grove paths comfortable while preserving the relaxed blazer-and-denim aesthetic.",
+      "missingItems": [],
+      "stylingTips": [
+        "Layer wd-03 over wd-01 as a warm mid-layer beneath wd-04 at the 2C morning start, or drape wd-03 over the shoulders if midday sun warms up.",
+        "Wear wd-06 at full length over wd-08 sneakers and wd-04 completely open for a clean, elongated minimal line.",
+        "Carry wd-10 to tie in the black contrast from wd-08 and keep essentials accessible while walking."
+      ],
+      "name": "Tonal Blazer & Denim Walking Look",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-01",
+            "name": "White basic T-shirt",
+            "owned": true
+          },
+          {
+            "id": "wd-03",
+            "name": "Beige knit sweater",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-04",
+            "name": "Beige tailored blazer",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-08",
+            "name": "Black-and-white sneakers",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor walking",
+        "scenic sightseeing",
+        "casual travel day"
+      ],
+      "styleConnections": [
+        "blazer over plain tee and straight-leg jeans (min-01)",
+        "neutral tonal layering in beige and white (min-05)",
+        "minimalist smart casual with flat sneakers"
+      ],
+      "inspirationReferenceIds": [
+        "min-01",
+        "min-05"
+      ],
+      "directionId": null,
+      "weatherKind": "climate"
+    }
+  ],
+  "warnings": [
+    "Weather for 2026-12-05 is a seasonal estimate, not a forecast."
+  ],
+  "shoppingGaps": [
+    {
+      "id": "gap-01",
+      "searchQuery": "black minimal waterproof hooded rain jacket",
+      "category": "outerwear",
+      "color": "black",
+      "silhouette": "relaxed hooded shell",
+      "material": "waterproof nylon or technical blend",
+      "styleDescriptors": [
+        "minimal",
+        "packable",
+        "weatherproof"
+      ],
+      "priority": "essential",
+      "reason": "Forecast calls for 70% probability of light rain and 15 kph wind at 3-10C, and the photo for wd-05 shows a sleeveless puffer vest rather than a sleeved waterproof jacket.",
+      "outfitIds": [
+        "look-01"
+      ],
+      "missingItemIds": [
+        "miss-01-01"
+      ],
+      "similarOwnedItemIds": [
+        "wd-05"
+      ]
+    },
+    {
+      "id": "gap-02",
+      "searchQuery": "black opaque fleece lined thermal tights",
+      "category": "accessory",
+      "color": "black",
+      "silhouette": "fitted full-length tights",
+      "material": "fleece-lined nylon or wool blend",
+      "styleDescriptors": [
+        "minimal",
+        "warm",
+        "opaque"
+      ],
+      "priority": "essential",
+      "reason": "Temperatures dip to 4C for the evening Kaiseki dinner, and wd-07 is a lightweight sleeveless satin slip dress that requires warm leg coverage.",
+      "outfitIds": [
+        "look-02"
+      ],
+      "missingItemIds": [
+        "miss-02-01"
+      ],
+      "similarOwnedItemIds": [
+        "wd-10"
+      ]
+    }
+  ],
+  "model": "gemini-4-hydrogen",
+  "wardrobeImagesUsed": [
+    "wd-01",
+    "wd-02",
+    "wd-03",
+    "wd-04",
+    "wd-05",
+    "wd-06",
+    "wd-07",
+    "wd-08",
+    "wd-09",
+    "wd-10"
+  ],
+  "inspirationMediaUsed": [
+    "min-01",
+    "min-03",
+    "min-05",
+    "rom-02"
+  ],
+  "inspirationNotes": [
+    {
+      "mediaId": "min-01",
+      "takeaway": "Open relaxed tailored blazer layered over a clean white tee and blue denim jeans for effortless smart-casual proportion -> wd-04 over wd-01 + wd-06.",
+      "usable": true,
+      "usedInOutfitIds": [
+        "look-03"
+      ]
+    },
+    {
+      "mediaId": "min-03",
+      "takeaway": "All-black tailored suiting and bare-skin open-blazer styling cannot be recreated because the wardrobe lacks a black blazer and black trousers and Kyoto's 2-12C weather requires warm base layers.",
+      "usable": false,
+      "usedInOutfitIds": []
+    },
+    {
+      "mediaId": "min-05",
+      "takeaway": "Tonal camel-and-cream layering pairing a tailored blazer over a crisp white crew-neck top and matching neutral tones -> wd-04 + wd-03 + wd-01.",
+      "usable": true,
+      "usedInOutfitIds": [
+        "look-02",
+        "look-03"
+      ]
+    },
+    {
+      "mediaId": "rom-02",
+      "takeaway": "Soft romantic floral dress brought into a grounded daytime look by pairing it with cozy knitwear and flat walking boots -> wd-07 layered with wd-03 + wd-09.",
+      "usable": true,
+      "usedInOutfitIds": [
+        "look-02"
+      ]
+    }
+  ]
+}

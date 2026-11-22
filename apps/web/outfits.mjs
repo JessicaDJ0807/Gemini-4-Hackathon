@@ -1,5 +1,5 @@
 import { createMissingItemShop } from '/shopping.mjs';
-import { validateOutfitRequest, validateOutfitResponse } from '/shared/outfit-plans.mjs';
+import { shoppingListFrom, validateOutfitRequest, validateOutfitResponse } from '/shared/outfit-plans.mjs';
 
 const $ = (id) => document.getElementById(id);
 function node(tag, text, className) {
@@ -26,6 +26,7 @@ export function attachOutfits() {
     $('wardrobe-count').textContent = `${selected.size} selected`;
     $('look-days').replaceChildren();
     $('outfit-results').hidden = true; $('daily-looks').replaceChildren();
+    $('shopping-list').hidden = true; $('shopping-list-items').replaceChildren(); $('shopping-list-owned').replaceChildren();
     $('outfit-error').hidden = true; $('outfit-status').textContent = '';
     $('generate-outfits').disabled = !trip || !catalog?.enabled || !selected.size;
   }
@@ -55,11 +56,16 @@ export function attachOutfits() {
       catalog = result; selected = new Set(result.wardrobe.map((item) => item.id));
       $('outfit-mode').textContent = result.provider === 'live' ? 'Sample wardrobe · Styled with AI' : 'Demo · mock outfits, no AI analysis';
       $('mock-note').hidden = result.provider === 'live';
-      $('wardrobe-footer').textContent = result.provider === 'live' ? 'Sample wardrobe photos are styling references, not products for sale.' : 'Demo garments are illustrations, not products for sale.';
+      $('wardrobe-footer').textContent = 'Sample wardrobe photos are styling references, not products for sale.';
       const credits = result.credits ?? [];
       $('wardrobe-credits').hidden = !credits.length;
       $('wardrobe-credit-list').replaceChildren(...credits.map(credit => {
-        const li = node('li'), link = node('a', credit.name); link.href = credit.url; link.target = '_blank'; link.rel = 'noopener noreferrer'; li.append(link); return li;
+        const li = node('li'), external = (text, href) => { const a = node('a', text); a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; return a; };
+        li.append(credit.url ? external(credit.name, credit.url) : node('span', credit.name));
+        const by = [credit.author && `by ${credit.author}`, credit.source].filter(Boolean).join(' · ');
+        if (by) li.append(` — ${by}`);
+        if (credit.license) li.append(' · ', credit.licenseUrl ? external(credit.license, credit.licenseUrl) : credit.license);
+        return li;
       }));
       renderWardrobe(); invalidate();
       if (!result.enabled) error('Outfit generation is unavailable. Please try again later.');
@@ -74,8 +80,13 @@ export function attachOutfits() {
     $('daily-looks').replaceChildren();
     $('look-days').replaceChildren();
     const cards = [], tabs = [];
+    const dayLabel = (iso) => new Date(`${iso}T12:00:00Z`).toLocaleDateString('en', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+    // A's merged shopping list, when valid: one search per purchase instead of one per outfit.
+    const list = shoppingListFrom(result, request);
+    const gapFor = new Map((list ?? []).flatMap((gap) => gap.missingItemIds.map((id) => [id, gap])));
+    const owned = (id) => request.wardrobe.find((item) => item.id === id);
     for (const [index, outfit] of [...result.outfits].sort((a, b) => a.date.localeCompare(b.date)).entries()) {
-      const date = new Date(`${outfit.date}T12:00:00Z`).toLocaleDateString('en', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+      const date = dayLabel(outfit.date);
       const card = node('article', undefined, 'daily-look'); card.id = `daily-look-${index}`; card.hidden = index !== 0;
       card.append(node('p', `DAY ${index + 1} / ${date}`, 'eyebrow'));
       const tab = node('button', date, 'day-button'); tab.type = 'button'; tab.setAttribute('aria-pressed', String(index === 0)); tab.setAttribute('aria-controls', card.id);
@@ -89,15 +100,43 @@ export function attachOutfits() {
       card.append(clothes, notes);
       if (outfit.missingItems.length) {
         const gaps = node('section', undefined, 'missing-items'); gaps.append(node('h4', 'Complete the look'));
-        const list = node('ul', undefined, 'missing-piece-list');
+        const pieces = node('ul', undefined, 'missing-piece-list');
         for (const item of outfit.missingItems) {
-          const piece = createMissingItemShop(item); shopping.push(piece); list.append(piece.element);
+          const gap = gapFor.get(item.id);
+          if (!gap) { const piece = createMissingItemShop(item); shopping.push(piece); pieces.append(piece.element); continue; }
+          const row = node('li', undefined, 'missing-piece'), copy = node('div');
+          copy.append(node('p', item.description, 'missing-piece-title'), node('p', gap.decision === 'buy'
+            ? `On your shopping list · #${gap.rank}${gap.outfitIds.length > 1 ? ` · also for ${gap.outfitIds.length - 1} other look${gap.outfitIds.length > 2 ? 's' : ''}` : ''}`
+            : `Wear your ${owned(gap.ownedAlternativeId).name} instead`, 'hint'));
+          row.append(copy); pieces.append(row);
         }
-        gaps.append(list); card.append(gaps);
+        gaps.append(pieces); card.append(gaps);
       } else card.append(node('p', catalog.provider === 'live' ? 'No missing pieces suggested for this look.' : 'No gaps flagged by the mock.', 'hint'));
       $('daily-looks').append(card);
     }
+    if (list) renderShoppingList(list, result, dayLabel, owned);
     $('outfit-results').hidden = false; $('wardrobe-selection').open = false; $('results-title').focus();
+  }
+  function renderShoppingList(list, result, dayLabel, owned) {
+    const dateOf = new Map(result.outfits.map((outfit) => [outfit.id, outfit.date]));
+    const forDays = (gap) => [...new Set(gap.outfitIds.map((id) => dateOf.get(id)))].sort().map(dayLabel).join(', ');
+    const buys = list.filter((gap) => gap.decision === 'buy'), swaps = list.filter((gap) => gap.decision === 'use_owned');
+    for (const gap of buys) {
+      const title = gap.searchQuery[0].toUpperCase() + gap.searchQuery.slice(1);
+      const piece = createMissingItemShop({ id: gap.id, description: title, searchQuery: gap.searchQuery, fallbackQueries: gap.fallbackQueries,
+        priority: gap.priority, detail: `#${gap.rank} · ${gap.priority === 'essential' ? 'Recommended' : 'Optional'} · For ${forDays(gap)} · ${gap.reason}` });
+      shopping.push(piece); $('shopping-list-items').append(piece.element);
+    }
+    $('shopping-list-owned').replaceChildren(...swaps.map((gap) => {
+      const row = node('li', undefined, 'missing-piece'), copy = node('div');
+      copy.append(node('p', `Wear your ${owned(gap.ownedAlternativeId).name}`, 'missing-piece-title'), node('p', `For ${forDays(gap)} · ${gap.reason}`, 'hint'));
+      row.append(copy); return row;
+    }));
+    $('shopping-list-owned-heading').hidden = !swaps.length;
+    $('shopping-list-summary').textContent = buys.length
+      ? `${buys.length} piece${buys.length > 1 ? 's' : ''} to complete your trip, most useful first.`
+      : 'Everything you need is already in your wardrobe.';
+    $('shopping-list').hidden = false;
   }
   $('reload-wardrobe').addEventListener('click', loadWardrobe);
   $('generate-outfits').addEventListener('click', async () => {

@@ -1,0 +1,305 @@
+{
+  "requestId": "plan-demo-inspiration-001",
+  "inputRevision": 1,
+  "outfits": [
+    {
+      "id": "look-01",
+      "date": "2026-12-03",
+      "attractionIds": [
+        "fushimi-inari"
+      ],
+      "wardrobeItemIds": [
+        "wd-01",
+        "wd-03",
+        "wd-06",
+        "wd-09",
+        "wd-10"
+      ],
+      "rationale": "With a 3 to 10 C forecast, 70% chance of light rain, and 15 kph wind, a chunky cream knit over a white tee pairs with rugged brown leather boots for traction on wet shrine steps and a needed waterproof shell.",
+      "missingItems": [
+        {
+          "id": "miss-01-01",
+          "description": "Minimalist waterproof hooded rain jacket",
+          "searchQuery": "black waterproof hooded rain jacket",
+          "priority": "essential",
+          "reason": "Forecast shows 70% chance of light rain with 15 kph wind, and the owned black jacket (wd-05) is actually a sleeveless puffer vest while wd-04 is an unlined-weather tailored blazer.",
+          "category": "outerwear",
+          "color": "black",
+          "silhouette": "relaxed mid-hip",
+          "material": "waterproof breathable shell (optional)",
+          "styleDescriptors": [
+            "minimal",
+            "matte",
+            "functional"
+          ]
+        }
+      ],
+      "stylingTips": [
+        "Wear the white tee (wd-01) under the cream cable-knit sweater (wd-03) so you can adjust warmth while climbing steps.",
+        "Cuff the blue jeans (wd-06) slightly above the brown leather boots (wd-09) to keep hems dry in light rain.",
+        "Treat the leather boots with waterproofing spray before the hike if possible."
+      ],
+      "name": "Rain-Ready Shrine Hike",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-01",
+            "name": "White basic T-shirt",
+            "owned": true
+          },
+          {
+            "id": "wd-03",
+            "name": "Beige knit sweater",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-09",
+            "name": "Brown leather boots",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "miss-01-01",
+            "name": "Minimalist waterproof hooded rain jacket",
+            "owned": false
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor hiking",
+        "temple visit",
+        "rainy day walking"
+      ],
+      "styleConnections": [
+        "minimal",
+        "neutral tonal layering",
+        "comfortable for lots of walking without high heels"
+      ],
+      "inspirationReferenceIds": [],
+      "weatherKind": "forecast"
+    },
+    {
+      "id": "look-02",
+      "date": "2026-12-04",
+      "attractionIds": [
+        "nishiki-market",
+        "kaiseki-dinner"
+      ],
+      "wardrobeItemIds": [
+        "wd-01",
+        "wd-02",
+        "wd-04",
+        "wd-06",
+        "wd-09",
+        "wd-10"
+      ],
+      "rationale": "Partly cloudy skies with a 4 to 12 C swing and only 10% rain chance suit breathable layered tailoring that moves comfortably from market browsing to an evening dinner.",
+      "missingItems": [],
+      "stylingTips": [
+        "Layer the white button-up (wd-02) open or buttoned over the white tee (wd-01) underneath the beige blazer (wd-04) for warmth as temperatures drop toward 4 C at night.",
+        "Choose the darker-wash pair of jeans from wd-06 for a cleaner evening dinner look.",
+        "Keep the black leather bag (wd-10) as your single understated accessory."
+      ],
+      "name": "Tailored Market to Kaiseki",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-01",
+            "name": "White basic T-shirt",
+            "owned": true
+          },
+          {
+            "id": "wd-02",
+            "name": "White button-up shirt",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-04",
+            "name": "Beige tailored blazer",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-09",
+            "name": "Brown leather boots",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "market shopping",
+        "casual dining",
+        "evening dinner"
+      ],
+      "styleConnections": [
+        "relaxed tailoring",
+        "minimalist",
+        "smart casual",
+        "blazer over plain tee and neutral tonal layering inspired by min-01 and min-05"
+      ],
+      "inspirationReferenceIds": [
+        "min-01",
+        "min-05"
+      ],
+      "weatherKind": "forecast"
+    },
+    {
+      "id": "look-03",
+      "date": "2026-12-05",
+      "attractionIds": [
+        "arashiyama"
+      ],
+      "wardrobeItemIds": [
+        "wd-02",
+        "wd-03",
+        "wd-05",
+        "wd-06",
+        "wd-08",
+        "wd-10"
+      ],
+      "rationale": "Because the 2 to 9 C, 30% rain outlook is a seasonal climate estimate rather than a forecast, adaptable layers pair the cream knit with wd-05, which the photo shows is a sleeveless black puffer vest rather than a full-sleeve jacket.",
+      "missingItems": [],
+      "stylingTips": [
+        "Layer the white button-up (wd-02) under the cream cable-knit sweater (wd-03) and top with the sleeveless black puffer vest (wd-05) for core warmth without restricting arm movement.",
+        "Wear the black-and-white sneakers (wd-08) for cushioned all-day walking along the bamboo paths.",
+        "Pack the rain jacket from Day 1 in your black leather bag (wd-10) in case the 30% seasonal precipitation chance materializes."
+      ],
+      "name": "Layered Bamboo Grove Walk",
+      "itemsByCategory": {
+        "top": [
+          {
+            "id": "wd-02",
+            "name": "White button-up shirt",
+            "owned": true
+          },
+          {
+            "id": "wd-03",
+            "name": "Beige knit sweater",
+            "owned": true
+          }
+        ],
+        "outerwear": [
+          {
+            "id": "wd-05",
+            "name": "Black jacket",
+            "owned": true
+          }
+        ],
+        "bottom": [
+          {
+            "id": "wd-06",
+            "name": "Blue denim jeans",
+            "owned": true
+          }
+        ],
+        "shoes": [
+          {
+            "id": "wd-08",
+            "name": "Black-and-white sneakers",
+            "owned": true
+          }
+        ],
+        "accessory": [
+          {
+            "id": "wd-10",
+            "name": "Black leather bag",
+            "owned": true
+          }
+        ]
+      },
+      "occasions": [
+        "outdoor walking",
+        "sightseeing"
+      ],
+      "styleConnections": [
+        "minimal",
+        "neutral tonal layering",
+        "comfortable for lots of walking without high heels"
+      ],
+      "inspirationReferenceIds": [],
+      "weatherKind": "climate"
+    }
+  ],
+  "warnings": [
+    "Weather for 2026-12-05 is a seasonal estimate, not a forecast."
+  ],
+  "shoppingGaps": [
+    {
+      "id": "gap-01",
+      "searchQuery": "black waterproof hooded rain jacket",
+      "category": "outerwear",
+      "color": "black",
+      "silhouette": "relaxed mid-hip",
+      "material": "waterproof breathable shell (optional)",
+      "styleDescriptors": [
+        "minimal",
+        "matte",
+        "functional"
+      ],
+      "priority": "essential",
+      "reason": "Forecast shows 70% chance of light rain with 15 kph wind, and the owned black jacket (wd-05) is actually a sleeveless puffer vest while wd-04 is an unlined-weather tailored blazer.",
+      "outfitIds": [
+        "look-01"
+      ],
+      "missingItemIds": [
+        "miss-01-01"
+      ],
+      "similarOwnedItemIds": [
+        "wd-05"
+      ]
+    }
+  ],
+  "model": "gemini-4-hydrogen",
+  "wardrobeImagesUsed": [
+    "wd-01",
+    "wd-02",
+    "wd-03",
+    "wd-04",
+    "wd-05",
+    "wd-06",
+    "wd-07",
+    "wd-08",
+    "wd-09",
+    "wd-10"
+  ],
+  "inspirationMediaUsed": [
+    "min-01",
+    "min-03",
+    "min-05",
+    "rom-02"
+  ]
+}

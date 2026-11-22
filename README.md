@@ -1,6 +1,6 @@
 <div align="center">
 
-# ✳ Travel AI Stylist
+# Travel AI Stylist
 
 **Plan the trip. Style the looks. Shop what's missing.**
 

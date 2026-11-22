@@ -5,19 +5,20 @@
   <title>Your trip · Travel AI Stylist</title>
   <link rel="stylesheet" href="/style.css"><script type="module" src="/trip.mjs"></script>
 </head>
-<body><main>
-  <header><a class="brand" href="/">TRAVEL AI STYLIST</a><a href="/">Edit my style</a></header>
-  <p class="eyebrow">02 / YOUR TRIP</p><h1>Where are we going?</h1>
-  <p class="intro">A few places you’ll love. A little room to make the trip your own.</p>
+<body class="trip-page"><main>
+  <header class="app-header"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">✳</span> TRAVEL AI STYLIST</a><ol class="flow-steps" aria-label="Your journey"><li><span>01</span> Your style</li><li aria-current="step"><span>02</span> The trip</li><li><span>03</span> Your looks</li></ol><a class="header-edit" href="/">Edit style ↗</a></header>
+<div class="page-hero"><div><p class="eyebrow">NEXT STOP: SOMEWHERE GOOD.</p><h1>Where are<br><mark>we going?</mark></h1><p class="intro">A few places you’ll love. Room for a little spontaneity.</p></div><div class="hero-doodle" aria-hidden="true"><svg viewBox="0 0 180 140" fill="none" aria-hidden="true"><path d="M16 118C51 138 94 113 76 90C62 73 45 91 56 105C69 121 109 90 119 69" stroke="currentColor" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"/><path d="M90 45L166 15L140 91L123 62L90 45Z" fill="#dcfa56" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M123 62L166 15M123 62L118 81L133 77" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M44 33V47M37 40H51M156 113V123M151 118H161" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Take the<br>scenic route.</span></div></div>
   <p id="profile-required" hidden>First, <a href="/">confirm your style profile</a> to plan a trip.</p>
   <div id="trip-editor" hidden>
+    <section class="destination-card" aria-labelledby="destination-title"><div class="section-heading"><h2 id="destination-title">Pick a place</h2><span class="card-number" aria-hidden="true">01</span></div>
     <form id="location-form">
       <label class="field" for="location">Destination city</label>
       <div class="inline-form"><input id="location" required minlength="2" maxlength="100" placeholder="Try New York, Paris, or Tokyo" autocomplete="off"><button id="search-city" type="submit">Find city</button></div>
     </form>
     <div id="city-results" aria-live="polite"></div>
     <p id="destination-label" role="status">Choose a city from the search results.</p>
-    <form id="dates-form">
+    </section>
+    <form id="dates-form" class="dates-card"><div class="section-heading"><h2>Make some time</h2><span class="card-number" aria-hidden="true">02</span></div>
       <div class="date-grid">
         <div><label class="field" for="start-date">Start date</label><input type="date" id="start-date" required></div>
         <div><label class="field" for="end-date">End date</label><input type="date" id="end-date" required></div>
@@ -28,7 +29,7 @@
     <p id="trip-status" role="status"></p><p id="trip-error" role="alert" hidden></p>
     <section id="places-section" hidden aria-labelledby="places-title">
       <div class="places-heading">
-        <div><p class="eyebrow">MAKE IT YOURS</p><h2 id="places-title" tabindex="-1">Your places <span id="place-count" class="place-count" aria-live="polite"></span></h2></div>
+        <div><p class="eyebrow">A LITTLE EXPLORING</p><h2 id="places-title" tabindex="-1">Your places <span id="place-count" class="place-count" aria-live="polite"></span></h2></div>
         <a id="places-source" target="_blank" rel="noopener noreferrer" hidden>City guide ↗</a>
       </div>
       <p id="suggestion-note" class="hint"></p>

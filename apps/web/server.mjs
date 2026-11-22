@@ -1,3 +1,8 @@
+import { PHOTO_REQUEST_BYTES } from '../../packages/contracts/style-inspiration.mjs';
+import { createShoppingAssistant } from './shopping-assistant.mjs';
+import { shopRpc } from './shop-rpc.mjs';
+import { createShopAccounts } from './shop-account.mjs';
+import { createShopPay } from './shop-pay.mjs';
 import { photoWardrobe, photoWardrobeVersion, photoCredits } from '../../data/demo-wardrobe/photo-wardrobe.mjs';
 import { prepareAiOutfitRequest } from './ai-outfits.mjs';
 import { createShopCheckout } from './shop-checkout.mjs';
@@ -16,6 +21,9 @@ import { wardrobe, wardrobeVersion } from '../../data/demo-wardrobe/wardrobe.mjs
 import { validateOutfitRequest, validateOutfitResponse } from '../../packages/contracts/outfit-plans.mjs';
 
 const assets = {
+  '/shopping-chat.mjs': ['shopping-chat.mjs', 'text/javascript'],
+  '/shop-wallet.mjs': ['shop-wallet.mjs', 'text/javascript'],
+  '/shared/shopping-chat.mjs': ['../../packages/contracts/shopping-chat.mjs', 'text/javascript'],
   ...Object.fromEntries(photoWardrobe.map(item => [item.imageUrl, [`../../services/ai/tests/fixtures/wardrobe/images/${item.id}.jpg`, 'image/jpeg']])),
   '/cart.mjs': ['cart.mjs', 'text/javascript'],
   '/shopping.mjs': ['shopping.mjs', 'text/javascript'],
@@ -45,12 +53,19 @@ const assets = {
   '/contracts.mjs': ['../../packages/contracts/style-analysis.mjs', 'text/javascript']
 };
 
-export function createWebServer({ aiBaseUrl, token, provider, fetchImpl = fetch, locationFetch = fetch, placesKey, placesFetch = fetch, weatherFetch = fetch, weatherNow, geminiKey, geminiModel, geminiFetch = fetch, timeoutMs = 25000, geminiTimeoutMs = 55000, shopFetch = fetch, shopTimeoutMs = 20000, outfitTimeoutMs = 120000, publicAppUrl = 'http://127.0.0.1:3000' }) {
+export function createWebServer({ aiBaseUrl, token, provider, fetchImpl = fetch, locationFetch = fetch, placesKey, placesFetch = fetch, weatherFetch = fetch, weatherNow, geminiKey, geminiModel, geminiFetch = fetch, timeoutMs = 25000, geminiTimeoutMs = 55000, shopFetch = fetch, shopAuthFetch = fetch, shopNow, shoppingTestMode = false, shopTimeoutMs = 20000, outfitTimeoutMs = 120000, publicAppUrl = 'http://127.0.0.1:3000' }) {
   const activeWardrobe = provider === 'live' ? photoWardrobe : wardrobe;
   const activeVersion = provider === 'live' ? photoWardrobeVersion : wardrobeVersion;
   const gemini = createGeminiStyle({ apiKey: geminiKey, model: geminiModel, fetchImpl: geminiFetch, timeoutMs: geminiTimeoutMs });
   const shopCheckout = createShopCheckout({ fetchImpl: shopFetch, timeoutMs: shopTimeoutMs });
   const searchProducts = createProductSearch({ fetchImpl: shopFetch, timeoutMs: shopTimeoutMs, issueOffer: shopCheckout.issueOffer });
+  const shoppingChat = createShoppingAssistant({ apiKey: geminiKey, model: geminiModel, fetchImpl: geminiFetch, searchProducts });
+  const rpc = shopRpc({ fetchImpl: shopFetch, timeoutMs: shopTimeoutMs });
+  const accounts = createShopAccounts({ fetchImpl: shopAuthFetch, rpc, now: shopNow });
+  const wallet = createShopPay({ rpc, accounts, prepareCheckout: shopCheckout.prepare });
+  const walletRoutes = { connect: (state) => accounts.connect(state), poll: (state) => accounts.poll(state),
+    account: (state) => state ? accounts.account(state) : { signedIn: false },
+    disconnect: (state) => accounts.disconnect(state), checkout: wallet.create, update: wallet.update, pay: wallet.pay, refresh: wallet.refresh };
   const places = createPlacesClient({ apiKey: placesKey, fetchImpl: placesFetch });
   return createServer(async (request, response) => {
     let body;
@@ -67,7 +82,7 @@ export function createWebServer({ aiBaseUrl, token, provider, fetchImpl = fetch,
         if (!id || id.length > 100) throw new ApiError(400, 'INVALID_DESTINATION', 'Select a destination first.');
         return json(response, 200, suggestAttractions(id));
       }
-      if (request.method === 'GET' && request.url === '/api/config') return json(response, 200, { provider, photoAnalysis: gemini.enabled });
+      if (request.method === 'GET' && request.url === '/api/config') return json(response, 200, { provider, photoAnalysis: gemini.enabled && !shoppingTestMode, ...(shoppingTestMode ? { shoppingTestMode: true } : {}) });
       if (request.method === 'GET' && assets[request.url]) {
         const [path, type] = assets[request.url];
         const content = await readFile(new URL(path, import.meta.url));
@@ -78,14 +93,26 @@ export function createWebServer({ aiBaseUrl, token, provider, fetchImpl = fetch,
         });
         return response.end(content);
       }
-      if (request.method !== 'POST' || !['/api/checkout', '/api/products/search', '/api/style-inspiration', '/api/style-analysis', '/api/outfit-plans', '/api/places/autocomplete', '/api/places/details', '/api/weather'].includes(request.url)) throw new ApiError(404, 'NOT_FOUND', 'Endpoint not found.');
+      if (request.method !== 'POST' || ![...Object.keys(walletRoutes).map(name => `/api/shop-pay/${name}`), '/api/shopping/chat', '/api/checkout', '/api/products/search', '/api/style-inspiration', '/api/style-analysis', '/api/outfit-plans', '/api/places/autocomplete', '/api/places/details', '/api/weather'].includes(request.url)) throw new ApiError(404, 'NOT_FOUND', 'Endpoint not found.');
       if (request.headers.origin && request.headers.origin !== `http://${request.headers.host}`) {
         throw new ApiError(403, 'FORBIDDEN', 'Use the local app to submit this request.');
       }
-      body = await readJson(request, request.url === '/api/style-inspiration' ? 9 * 1024 * 1024 : request.url === '/api/outfit-plans' ? 128 * 1024 : 16384);
+      body = await readJson(request, request.url === '/api/style-inspiration' ? PHOTO_REQUEST_BYTES : request.url === '/api/outfit-plans' ? 128 * 1024 : 16384);
+      if (request.url.startsWith('/api/shop-pay/')) {
+        if (request.headers.origin !== `http://${request.headers.host}`) throw new ApiError(403, 'FORBIDDEN', 'Use this app to manage your Shop session.');
+        response.setHeader('Cache-Control', 'no-store');
+        const action = request.url.split('/').at(-1);
+        const state = accounts.session(request, response, action === 'connect');
+        if (!state && !['account', 'disconnect'].includes(action)) throw new ApiError(401, 'SHOP_SIGN_IN_REQUIRED', 'Connect Shop to continue.');
+        return json(response, 200, await walletRoutes[action](state, body));
+      }
+      if (request.url === '/api/shopping/chat') return json(response, 200, await shoppingChat(body));
       if (request.url === '/api/checkout') return json(response, 200, await shopCheckout.checkout(body));
       if (request.url === '/api/products/search') return json(response, 200, await searchProducts(body));
-      if (request.url === '/api/style-inspiration') return json(response, 200, await gemini.analyze(body));
+      if (request.url === '/api/style-inspiration') {
+        if (shoppingTestMode) throw new ApiError(503, 'PHOTO_ANALYSIS_DISABLED_IN_TEST', 'Photo analysis is off in payment-test mode. Add a manual style tag here, or use the live A+B app for photos.');
+        return json(response, 200, await gemini.analyze(body));
+      }
       if (request.url === '/api/weather') return json(response, 200, await getTripWeather(body, { fetchImpl: weatherFetch, now: weatherNow }));
       if (request.url === '/api/places/autocomplete') return json(response, 200, await places.autocomplete(body));
       if (request.url === '/api/places/details') return json(response, 200, await places.details(body));

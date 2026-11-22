@@ -1,3 +1,4 @@
+import '/shopping-chat.mjs';
 import { validProfile } from '/contracts.mjs';
 import { restoreSavedTrip } from '/shared/saved-trip.mjs';
 import { placeDetails } from '/place-search.mjs';
